@@ -160,4 +160,15 @@ public class User {
     public void setIsDel(Integer isDel) {
         this.isDel = isDel;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", emailFlag='" + emailFlag + '\'' +
+                ", tailSlug='" + tailSlug + '\'' +
+                '}';
+    }
 }
