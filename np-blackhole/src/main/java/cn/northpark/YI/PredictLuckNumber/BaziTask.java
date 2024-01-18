@@ -1,4 +1,4 @@
-package cn.northpark.YI;
+package cn.northpark.YI.PredictLuckNumber;
 
 import cn.northpark.utils.TimeUtils;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,4 +1,4 @@
-package cn.northpark.YI;
+package cn.northpark.YI.PredictLuckNumber;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;

@@ -1,4 +1,4 @@
-package cn.northpark.YI;
+package cn.northpark.YI.PredictLuckNumber;
 /*
 * NEW一个Bazi类 传入时间可以得出生辰八字getbazi(); 
 */
