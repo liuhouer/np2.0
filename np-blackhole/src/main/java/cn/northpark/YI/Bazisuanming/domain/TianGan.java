@@ -1,7 +1,7 @@
 package cn.northpark.YI.Bazisuanming.domain;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 天干
  * 甲木、乙木、丙火、丁火、戊土、己土、庚金、辛金、壬水、癸水，其中甲丙戊庚壬为阳性，乙丁己辛癸为阴性
  */

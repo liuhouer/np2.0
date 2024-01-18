@@ -9,7 +9,7 @@ import static cn.northpark.YI.Bazisuanming.domain.DiZhi.*;
 
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 驿马 以年支或日支为主。申子辰马在寅, 寅午戌马在申,巳酉丑马在亥, 亥卯未马在巳.
  */
 public class YiMa implements ShenSha {

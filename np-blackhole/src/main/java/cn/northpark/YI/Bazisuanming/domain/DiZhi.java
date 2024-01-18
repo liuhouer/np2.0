@@ -1,7 +1,7 @@
 package cn.northpark.YI.Bazisuanming.domain;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 地支
  * 子代表鼠，丑代表牛，寅代表虎；卯代表兔，辰代表龙，巳代表蛇，午代表马，未代表羊，申代表猴，酉代表鸡，戌代表狗，亥代表猪
  */

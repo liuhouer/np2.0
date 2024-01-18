@@ -7,7 +7,7 @@ import cn.northpark.YI.Bazisuanming.domain.ShenSha;
 import cn.northpark.YI.Bazisuanming.domain.TianGan;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  *  天德贵人 正月生者见丁, 二月生者见申,三月生者见壬, 四月生者见辛,五月生者见亥, 六月生者见甲,七月生者 见癸, 八月生者见寅,九月生者见丙,
  * 十月生者见乙,十一月生者见巳, 十二月生者见庚. 凡四柱年月日时上见者为有天德贵人.
  */

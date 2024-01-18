@@ -1,7 +1,7 @@
 package cn.northpark.YI.Bazisuanming.body;
 
 /**
- * Created by Jeey on 2017/10/11.
+ * Created by Jeey
  */
 public class SizhuRankQueryBody {
     private int year;

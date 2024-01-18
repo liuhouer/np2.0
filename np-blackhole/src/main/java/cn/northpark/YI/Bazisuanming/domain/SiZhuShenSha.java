@@ -3,7 +3,7 @@ package cn.northpark.YI.Bazisuanming.domain;
 import java.util.List;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 四柱神煞
  */
 public class SiZhuShenSha {

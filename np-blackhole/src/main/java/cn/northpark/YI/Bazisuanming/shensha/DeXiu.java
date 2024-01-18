@@ -13,7 +13,7 @@ import static cn.northpark.YI.Bazisuanming.domain.TianGan.*;
 
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 德秀贵人 寅午戌月，丙丁为德，戊癸为秀。申子辰月，壬癸戊己为德，丙辛甲己为秀。巳酉丑月，庚辛为德，乙庚为秀。亥卯未月，甲乙为德，丁壬为秀
  */
 public class DeXiu implements ShenSha {

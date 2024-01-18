@@ -7,7 +7,7 @@ import cn.northpark.YI.Bazisuanming.domain.ShenSha;
 import cn.northpark.YI.Bazisuanming.domain.TianGan;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 福星贵人 以年干或日干为主。凡甲丙两干见寅或子，乙癸两干见卯或丑，戊干见申，己干见未，丁干见亥，庚干见午，辛干见巳，壬干见辰是也
  */
 public class FuXing implements ShenSha {

@@ -7,7 +7,7 @@ import cn.northpark.YI.Bazisuanming.domain.ShenSha;
 import cn.northpark.YI.Bazisuanming.domain.TianGan;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 天乙贵人 甲戊并牛羊, 乙己鼠猴乡, 丙丁猪鸡位, 壬癸兔蛇藏, 庚辛逢虎马, 此是贵人方. 查 法: 以日干起贵人, 地支见者为是
  */
 public class TianYi implements ShenSha {

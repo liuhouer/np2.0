@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 神煞
  */
 public interface ShenSha {

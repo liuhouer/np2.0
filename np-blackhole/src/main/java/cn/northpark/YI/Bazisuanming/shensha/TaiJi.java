@@ -7,7 +7,7 @@ import cn.northpark.YI.Bazisuanming.domain.TianGan;
 
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 太极贵人 甲乙生人子午中, 丙丁鸡兔定亨通,戊己两干临四季,庚辛寅亥禄丰隆,壬癸巳申偏喜美, 值此应当福气 钟,更须贵格来相扶,候封万户到三公.
  */
 public class TaiJi implements ShenSha {

@@ -7,7 +7,7 @@ import cn.northpark.YI.Bazisuanming.domain.TianGan;
 
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  *  月德贵人 寅午戌月生者见丙, 申子辰月生者见壬,亥卯未月生者见甲,巳酉丑月生者见庚. 凡柱中年月日时干上见者为有月德贵人.
  */
 public class YueDe implements ShenSha {

@@ -1,7 +1,7 @@
 package cn.northpark.YI.Bazisuanming.domain;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 五行
  */
 public enum WuXing {

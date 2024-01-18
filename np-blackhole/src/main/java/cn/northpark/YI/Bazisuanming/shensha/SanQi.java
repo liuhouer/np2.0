@@ -7,7 +7,7 @@ import cn.northpark.YI.Bazisuanming.domain.ShenSha;
 import cn.northpark.YI.Bazisuanming.domain.TianGan;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 三奇贵人 天上三奇甲戊庚 中；地下三奇乙丙丁 上；人中三奇壬癸辛 下 天干有乙丙丁或地支有卯巳午，顺行为妙。三奇在什么条件下才能真正为奇？无非是：（一），顺布而排。即年乙月丙日丁，或月乙日丙时丁
  */
 public class SanQi implements ShenSha {

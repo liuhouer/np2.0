@@ -10,7 +10,7 @@ import static cn.northpark.YI.Bazisuanming.baziutil.BaZiUtil.BASE_TIMESTAMP;
 import static cn.northpark.YI.Bazisuanming.baziutil.BaZiUtil.JIA_ZI;
 
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  */
 public class Bazi {
     private TianGan yearGan;

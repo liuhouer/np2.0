@@ -1,7 +1,7 @@
 package cn.northpark.YI.Bazisuanming.domain;
 
 /**
- * Created by Jeey on 2017/11/22.
+ * Created by Jeey
  */
 public enum  JiaZi {
     甲子(WuXing.金),

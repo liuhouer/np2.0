@@ -8,7 +8,7 @@ import cn.northpark.YI.Bazisuanming.domain.TianGan;
 
 import static cn.northpark.YI.Bazisuanming.domain.DiZhi.*;
 /**
- * Created by Jeey on 2017/11/17.
+ * Created by Jeey
  * 华盖 寅午戌见戌, 亥卯未见未,申子辰见辰, 巳酉丑见丑. 以年支或日支不主, 凡四柱中所见者为有华盖星.
  */
 public class HuaGai implements ShenSha {
