@@ -9,7 +9,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Optional;
 
 
 /**完整排盘系统
@@ -218,11 +220,13 @@ public class LuozhuangPaipanClass {
 
         }
         System.out.println("---------");
-        System.out.println("此人大运");
+
+        int dayunFirst = cal.get(Calendar.YEAR) + Luozhuangpaipandayun.calDayunOffset(ganziyear,DayunArray);
+        System.out.println("此人大运|每10年轮换|"+"第一个大运纪年"+dayunFirst+"|"+"每逢"+String.valueOf(dayunFirst).substring(String.valueOf(dayunFirst).length()-1)+"轮换大运");
         myLuozhuangpaipandayun.pringst(DayunArray);
-        System.out.println("---------");
-        System.out.println("此人起大运日期：");
-        System.out.println(myLuozhuangdizhang.dayunkaishi(cal, ganziyear.substring(0,1), isman)+ "岁");
+//        System.out.println("---------");
+//        System.out.println("此人起大运日期：");
+//        System.out.println(myLuozhuangdizhang.dayunkaishi(cal, ganziyear.substring(0,1), isman)+ "岁");
         System.out.println("---------");
         System.out.println("此人大运生旺死绝");
         myLuozhuangpaipandayun.pringst(DayunArrayshengsi);
@@ -265,6 +269,8 @@ public class LuozhuangPaipanClass {
 
 
     }
+
+
 
     /**
      * @param args the command line arguments
