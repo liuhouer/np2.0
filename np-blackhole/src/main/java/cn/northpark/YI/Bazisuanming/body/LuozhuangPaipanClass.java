@@ -3,6 +3,8 @@ package cn.northpark.YI.Bazisuanming.body;
 /**
  * Created by Jeey  .
  */
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -72,6 +74,19 @@ public class LuozhuangPaipanClass {
 
         System.out.println("此人八字【" + GanZhi + "】");
 
+
+        //TODO 称骨
+        Double aDouble = JeeyChengGu.yearMap.get(ganziyear);
+        Double bDouble = JeeyChengGu.monthMap.get(lunar.getMonth()+"月");
+        Double cDouble = JeeyChengGu.dayMap.get(lunar.getDay());
+        Double dDouble = JeeyChengGu.hourMap.get(ganzitime.substring(1));
+        Double sumed = aDouble+bDouble+cDouble+dDouble;
+        System.out.println("袁天罡称骨【" + JeeyChengGu.convertToTraditionalChineseUnits(sumed) +"("+JeeyChengGu.convertToTraditionalChineseUnits(aDouble) + "+"+ JeeyChengGu.convertToTraditionalChineseUnits(bDouble) + "+"+ JeeyChengGu.convertToTraditionalChineseUnits(cDouble) +  "+"+ JeeyChengGu.convertToTraditionalChineseUnits(dDouble) +")】");
+        System.out.println("袁天罡称骨算命【" +
+                ((isman == Sex.MAN) ?
+                        JeeyChengGu.mansongMap.get(JeeyChengGu.convertToTraditionalChineseUnits(sumed).replace("钱", "")) :
+                        JeeyChengGu.womansongMap.get(JeeyChengGu.convertToTraditionalChineseUnits(sumed).replace("钱", ""))) +
+                "】");
         String[] arrayOfString = new String[9];
 
         arrayOfString[0] = "";
@@ -114,7 +129,7 @@ public class LuozhuangPaipanClass {
         //　　　　才枭伤　　才　　　　印官　　　比杀枭　 <- 这里直接用藏干计算
         //地势　　养　　　　胎　　　　沐浴　　　长生　　　<- 藏干不算生旺死绝
         //纳音　　白蜡金　　城墙土　　路旁土　　白蜡金
-
+        System.out.println("---------");
         System.out.println("此人四柱干支十神");
         System.out.print(myluozhuangpaipanshisheng.shisheng[shishengbiaoshunxu][myLuozhuangpaipandayun.getyuezhuStart(myluozhuangpaipanshisheng.shisheng[0], ganziyear.substring(0, 1))]); //十神表 用支查表
         System.out.print(" ");
@@ -126,6 +141,7 @@ public class LuozhuangPaipanClass {
 
         System.out.println("");
 
+        System.out.println("---------");
         System.out.println("此人年藏干");
         String[] zhanggan = LuozhuangcommonClass.dizhuang(ganziyear.substring(1, 2));
         for (int i = 0; i < zhanggan.length; i++) {
@@ -142,6 +158,7 @@ public class LuozhuangPaipanClass {
         }
         System.out.println("");
         zhanggan = LuozhuangcommonClass.dizhuang(ganzimonth.substring(1, 2));
+        System.out.println("---------");
         System.out.println("此人月藏干");
 
         for (int i = 0; i < zhanggan.length; i++) {
@@ -156,6 +173,7 @@ public class LuozhuangPaipanClass {
 
         }
         System.out.println("");
+        System.out.println("---------");
         System.out.println("此人日藏干");
         zhanggan = LuozhuangcommonClass.dizhuang(ganziday.substring(1, 2));
         for (int i = 0; i < zhanggan.length; i++) {
@@ -171,6 +189,7 @@ public class LuozhuangPaipanClass {
         }
 
         System.out.println("");
+        System.out.println("---------");
         System.out.println("此人时藏干");
         zhanggan = LuozhuangcommonClass.dizhuang(ganzitime.substring(1, 2));
         for (int i = 0; i < zhanggan.length; i++) {
@@ -185,7 +204,7 @@ public class LuozhuangPaipanClass {
 
         }
 
-
+        System.out.println();
 
         String[] DayunArrayshengsi = new String[DayunArray.length];//大运十天干生旺死绝表
         String[] DayunArrayshisheng = new String[DayunArray.length];//大运十神表
@@ -198,14 +217,16 @@ public class LuozhuangPaipanClass {
 
 
         }
+        System.out.println("---------");
         System.out.println("此人大运");
         myLuozhuangpaipandayun.pringst(DayunArray);
-
+        System.out.println("---------");
         System.out.println("此人起大运日期：");
         System.out.println(myLuozhuangdizhang.dayunkaishi(cal, ganziyear.substring(0,1), isman)+ "岁");
-
+        System.out.println("---------");
         System.out.println("此人大运生旺死绝");
         myLuozhuangpaipandayun.pringst(DayunArrayshengsi);
+        System.out.println("---------");
         System.out.println("此人大运十神");
         myLuozhuangpaipandayun.pringst(DayunArrayshisheng);
 
@@ -218,13 +239,13 @@ public class LuozhuangPaipanClass {
         }
 
 
-
+        System.out.println("---------");
         System.out.println("此人大运神煞");
         myLuozhuangpaipandayun.pringst(DayunArrayshengsha);
 
 
 
-
+        System.out.println("---------");
         System.out.println("此人流年");
 
         int[] liunianarray = new int[80];
@@ -235,7 +256,7 @@ public class LuozhuangPaipanClass {
             liunianarray[i] = start + i;
         }
         myLuozhuangpaipandayun.pringst(myLuozhuangshengSha.liunianshensha(liunianarray, arrayOfString, isman));
-
+        System.out.println("---------");
         System.out.println("此人婚姻神煞:");
         LuozhuangshenshaHehun myLuozhuangshenshaHehun = new LuozhuangshenshaHehun();
         System.out.println(myLuozhuangshenshaHehun.shensha(cal));
