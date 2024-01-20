@@ -190,6 +190,7 @@ public class SoftController {
                     model.setContentMinio(MinioUtils.uploadText(model.getContent()));
                     model.setUseMinio(model.getUseMinio());
                 }
+                model.setPostDate(TimeUtils.nowdate());
         		softService.updateSoft(model);
 
 

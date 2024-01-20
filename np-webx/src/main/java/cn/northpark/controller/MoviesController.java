@@ -300,6 +300,7 @@ public class MoviesController {
                     model.setMovieDescMinio(MinioUtils.uploadText(model.getMovieDesc()));
                     model.setUseMinio(model.getUseMinio());
                 }
+                model.setAddTime(TimeUtils.nowdate());
         		moviesService.updateMovies(model);
 
                 //从redis set里面删除更新的失效资源
