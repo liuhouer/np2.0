@@ -205,7 +205,7 @@ public class LuozhuangshengSha {
 
         }
         if ((taohua(bazi[6], yearjiazi.substring(1, 2))) || (taohua(bazi[2], yearjiazi.substring(1, 2)))) {
-            sb.append("咸池");
+            sb.append("咸池(桃花)");
 
         }
         if (yuancheng(bazi[2], yearjiazi.substring(1, 2), Manorwoman(isman), dizhiOrder(bazi[2]) % 2)) {
@@ -430,7 +430,7 @@ public class LuozhuangshengSha {
 
             }
             if ((taohua(bazi[6], bs)) || (taohua(bazi[2], bs))) {
-                sb.append("咸池");
+                sb.append("咸池(桃花)");
 
             }
 
@@ -509,7 +509,7 @@ public class LuozhuangshengSha {
     }
 
     /**
-     * 咸池 挑花 申 子辰在酉, 寅午戌在卯, 巳酉丑在午, 亥卯未在子. 查法: 以年支或日支查四柱其它地支, 见者为 是.
+     * 咸池(桃花) 挑花 申 子辰在酉, 寅午戌在卯, 巳酉丑在午, 亥卯未在子. 查法: 以年支或日支查四柱其它地支, 见者为 是.
      *
      * @param paramString1
      * @param paramString2
@@ -695,16 +695,16 @@ public class LuozhuangshengSha {
         if (((paramString1.equals("亥")) || (paramString1.equals("卯")) || (paramString1.equals("未"))) && (paramString2.equals("灾煞"))) {
             return "酉";
         }
-        if (((paramString1.equals("申")) || (paramString1.equals("子")) || (paramString1.equals("辰"))) && (paramString2.equals("咸池"))) {
+        if (((paramString1.equals("申")) || (paramString1.equals("子")) || (paramString1.equals("辰"))) && (paramString2.equals("咸池(桃花)"))) {
             return "酉";
         }
-        if (((paramString1.equals("寅")) || (paramString1.equals("午")) || (paramString1.equals("戌"))) && (paramString2.equals("咸池"))) {
+        if (((paramString1.equals("寅")) || (paramString1.equals("午")) || (paramString1.equals("戌"))) && (paramString2.equals("咸池(桃花)"))) {
             return "卯";
         }
-        if (((paramString1.equals("巳")) || (paramString1.equals("酉")) || (paramString1.equals("丑"))) && (paramString2.equals("咸池"))) {
+        if (((paramString1.equals("巳")) || (paramString1.equals("酉")) || (paramString1.equals("丑"))) && (paramString2.equals("咸池(桃花)"))) {
             return "午";
         }
-        if (((paramString1.equals("亥")) || (paramString1.equals("卯")) || (paramString1.equals("未"))) && (paramString2.equals("咸池"))) {
+        if (((paramString1.equals("亥")) || (paramString1.equals("卯")) || (paramString1.equals("未"))) && (paramString2.equals("咸池(桃花)"))) {
             return "子";
         }
         if ((paramString1.equals("寅")) && (paramString2.equals("天德"))) {

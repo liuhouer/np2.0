@@ -182,6 +182,38 @@ public class Luozhuangpaipandayun {
     }
 
     /**
+     * @author Jeey
+     * 根据大运排出的年份 和出生年份计算偏移量
+     * @param ganziyear
+     * @param dayunArray
+     * @return
+     */
+    public static int calDayunOffset(String ganziyear,String[] dayunArray ) {
+        String[] jiazhiArray = BaZi.jiazhi;
+        int ganziyearIndex = -1; // 初始化ganziyear索引位置为-1
+        int jiIndex = -1; // 初始化己的索引位置为-1
+
+        for (int i = 0; i < jiazhiArray.length; i++) {
+            if (jiazhiArray[i].equals(ganziyear)) {
+                ganziyearIndex = i; // 找到ganziyear对象，记录索引位置
+            }
+        }
+        for (int i = ganziyearIndex; i < jiazhiArray.length; i++) {
+            if (jiazhiArray[i].startsWith(dayunArray[0].substring(0,1))) {
+                jiIndex = i; // 找到第一个"己"，记录索引位置
+                break; // 找到后跳出循环
+            }
+        }
+
+        int offset = jiIndex - ganziyearIndex; // 计算差值
+
+        System.out.println("ganziyear索引位置: " + ganziyearIndex);
+        System.out.println("己的索引位置: " + jiIndex);
+        System.out.println("差值: " + offset);
+        return  offset ;
+    }
+
+    /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws ParseException {
@@ -191,7 +223,7 @@ public class Luozhuangpaipandayun {
 //        System.out.print(String.format(":%s,:%s",test));
 
         Luozhuangpaipandayun my=new Luozhuangpaipandayun();
-        my.paipan("1991-4-1 15", Sex.MAN);
+        my.paipan("1991-12-31 13", Sex.MAN);
 
     }
 }
