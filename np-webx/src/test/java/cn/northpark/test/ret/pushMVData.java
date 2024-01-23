@@ -15,14 +15,14 @@ import java.io.IOException;
 public class pushMVData {
     public static void main(String[] args) {
 
-        for (int i = 3; i <=36 ; i++) {
+        for (int i = 1; i <=30 ; i++) {
             String path = "C:\\Users\\Bruce\\Documents\\MVpage"+i+".txt";
             try {
                 String jsonData = FileUtils.readFileToString(new File(path));
 
                 log.info("爬取的数据----》,{}", jsonData);
-//                String url = "https://northpark.cn/ret/movies/data";
-                String url = "http://localhost:8082/ret/movies/data";
+                String url = "https://northpark.cn/ret/movies/data";
+//                String url = "http://localhost:8082/ret/movies/data";
 
                 String result = HttpGetUtils.sendPostJsonData(url, jsonData);
                 while (!result.contains("200")){

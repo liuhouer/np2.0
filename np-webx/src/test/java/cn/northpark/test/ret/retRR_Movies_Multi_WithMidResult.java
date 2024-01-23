@@ -24,7 +24,7 @@ public class retRR_Movies_Multi_WithMidResult {
 
         /*构造页码*/
         List<Integer> todo_list = new ArrayList<>();
-        for (int i = 1; i <= 36; i++) {
+        for (int i = 1; i <= 30; i++) {
             todo_list.add(i);
         }
 
