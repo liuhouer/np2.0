@@ -2406,6 +2406,7 @@ public class HTMLParserUtil {
             if (div_cont.contains("百度网盘") || div_cont.contains("迅雷云盘") || div_cont.contains("阿里网盘")|| div_cont.contains("提取码")
                     || div_cont.contains("迅雷下载") || div_cont.contains("云盘下载") || linkHtml.contains("ed2k") || linkHtml.contains("magnet")
                     || div_cont.contains("下载") || div_cont.contains(BC_Constant.ignore_pic_list.get(0)) //迅雷下载图标
+                    || div_cont.contains("网盘")
             ) {
 
                 sb.append(link.outerHtml());
@@ -2417,7 +2418,7 @@ public class HTMLParserUtil {
             System.err.println("html--->"+div_cont);
             if (div_cont.contains("百度网盘") || div_cont.contains("迅雷云盘") || div_cont.contains("阿里网盘")|| div_cont.contains("提取码")
                     || div_cont.contains("迅雷下载") || div_cont.contains("云盘下载") || linkHtml.contains("ed2k") || linkHtml.contains("magnet")
-                    || div_cont.contains("下载")
+                    || div_cont.contains("下载") || div_cont.contains("网盘")
             ) {
 
                 //包含下载 && 有a链接
@@ -2995,9 +2996,60 @@ public class HTMLParserUtil {
 
 //            retSQ_hema()
 
-            System.err.println(getLocalFolderByOS());
-            System.err.println(getLocalFolderByOS("mv"));
-            System.err.println(getLocalFolderByOSMovies());
+//            System.err.println(getLocalFolderByOS());
+//            System.err.println(getLocalFolderByOS("mv"));
+//            System.err.println(getLocalFolderByOSMovies());
+
+
+
+
+            String desc = "";
+
+
+            String a_url = "https://www.rrdynb.com/dianshiju/2022/1110/30955.html";
+            String dataResult_ = HttpGetUtils.getDataResult(a_url);
+
+            Document doc_ = Jsoup.parse(dataResult_, a_url);
+
+
+            Element detail = doc_.select("div.movie-des.shadow > div.movie-txt").get(0);
+
+
+            //========================解析路径start======================================
+            //删除打赏和微信二维码信息
+
+            StringBuilder sb = new StringBuilder();
+
+
+
+            //处理div中的连接，就去p磁力链查找下载地址，删除后，设置到path
+            Elements ps = detail.select("div.movie-txt > div");
+            if (!CollectionUtils.isEmpty(ps)) {
+                for (Iterator iterator = ps.iterator(); iterator.hasNext(); ) {
+                    Element link = (Element) iterator.next();
+                    if(link.select("a").size()>0){
+                        //把iterater里面的元素连接提取到path中
+                        handleLink(sb, link, "div");
+                    }
+                }
+            }
+
+            //处理完div后 处理样式有问题的span
+            Elements spans = detail.select("div.movie-txt > span");
+            if (!CollectionUtils.isEmpty(spans)) {
+                for (Iterator iterator = spans.iterator(); iterator.hasNext(); ) {
+                    Element link = (Element) iterator.next();
+                    //把iterater里面的元素连接提取到path中
+                    handleLink(sb, link, "span");
+                }
+            }
+
+
+            String path = sb.toString();
+
+            log.info("path,,,,{}",path);
+
+            //========================解析路径======================================
         } catch (Exception e) {
 
             log.error("HTMLPARSERutils------->", e);
