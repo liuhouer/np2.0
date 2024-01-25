@@ -62,7 +62,7 @@ public class KnowledgeController {
 	/**
 	 * 每页展示多少条学习数
 	 */
-	private static int LearningCount = 20;
+	private static int LearningCount = 15;
 
 	
 	/**

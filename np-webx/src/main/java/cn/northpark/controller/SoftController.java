@@ -61,7 +61,7 @@ public class SoftController {
     /**
      * 每页展示多少条mac数
      */
-    private static int SoftCount = 20;
+    private static int SoftCount = 16;
     
 
 
