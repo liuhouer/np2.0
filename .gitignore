@@ -42,3 +42,4 @@ redis.properties
 *.log
 /log/
 mybatis-config.xml
+kafka.properties
