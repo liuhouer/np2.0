@@ -42,4 +42,5 @@ redis.properties
 *.log
 /log/
 mybatis-config.xml
-kafka.properties
+/np-base/src/main/resources/kafka.properties
+/np-webx/src/main/resources/kafka.properties
