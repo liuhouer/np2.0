@@ -1,7 +1,6 @@
 package soft;
 
 import cn.northpark.utils.NPQueryRunner;
-import cn.northpark.utils.SoftUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.lang3.StringUtils;

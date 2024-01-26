@@ -1,14 +1,13 @@
 package cn.northpark.YI.PredictLuckNumber;
 
+import cn.northpark.utils.EmailUtils;
+import cn.northpark.utils.TimeUtils;
+
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
 /**
- * 本工具原本是用于安卓日历小程序的，现在工程暂时搁置了，就把这个生成八字的方法发出来。
- * 测试类
  *
  */
 public class PredictLuckNumberApp {
@@ -16,23 +15,23 @@ public class PredictLuckNumberApp {
 	public static void main(String[] args) throws Exception {
 		// 获取当前日期时间
 		// 获取当前日期
-		LocalDate currentDate = LocalDate.now();
+//		LocalDate currentDate = LocalDate.now();
+//
+//		// 计算前面10天的日期
+//		LocalDate startDate = currentDate.minusDays(10);
+//
+//		// 定义日期格式化器
+//		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//		// 格式化日期为 "yyyy-MM-dd" 格式
+//		for (int i = 0; i < 10; i++) {
+//			String formattedDate = startDate.plusDays(i).format(dateFormatter);
+//			System.out.println(formattedDate);
+//
+//			predictNumbers(formattedDate);
+//		}
 
-		// 计算前面10天的日期
-		LocalDate startDate = currentDate.minusDays(10);
-
-		// 定义日期格式化器
-		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-		// 格式化日期为 "yyyy-MM-dd" 格式
-		for (int i = 0; i < 10; i++) {
-			String formattedDate = startDate.plusDays(i).format(dateFormatter);
-			System.out.println(formattedDate);
-
-			predictNumbers(formattedDate);
-		}
-
-
+		predictNumbers(TimeUtils.nowdate());
 
 	}
 
@@ -66,9 +65,9 @@ public class PredictLuckNumberApp {
 		sb.append("当前日期时间: " + currentDateTimeString);
 		sb.append("\n");
 		sb.append("今日幸运数字: " + heLuoNo);
-//		String sendEMAIL = EmailUtils.getInstance().sendEMAIL("654714226@qq.com", "今日预测3D幸运数字", sb.toString());
-//
-//		System.err.println("sendEMAIL flag====="+sendEMAIL);
+		String sendEMAIL = EmailUtils.getInstance().sendEMAIL("654714226@qq.com", "今日预测3D幸运数字", sb.toString());
+
+		System.err.println("sendEMAIL flag====="+sendEMAIL);
 	}
 
 }
