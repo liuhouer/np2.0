@@ -90,6 +90,7 @@ public class JeeyChengGu {
 
         // 初始化月 map
         Map<String, Double> tempMonthMap = new HashMap<>();
+        tempMonthMap.put("正月", 0.6);
         tempMonthMap.put("一月", 0.6);
         tempMonthMap.put("二月", 0.7);
         tempMonthMap.put("三月", 1.8);
@@ -102,6 +103,20 @@ public class JeeyChengGu {
         tempMonthMap.put("十月", 0.8);
         tempMonthMap.put("十一月", 0.9);
         tempMonthMap.put("十二月", 0.5);
+        tempMonthMap.put("腊月", 0.5);
+
+        tempMonthMap.put("1月", 0.6);
+        tempMonthMap.put("2月", 0.7);
+        tempMonthMap.put("3月", 1.8);
+        tempMonthMap.put("4月", 0.9);
+        tempMonthMap.put("5月", 0.5);
+        tempMonthMap.put("6月", 1.6);
+        tempMonthMap.put("7月", 0.9);
+        tempMonthMap.put("8月", 1.5);
+        tempMonthMap.put("9月", 1.8);
+        tempMonthMap.put("10月", 0.8);
+        tempMonthMap.put("11月", 0.9);
+        tempMonthMap.put("12月", 0.5);
 
         monthMap = Collections.unmodifiableMap(tempMonthMap);
 
