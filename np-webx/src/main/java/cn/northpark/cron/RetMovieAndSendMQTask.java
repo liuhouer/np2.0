@@ -79,7 +79,7 @@ public class RetMovieAndSendMQTask {
     public static void main(String[] args) {
         log.info("#####开始获取["+ TimeUtils.nowdate() +"]电影信息#######");
 
-        for (int i = 1; i < 3; i++) {
+        for (int i = 1; i < 20; i++) {
             log.info("正在执行task " + i);
 
             //====================执行逻辑=====================

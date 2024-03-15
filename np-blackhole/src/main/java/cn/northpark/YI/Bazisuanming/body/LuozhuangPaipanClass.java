@@ -279,7 +279,7 @@ public class LuozhuangPaipanClass {
         LuozhuangPaipanClass my = new LuozhuangPaipanClass();
         System.out.println("请输入你的年月日时间类似 2013-3-14 20");
         BufferedReader strin = new BufferedReader(new InputStreamReader(System.in));
-        String a = "1991-12-31 13";
+        String a = "1990-1-20 8";
         System.out.println("输入的是：" + a);
         my.paipan(a, Sex.MAN);
 
