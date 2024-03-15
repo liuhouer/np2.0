@@ -270,11 +270,11 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-<script data-cfasync="false" src="https://northpark.cn/statics/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script data-cfasync="false" src="https://northpark.cn/statics/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
+<script src="https://northpark.cn/statics/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<script src="https://northpark.cn/statics/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
 <script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.js"></script>
 <script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script data-cfasync="false" src="/static/js/page/zancmt.js"></script>
+<script src="/static/js/page/zancmt.js"></script>
 
 <script>
     $(function () {

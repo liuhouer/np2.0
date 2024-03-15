@@ -215,7 +215,7 @@
 
 <%@ include file="page/common/container.jsp" %>
 
-<script type="text/javascript" data-cfasync="false">
+<script type="text/javascript"  >
     //禁止图片拉伸
     $(function () {
         $("img").each(function () {
@@ -243,7 +243,7 @@
     })
 </script>
 
-<script type="text/javascript" data-cfasync="false">
+<script type="text/javascript"  >
     /*  ##set query param */
     var keyword = $("#keyword").val();
     if (keyword) {

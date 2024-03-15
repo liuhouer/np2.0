@@ -48,9 +48,9 @@
 
 <script src="/static/js/artDialog/plugins/iframeTools.js"></script>
 
-<script data-cfasync="false" src="/static/js/page/seltab.js"></script>
+<script src="/static/js/page/seltab.js"></script>
 
-<script data-cfasync="false" src="/static/js/page/common.js"></script>
+<script src="/static/js/page/common.js"></script>
 
 <script>
 

@@ -90,7 +90,7 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script data-cfasync="false" src="https://northpark.cn/statics/js/page/space.js"></script>
+<script src="https://northpark.cn/statics/js/page/space.js"></script>
 
 
 </body>

@@ -115,8 +115,8 @@
 		                                        <a class="common-a-right" title="置顶" href="" onclick="handup('${s.id}')">置顶</a>
 		                                        <span class=" glyphicon glyphicon-eye-close margin10"></span>
 		                                        <a class="common-a-right" title="隐藏" href="" onclick="hideup('${s.id}')">大尺度隐藏</a>
-		                                        <span class="glyphicon glyphicon-pencil margin10"></span>   
-		                                        <a class="common-a-right" title="编辑" href="/movies/edit/${s.id}" >快速编辑</a>   
+		                                        <span class="glyphicon glyphicon-pencil margin10"></span>
+		                                        <a class="common-a-right" title="编辑" href="/movies/edit/${s.id}" >快速编辑</a>
                                             </c:if>
                                         </c:if>
 
@@ -125,7 +125,7 @@
 
                                             ${s.movieDesc }
                                     </p>
-                                    
+
                                     <p>
                                         <a class="btn btn-warning margin-t10" href="/movies/post-${s.id}.html">
                                             Read More
@@ -264,7 +264,7 @@
 
 <%@ include file="page/common/container.jsp" %>
 
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
     //禁止图片拉伸
     $(function () {
 
@@ -292,7 +292,7 @@
     })
 </script>
 
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
 
     $(function () {
         //搜索事件处理
@@ -368,7 +368,7 @@
 
 
 </script>
-<script data-cfasync="false" src="https://northpark.cn/statics/js/page/movies.js"></script>
+<script src="https://northpark.cn/statics/js/page/movies.js"></script>
 
 <script>
 

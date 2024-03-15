@@ -207,7 +207,7 @@
 	</div>
 
 	<%@ include file="/WEB-INF/views/page/common/container.jsp"%>
-	<script data-cfasync="false" type="text/javascript">
+	<script type="text/javascript">
 		$(function() {
 
 			//设置标签颜色

@@ -235,7 +235,7 @@
 
 
 
-	<script type="text/javascript" data-cfasync="false" >
+	<script type="text/javascript"   >
 		$(function() {
 
 			//设置标签颜色

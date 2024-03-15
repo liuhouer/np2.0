@@ -19,7 +19,7 @@
     <meta name="keywords" content="${poem_enjoy.title },${poem_enjoy.author },诗词秀,诗词赏析,诗词天地,爱诗词,NorthPark">
     <meta name="description"
           content="${poem_enjoy.content }">
-          
+
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <style>
 
@@ -90,7 +90,7 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 <script type="text/javascript" src="https://northpark.cn/statics/js/canvas-particle.js"></script>
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
     //禁止图片拉伸
     $(function () {
     	$(".bg-white").find("img").each(function () {
@@ -109,7 +109,7 @@
     });
 
 </script>
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
     window.onload = function () {
         //配置
         var config = {

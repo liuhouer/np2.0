@@ -182,9 +182,9 @@
 					</div>
 				</div>
 				<%@ include file="/WEB-INF/views/page/common/container.jsp" %>
-					<script data-cfasync="false" src="https://northpark.cn/statics/js/page/forget.js">
+					<script src="https://northpark.cn/statics/js/page/forget.js">
 					</script>
-					<script data-cfasync="false">
+					<script  >
 						loadDonates(1);
 						//展示全文和评论详情-- northpark评论模块 --
 						loadComment(999999, 7);
@@ -199,5 +199,5 @@
 						}
 					</script>
 		</body>
-	
+
 	</html>

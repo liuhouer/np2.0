@@ -245,7 +245,7 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-<script type="text/javascript" data-cfasync="false">
+<script type="text/javascript"  >
     //禁止图片拉伸
     $(function () {
         $("img").each(function () {

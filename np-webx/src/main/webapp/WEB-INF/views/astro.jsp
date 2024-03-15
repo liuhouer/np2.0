@@ -160,11 +160,11 @@
                         <div class="clearfix ">
                             <hr>
                         </div>
-                         <c:if test="${wx_cop_userid !=null}"> 
+                         <c:if test="${wx_cop_userid !=null}">
                            <div class="row padding20" id="J_order_xz" >
                                    <a class="btn btn-pink  no-decoration btn-xlg" style="display: block;" id="J_order_btn" >定制星座推送</a>
 
-                           </div>  
+                           </div>
                          </c:if>
 
 
@@ -193,7 +193,7 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
     //禁止图片拉伸
     $(function () {
     	$(".bg-white").find("img").each(function () {
@@ -312,7 +312,7 @@
 					   .append('<p>工作运势：'+msg.career+'</p>')
 					   .append('<p>财运运势：'+msg.money+'</p>')
 					   .append('<p>健康运势：'+msg.health+'</p>')
-					   
+
             	}else if(type=='week'){
             		$("#J_content").empty().append('<h3>本周：'+msg.date+'</h3>')
 					   .append('<p>爱情运势：'+msg.love+'</p>')

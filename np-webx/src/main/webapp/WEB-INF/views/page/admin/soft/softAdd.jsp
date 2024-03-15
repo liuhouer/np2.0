@@ -51,8 +51,8 @@
                                name="retCode" type="text" value="${model.retCode }">
                     </div>
                     <div class="form-group ">
-                               
-                         <span class="glyphicon glyphicon-star padding-b20"></span>下载地址     
+
+                         <span class="glyphicon glyphicon-star padding-b20"></span>下载地址
                          <textarea id="J_path" style="height: 200px; max-height: 400px;"
                                       name="path" rows="5">
 								${model.path }
@@ -63,9 +63,9 @@
                                    target="_black">
                                     <i class="fa fa-download padding5"></i> 云盘下载
                                 </a>
-						 </textarea>      
+						 </textarea>
                     </div>
-                    
+
                     <div class="form-group">
                     		<span class="glyphicon glyphicon-star padding-b20"></span>软件简介
 							<textarea id="J_brief" style="height: 200px; max-height: 400px;"
@@ -125,14 +125,14 @@
                     </div>
 
 
-                    
+
                     <div class="form-group ">
 						<span class="glyphicon glyphicon-star  padding-b20"></span>英文标签
                         <input  placeholder="英文标签" required
                                class="form-control  input-lg  border-light-1 bg-lyellow grid98 radius-0"
                                name="tagsCode" type="text" value="${model.tagsCode }">
                     </div>
-                    
+
 
 
                     <div class="form-group">
@@ -158,7 +158,7 @@
 
 <script src="https://northpark.cn/statics/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
 <script src="https://northpark.cn/statics/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
     $(function () {
         var editor = $('#J_md_text').wangEditor({
             'menuConfig': [
@@ -169,7 +169,7 @@
                 ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
             ]
         });
-        
+
         var editor2 = $('#J_path').wangEditor({
             'menuConfig': [
                 ['viewSourceCode'],
@@ -179,7 +179,7 @@
                 ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
             ]
         });
-        
+
         var editor3 = $('#J_brief').wangEditor({
             'menuConfig': [
                 ['viewSourceCode'],

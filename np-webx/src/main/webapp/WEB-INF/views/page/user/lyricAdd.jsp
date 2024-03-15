@@ -94,7 +94,7 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script data-cfasync="false" src="https://northpark.cn/statics/js/page/lrc/lyricadd.js"></script>
+<script src="https://northpark.cn/statics/js/page/lrc/lyricadd.js"></script>
 <script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.js"></script>
 <script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.zh-CN.js"></script>
 

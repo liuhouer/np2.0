@@ -146,7 +146,7 @@
 
 <script src="/static/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
 <script src="/static/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
         $(function () {
                 let editor = $('#J_md_text').wangEditor({
                         'menuConfig': [

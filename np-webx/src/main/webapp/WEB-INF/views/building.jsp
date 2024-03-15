@@ -31,7 +31,7 @@
     <div class="container">
         <div class="mainbody" style="margin-top:10em;">
                 <div class="col-sm-12  center">
-                        
+
 
 						<img src="https://northpark.cn/statics/img/404.jpg"></img>
 
@@ -53,7 +53,7 @@
 
 
 
-<script  data-cfasync="false" type="text/javascript">
+<script  type="text/javascript">
 
 $(function () {
     $("#mes").click(function () {

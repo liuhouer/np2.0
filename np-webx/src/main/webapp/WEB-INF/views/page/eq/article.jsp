@@ -157,14 +157,14 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
 
 
     $(function () {
     	$(".bg-white").find("img").each(function () {
             $(this).css('max-width', ($(".bg-white").width()));
             $(this).css('padding-right', '20%');
-            
+
         })
 
         //展示全文和评论详情-- northpark评论模块 --

@@ -45,12 +45,12 @@
                                name="movieName" type="text" value="${model.movieName }">
                     </div>
                     <div class="form-group ">
-                               
-                         <span class="glyphicon glyphicon-star"></span>下载地址     
+
+                         <span class="glyphicon glyphicon-star"></span>下载地址
                          <textarea id="J_path" style="height: 200px; max-height: 400px;"
                                       name="path" rows="5">
 								${model.path }
-						 </textarea>      
+						 </textarea>
                     </div>
 					<div class="form-group ">
 						<span class="glyphicon glyphicon-star"></span>电影颜色
@@ -83,7 +83,7 @@
                             <input type="checkbox" name="useMinio" value="1"  ${model.useMinio == 1 ? 'checked' : ''} > 使用Minio
                         </label>
                     </div>
-					
+
                     <div class="form-group">
                         <input id="formSubmit" data-activetext="添加 ››"
                                class="btn btn-hero btn-xlg margin-t10 grid50" value="添加"
@@ -107,7 +107,7 @@
 
 <script src="https://northpark.cn/statics/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
 <script src="https://northpark.cn/statics/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
     $(function () {
         var editor = $('#J_md_text').wangEditor({
             'menuConfig': [
@@ -118,7 +118,7 @@
                 ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
             ]
         });
-        
+
         var editor2 = $('#J_path').wangEditor({
             'menuConfig': [
                 ['viewSourceCode'],

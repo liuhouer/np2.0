@@ -32,7 +32,7 @@
     <div class="container">
         <div class="mainbody" style="margin-top:10em;">
                 <div class="col-sm-12  center">
-                        
+
 
 						<img src="https://northpark.cn/statics/img/500.jpg"></img>
 
@@ -53,7 +53,7 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-<script data-cfasync="false" type="text/javascript">
+<script type="text/javascript">
 
 $(function () {
     $("#mes").click(function () {
