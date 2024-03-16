@@ -79,8 +79,8 @@
 										<div class="dashed center col-md-10 padding-b20">
 
 											<c:if test="${user==null }">
-												<p class="center red">
-													本文隐藏内容 <a target="_blank" class="flatbtn green-text"
+												<p class="center hidden-content">
+													本文隐藏内容 <a target="_blank" class="flatbtn"
 														id="J_login_see"><i class="fa fa-sign-in padding5"></i>登录</a>
 													后才可以浏览
 												</p>
@@ -89,7 +89,7 @@
 												<p id="J_show_path">${model.path }</p>
 											</c:if>
 
-									        <small class="text-color-K padding-l10">资源失效、缺失、错误 不要慌 </small>
+									        <small class="text-muted padding-l10">资源失效、缺失、错误 不要慌 </small>
 											<span class="fa fa-hand-o-right padding-l10"></span>
 											<input id="J_feedback_btn" class="btn tag-node" style="width:150px;" type="button" value="戳我,失效反馈">
 
