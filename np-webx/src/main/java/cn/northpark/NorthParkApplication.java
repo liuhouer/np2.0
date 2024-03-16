@@ -3,12 +3,15 @@ package cn.northpark;
 import cn.northpark.interceptor.AdminInterceptor;
 import cn.northpark.interceptor.LoginInterceptor;
 import cn.northpark.interceptor.UseCKInterceptor;
+import cn.northpark.utils.JsonUtil;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.Context;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
@@ -18,17 +21,29 @@ import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
 @MapperScan("cn.northpark.mapper")
+@Slf4j
 public class NorthParkApplication extends SpringBootServletInitializer implements WebMvcConfigurer, ErrorPageRegistrar {
 
 	/**
@@ -104,8 +119,46 @@ public class NorthParkApplication extends SpringBootServletInitializer implement
         registry.addErrorPages(errorPage500, errorPage404);
     }
 
-    public static void main(String[] args) {
-		SpringApplication.run(NorthParkApplication.class, args);
+
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        return args -> {
+
+            System.out.println("Let's inspect the RequestMappingHandlerMapping provided by NorthPark:");
+
+            RequestMappingHandlerMapping mapping = ctx.getBean(RequestMappingHandlerMapping.class);
+            Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
+
+            List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+            for (Map.Entry<RequestMappingInfo, HandlerMethod> m : map.entrySet()) {
+                Map<String, String> map1 = new HashMap<String, String>();
+                RequestMappingInfo info = m.getKey();
+                HandlerMethod method = m.getValue();
+                PatternsRequestCondition p = info.getPatternsCondition();
+                for (String url : p.getPatterns()) {
+                    map1.put("url", url);
+                }
+                log.info(JsonUtil.object2json(map1.get("url")));
+            }
+
+
+        };
+    }
+
+    public static void main(String[] args) throws Exception{
+
+        ConfigurableApplicationContext application=SpringApplication.run(NorthParkApplication.class, args);
+
+        Environment env = application.getEnvironment();
+        log.info("\n----------------------------------------------------------\n\t" +
+                        "Application 'NorthPark' is running! Access URLs:\n\t" +
+                        "Local: \t\thttp://localhost:{}\n\t" +
+                        "External: \thttp://{}:{}\n\t"+
+                        "----------------------------------------------------------",
+                env.getProperty("server.port"),
+                InetAddress.getLocalHost().getHostAddress(),
+                env.getProperty("server.port"));
+
 	}
 
 }
