@@ -69,8 +69,9 @@ public class FetchReqAndSaveData {
 
 
     private static void upsertToDatabase(Connection conn, JSONArray rows) {
-        String insertSql = "INSERT INTO requests (reqCode, reqName, reqDesc, businessPurpose, reqAuthorId, reqAuthor, reqAuthorDept, reqProjectId, reqProject, reqProductId, reqProduct, reqType, reqSource, reqSubmitTime, reqEstimatedEffort, reqExpEndTime, reqPriority, reqStatus, reqProductTypeId, reqProductTypeName, reqEvaluatorId, reqEvaluator) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        String updateSql = "UPDATE requests SET reqName = ?, reqDesc = ?, businessPurpose = ?, reqAuthorId = ?, reqAuthor = ?, reqAuthorDept = ?, reqProjectId = ?, reqProject = ?, reqProductId = ?, reqProduct = ?, reqType = ?, reqSource = ?, reqSubmitTime = ?, reqEstimatedEffort = ?, reqExpEndTime = ?, reqPriority = ?, reqStatus = ?, reqProductTypeId = ?, reqProductTypeName = ?, reqEvaluatorId = ?, reqEvaluator = ? WHERE reqCode = ?";
+        String insertSql = "INSERT INTO requests (reqCode, reqName, reqDesc, businessPurpose, reqAuthorId, reqAuthor, reqAuthorDept, reqProjectId, reqProject, reqProductId, reqProduct, reqType, reqSource, reqSubmitTime, reqEstimatedEffort, reqExpEndTime, reqPriority, reqStatus, reqProductTypeId, reqProductTypeName, reqEvaluatorId, reqEvaluator, reqModule, reqStatusChangeTime, reqCcList, reqCcListName, reqRel, pCode, xmjlId, xmjlName, syncCd, syncRes, syncMsg, cdId, reqUpTime, cdPubVersion, evalPostDict, evalPostId, extInfo, var1, var2, reqOwnerId, reqOwner, publisherId, publisher, endPoint, buDeptName, taskHandleDeptName, satisfaction, showLabel)  " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+        String updateSql = "UPDATE requests SET reqName=?, reqDesc=?, businessPurpose=?, reqAuthorId=?, reqAuthor=?, reqAuthorDept=?, reqProjectId=?, reqProject=?, reqProductId=?, reqProduct=?, reqType=?, reqSource=?, reqSubmitTime=?, reqEstimatedEffort=?, reqExpEndTime=?, reqPriority=?, reqStatus=?, reqProductTypeId=?, reqProductTypeName=?, reqEvaluatorId=?, reqEvaluator=?, reqModule=?, reqStatusChangeTime=?, reqCcList=?, reqCcListName=?, reqRel=?, pCode=?, xmjlId=?, xmjlName=?, syncCd=?, syncRes=?, syncMsg=?, cdId=?, reqUpTime=?, cdPubVersion=?, evalPostDict=?, evalPostId=?, extInfo=?, var1=?, var2=?, reqOwnerId=?, reqOwner=?, publisherId=?, publisher=?, endPoint=?, buDeptName=?, taskHandleDeptName=?, satisfaction=?, showLabel=? WHERE reqCode=? " ;
 
         try (PreparedStatement insertStmt = conn.prepareStatement(insertSql);
              PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
@@ -88,6 +89,13 @@ public class FetchReqAndSaveData {
                     int count = rs.getInt(1);
                     rs.close();
                     checkStmt.close();
+
+                    //INSERT INTO `requests` (`reqCode`, `reqName`, `reqDesc`, `businessPurpose`, `reqAuthorId`, `reqAuthor`, `reqAuthorDept`, `reqProjectId`, `reqProject`, `reqProductId`, `reqProduct`, `reqType`, `reqSource`, `reqSubmitTime`, `reqEstimatedEffort`, `reqExpEndTime`, `reqPriority`, `reqStatus`, `reqProductTypeId`, `reqProductTypeName`, `reqEvaluatorId`, `reqEvaluator`,
+
+
+
+
+                    //VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
                     if (count > 0) {
                         // Update the existing record
@@ -112,7 +120,37 @@ public class FetchReqAndSaveData {
                        updateStmt.setString(19, row.getString("reqProductTypeName"));
                        updateStmt.setString(20, row.getString("reqEvaluatorId"));
                        updateStmt.setString(21, row.getString("reqEvaluator"));
-                       updateStmt.setString(22, row.getString("reqCode"));
+
+                        updateStmt.setString(22, row.getString("reqModule"));
+                        updateStmt.setString(23, row.getString("reqStatusChangeTime"));
+                        updateStmt.setString(24, row.getString("reqCcList"));
+                        updateStmt.setString(25, row.getString("reqCcListName"));
+                        updateStmt.setString(26, row.getString("reqRel"));
+                        updateStmt.setString(27, row.getString("pCode"));
+                        updateStmt.setString(28, row.getString("xmjlId"));
+                        updateStmt.setString(29, row.getString("xmjlName"));
+                        updateStmt.setString(30, row.getString("syncCd"));
+                        updateStmt.setString(31, row.getString("syncRes"));
+                        updateStmt.setString(32, row.getString("syncMsg"));
+                        updateStmt.setString(33, row.getString("cdId"));
+                        updateStmt.setString(34, row.getString("reqUpTime"));
+                        updateStmt.setString(35, row.getString("cdPubVersion"));
+                        updateStmt.setString(36, row.getString("evalPostDict"));
+                        updateStmt.setString(37, row.getString("evalPostId"));
+                        updateStmt.setString(38, row.getString("extInfo"));
+                        updateStmt.setString(39, row.getString("var1"));
+                        updateStmt.setString(40, row.getString("var2"));
+                        updateStmt.setString(41, row.getString("reqOwnerId"));
+                        updateStmt.setString(42, row.getString("reqOwner"));
+                        updateStmt.setString(43, row.getString("publisherId"));
+                        updateStmt.setString(44, row.getString("publisher"));
+                        updateStmt.setString(45, row.getString("endPoint"));
+                        updateStmt.setString(46, row.getString("buDeptName"));
+                        updateStmt.setString(47, row.getString("taskHandleDeptName"));
+                        updateStmt.setString(48, row.getString("satisfaction"));
+                        updateStmt.setString(49, row.getString("showLabel"));
+
+                        updateStmt.setString(50, row.getString("reqCode"));
 
                        updateStmt.addBatch();
                     } else {
@@ -139,6 +177,42 @@ public class FetchReqAndSaveData {
                         insertStmt.setString(20, row.getString("reqProductTypeName"));
                         insertStmt.setString(21, row.getString("reqEvaluatorId"));
                         insertStmt.setString(22, row.getString("reqEvaluator"));
+
+                        // `reqModule`, `reqStatusChangeTime`, `reqCcList`, `reqCcListName`, `reqRel`, `pCode`,
+                        insertStmt.setString(23, row.getString("reqModule"));
+                        insertStmt.setString(24, row.getString("reqStatusChangeTime"));
+                        insertStmt.setString(25, row.getString("reqCcList"));
+                        insertStmt.setString(26, row.getString("reqCcListName"));
+                        insertStmt.setString(27, row.getString("reqRel"));
+                        insertStmt.setString(28, row.getString("pCode"));
+                        // `xmjlId`, `xmjlName`, `syncCd`, `syncRes`, `syncMsg`, `cdId`, `reqUpTime`, `cdPubVersion`,
+                        insertStmt.setString(29, row.getString("xmjlId"));
+                        insertStmt.setString(30, row.getString("xmjlName"));
+                        insertStmt.setString(31, row.getString("syncCd"));
+                        insertStmt.setString(32, row.getString("syncRes"));
+                        insertStmt.setString(33, row.getString("syncMsg"));
+                        insertStmt.setString(34, row.getString("cdId"));
+                        insertStmt.setString(35, row.getString("reqUpTime"));
+                        insertStmt.setString(36, row.getString("cdPubVersion"));
+
+                        // `evalPostDict`, `evalPostId`, `extInfo`, `var1`, `var2`, `reqOwnerId`, `reqOwner`,
+                        insertStmt.setString(37, row.getString("evalPostDict"));
+                        insertStmt.setString(38, row.getString("evalPostId"));
+                        insertStmt.setString(39, row.getString("extInfo"));
+                        insertStmt.setString(40, row.getString("var1"));
+                        insertStmt.setString(41, row.getString("var2"));
+                        insertStmt.setString(42, row.getString("reqOwnerId"));
+                        insertStmt.setString(43, row.getString("reqOwner"));
+
+                        // `publisherId`, `publisher`, `endPoint`, `buDeptName`, `taskHandleDeptName`, `satisfaction`, `showLabel`)
+                        insertStmt.setString(44, row.getString("publisherId"));
+                        insertStmt.setString(45, row.getString("publisher"));
+                        insertStmt.setString(46, row.getString("endPoint"));
+                        insertStmt.setString(47, row.getString("buDeptName"));
+                        insertStmt.setString(48, row.getString("taskHandleDeptName"));
+                        insertStmt.setString(49, row.getString("satisfaction"));
+                        insertStmt.setString(50, row.getString("showLabel"));
+
                         insertStmt.addBatch();
                     }
                 } catch (SQLException e) {
