@@ -19,7 +19,7 @@ import java.sql.*;
 @Slf4j
 public class FetchReqAndSaveData {
     private static final String URL = EnvCfgUtil.getValByCfgName("REQ_HOST")+"/api/req/reqRequest/queryReqRequestList";
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/flink?serverTimezone=UTC";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/req?serverTimezone=UTC";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "123456";
 
