@@ -2,7 +2,7 @@ package cn.northpark.utils;
 
 
 import cn.northpark.constant.BC_Constant;
-import cn.northpark.utils.encrypt.EnDecryptUtils;
+import cn.northpark.utils.encrypt.NorthParkCryptUtils;
 import cn.northpark.vo.BiliVO;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -333,7 +333,7 @@ public class FileUtils {
         File root = new File("/mnt/apk/album");
         List<String> fList = showAllFiles(root);
         for (int i = 0; i < fList.size(); i++) {
-            if (EnDecryptUtils.md5Encrypt(fList.get(i)).equals(pic1)) {//替换图片
+            if (NorthParkCryptUtils.md5Encrypt(fList.get(i)).equals(pic1)) {//替换图片
                 log.info(i + "---" + fList.get(i));
                 String new_pic = getRandomPic(fList);
 
@@ -397,7 +397,7 @@ public class FileUtils {
         String path = "";
         try {
             path = list.get(getRandomOne(list));
-            if (EnDecryptUtils.md5Encrypt(path).equals(pic1)) {
+            if (NorthParkCryptUtils.md5Encrypt(path).equals(pic1)) {
                 getRandomPic(list);
             }
         } catch (Exception e) {

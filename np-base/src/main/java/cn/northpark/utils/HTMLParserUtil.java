@@ -2,7 +2,7 @@ package cn.northpark.utils;
 
 import cn.northpark.constant.BC_Constant;
 import cn.northpark.constant.RetType;
-import cn.northpark.utils.encrypt.EnDecryptUtils;
+import cn.northpark.utils.encrypt.NorthParkCryptUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnails;
@@ -32,7 +32,7 @@ public class HTMLParserUtil {
 
 //    /**
 //     * 根据名字获取图片并且自动上传到服务器，返回上传地址
-//                
+//
 //     * http://photopin.com/free-photos/%E6%96%87%E7%AB%A0
 //     * @throws IOException
 //     */
@@ -41,25 +41,25 @@ public class HTMLParserUtil {
 //            try{
 //            	Result parse = ToAnalysis.parse(title);
 //            	System.out.println(parse);
-//            	
+//
 //            	List<Term> terms = parse.getTerms();
-//            	
+//
 //            	String term = terms.get(terms.size()-1).getName();
 //            	System.out.println(term);
 //            Document doc = Jsoup.connect("http://photopin.com/free-photos/"+URLEncoder.encode(term))
 //                                     .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")
 //                                          .referrer("http://www.google.com")
 //                                          .ignoreHttpErrors(true)
-//                                           .timeout(1000*5) //it's in milliseconds, so this means 5 seconds.  
+//                                           .timeout(1000*5) //it's in milliseconds, so this means 5 seconds.
 //                                     .get();
-//            
-//            
+//
+//
 //            //取得第一张照片
 //            Element img = doc.select("div[class=items-grid search-results]").select("img").get(0);
-//            
+//
 //            //上传
 //            HashMap<String, String> map22 = HTMLParserUtil.webPic2Disk(img.attr("src"), getLocalFolderByOS("album") ,title_code);
-//            
+//
 //            String albumimg = map22.get("trimpath");
 //            sb.append(albumimg);
 //            System.out.println(img.attr("src"));
@@ -67,7 +67,7 @@ public class HTMLParserUtil {
 //            }catch(Exception e){
 //                e.printStackTrace();
 //            }
-//            
+//
 //        return sb.toString();
 //    }
 
@@ -559,7 +559,7 @@ public class HTMLParserUtil {
 
 
                 // 生成码
-                String ret_code = EnDecryptUtils.md5Encrypt(title);
+                String ret_code = NorthParkCryptUtils.md5Encrypt(title);
 
                 map.put("title", title);
                 map.put("a_url", a_url);
@@ -1777,7 +1777,7 @@ public class HTMLParserUtil {
                         for (Element info_li : info_lis) {
                             String html = info_li.html();
                             if(html.contains("<h3")){
-                                String ret_code = EnDecryptUtils.md5Encrypt(title);
+                                String ret_code = NorthParkCryptUtils.md5Encrypt(title);
 
                                 map.put("ret_code", ret_code);
 
@@ -1874,7 +1874,7 @@ public class HTMLParserUtil {
 
                     String title = li.select("h3.dytit").get(0).text();
 
-                    String ret_code = EnDecryptUtils.md5Encrypt(title);
+                    String ret_code = NorthParkCryptUtils.md5Encrypt(title);
 
                     String path = "";
 
@@ -1893,7 +1893,7 @@ public class HTMLParserUtil {
 
 //                        //拼接brief
 //                        String logo_url = li.select("img").get(0).attr("src");
-//                        
+//
 //                        //-------------开始--------------------------------
 //
 //                        HashMap<String, String> map22 = HTMLParserUtil.webPic2Disk(logo_url, getLocalFolderByOSMovies(), TimeUtils.nowdate());
@@ -1902,9 +1902,9 @@ public class HTMLParserUtil {
 //
 //                        sb_brief.append("<img src=\"").append(rs).append("\" />");
 //                        //-------------结束--------------------------------
-//                        
+//
 //                        String brief_content = li.select("p").get(0).html();
-//                        
+//
 //                        sb_brief.append(brief_content);
 
 
@@ -2104,7 +2104,7 @@ public class HTMLParserUtil {
                     //标题
                     String title = li.select("div.pure-u-19-24 > div > h2 >a").get(0).attr("title");
 
-                    String ret_code = EnDecryptUtils.md5Encrypt(title);
+                    String ret_code = NorthParkCryptUtils.md5Encrypt(title);
 
                     String path = "";
 
@@ -2510,7 +2510,7 @@ public class HTMLParserUtil {
 
 
                     //生成代码
-                    String ret_code = EnDecryptUtils.md5Encrypt(title + types + author + detail_url);
+                    String ret_code = NorthParkCryptUtils.md5Encrypt(title + types + author + detail_url);
 
 
                     log.info("title==============>" + title);
@@ -2722,7 +2722,7 @@ public class HTMLParserUtil {
                 map.put("trimpath", (path + name).replace("E:\\bruce\\", ""));
                 map.put("trimPan", (path + name).replace("E:\\", "")).replace("D:\\","/bruce/");
             }catch (Exception ig){
-                
+
             }
 
 
@@ -2973,13 +2973,13 @@ public class HTMLParserUtil {
 
 //            	 retCaiMaiZT_PL("shui-jue");
 //            	 System.out.println(replaceBlank("\n\t\t\t\t丫丫的小贝壳屋：能够睡到自然醒就是一种幸福\n\t\t\t\t\t\t\t"));
-//            	
+//
 //            	retPicByName("刘德华", "liu-de-hua");
 //            	Result parse = ToAnalysis.parse("冬日里温暖的灯光");
 //            	System.out.println(parse);
-//            	
+//
 //            	List<Term> terms = parse.getTerms();
-//            	
+//
 //            	String term = terms.get(terms.size()-1).getName();
 //            	System.out.println(term);
 //            	for (Term t: terms) {

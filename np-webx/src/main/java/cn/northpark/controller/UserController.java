@@ -17,7 +17,7 @@ import cn.northpark.service.UserService;
 import cn.northpark.threadLocal.RequestHolder;
 import cn.northpark.threadPool.AsyncThreadPool;
 import cn.northpark.utils.*;
-import cn.northpark.utils.encrypt.EnDecryptUtils;
+import cn.northpark.utils.encrypt.NorthParkCryptUtils;
 import cn.northpark.utils.safe.WAQ;
 import cn.northpark.vo.UserVO;
 import com.google.common.collect.ImmutableList;
@@ -181,7 +181,7 @@ public class UserController {
                                 gt_model.getInvalidTime()) && (0 == gt_model.getIsEmailAuthed())) {// 时间未过期
                             User user = userService.findUser(Integer.parseInt(userid));
                             if (user != null) {
-                                user.setPassword(EnDecryptUtils.diyEncrypt(auth_code));
+                                user.setPassword(NorthParkCryptUtils.northparkEncrypt(auth_code));
                                 userService.updateUser(user);
 
                                 request.getSession().setAttribute("user", user);
@@ -199,7 +199,7 @@ public class UserController {
                         if (0 == gt_model.getIsEmailAuthed()) {
                             User user = userService.findUser(Integer.parseInt(userid));
                             if (user != null) {
-                                user.setPassword(EnDecryptUtils.diyEncrypt(auth_code));
+                                user.setPassword(NorthParkCryptUtils.northparkEncrypt(auth_code));
                                 userService.updateUser(user);
                                 request.getSession().setAttribute("user", user);
                                 //更新数据
@@ -662,7 +662,7 @@ public class UserController {
 
             //处理密码信息
             if (!StringUtils.isEmpty(new_password) && !StringUtils.isEmpty(new_password_confirmation) && new_password.equals(new_password_confirmation)) {
-                user.setPassword(EnDecryptUtils.diyEncrypt(new_password));
+                user.setPassword(NorthParkCryptUtils.northparkEncrypt(new_password));
             }
             //处理密码信息
             userService.updateUser(user);
@@ -838,7 +838,7 @@ public class UserController {
             //设置注册者的详细信息
             user.setLastLogin(JsonUtil.object2json(user.getDateJoined() + ipAndDetail));
             user.setTailSlug(username + TimeUtils.getRandomDay());
-            user.setPassword(EnDecryptUtils.diyEncrypt(password));
+            user.setPassword(NorthParkCryptUtils.northparkEncrypt(password));
             user.setEmailFlag("1");//暂时设置为1， 邮件发送失败再禁用账户
             session.setAttribute("user", user);
             map.put("user", user);
@@ -975,7 +975,7 @@ public class UserController {
 
             //防止sql注入--email
             email = WAQ.forSQL().escapeSql(email);
-            password = EnDecryptUtils.diyEncrypt(password);
+            password = NorthParkCryptUtils.northparkEncrypt(password);
             User user = userService.login(email, password);
             if (user != null && !user.getEmailFlag().equals("0")) {
                 //1.登录成功

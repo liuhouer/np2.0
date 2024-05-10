@@ -13,7 +13,6 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * NorthPark 使用JDBC+hikariCp-pool 来便捷的操作数据

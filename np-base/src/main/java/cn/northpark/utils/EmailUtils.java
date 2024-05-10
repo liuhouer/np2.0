@@ -1,6 +1,6 @@
 package cn.northpark.utils;
 
-import cn.northpark.utils.encrypt.EnDecryptUtils;
+import cn.northpark.utils.encrypt.NorthParkCryptUtils;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -10,18 +10,20 @@ import java.util.List;
 
 /**
  * @author jeyy
- * 
+ *
  */
 @Slf4j
 public class EmailUtils {
-	
+
+    private static final String EMAIL_PASS = EnvCfgUtil.getValByCfgName("EMAIL_PASS");
+
 	private EmailUtils() {
-		
+
 	}
-	
-	
+
+
 	private volatile static EmailUtils instance = null;
-	
+
 	/**
 	 *  双重同步锁模式【volatile出坑】
 	 	在对象声明时使用volatile关键字修饰，阻止CPU的指令重排。
@@ -36,7 +38,7 @@ public class EmailUtils {
 		}
 		return instance;
 	}
-	
+
 
     /**
      * 多谢注册northpark
@@ -49,7 +51,7 @@ public class EmailUtils {
             //smtp.qq.com || smtp.163.com
             String host = "smtp.163.com";
             String myEmail = "qhdsoftware@163.com";
-            String myPassword = EnDecryptUtils.diyDecrypt("emhhbmd5YW5nMjI2MDAwMDAw");
+            String myPassword = NorthParkCryptUtils.diyDecrypt(EMAIL_PASS);
             // 接收者邮箱
             String to = toEmail;
             String subject = "欢迎加入Northpark";
@@ -78,8 +80,8 @@ public class EmailUtils {
             		+ "<h2> Welcome! </h2>"
             		+ "<br><br>Welcome join northpark! "
             		+ "<br/><br/>"
-            		+ "sending time:" + TimeUtils.nowTime() + "<br/>"  
-            		+ "<br>如有任何疑问或顾虑，请联系northpark。<br/>"  
+            		+ "sending time:" + TimeUtils.nowTime() + "<br/>"
+            		+ "<br>如有任何疑问或顾虑，请联系northpark。<br/>"
             		 + "<br><a href=\"http://blog.northpark.cn\" style=\"text-decoration:none;color:#fff;text-shadow:none;background-color:#45d0c6;border:none;margin-top:10px;-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;padding:10px 16px;font-size:18px;line-height:1.33;border-radius:6px;display:inline-block;margin-bottom:0;font-weight:400;text-align:center;vertical-align:middle;cursor:pointer;background-image:none;border:1px solid transparent;white-space:nowrap;padding:6px 12px;font-size:14px;line-height:1.42857143;border-radius:4px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;\">欢迎来NorthPark博客做客</a><br/>"
             		+ "</div></div></div>"
 
@@ -97,7 +99,7 @@ public class EmailUtils {
         }
 
     }
-    
+
     /**
      * 资源失效反馈>>邮件提醒
      *
@@ -109,7 +111,7 @@ public class EmailUtils {
             //smtp.qq.com || smtp.163.com
             String host = "smtp.163.com";
             String myEmail = "qhdsoftware@163.com";
-            String myPassword = EnDecryptUtils.diyDecrypt("emhhbmd5YW5nMjI2MDAwMDAw");
+            String myPassword = NorthParkCryptUtils.diyDecrypt(EMAIL_PASS);
             // 接收者邮箱
             String to = "zhangyang226@gmail.com";
             String subject = "~~~~(>_<)~~~~资源失效反馈>>邮件提醒";
@@ -168,7 +170,7 @@ public class EmailUtils {
             //smtp.qq.com || smtp.163.com
             String host = "smtp.163.com";
             String myEmail = "qhdsoftware@163.com";
-            String myPassword = EnDecryptUtils.diyDecrypt("emhhbmd5YW5nMjI2MDAwMDAw");
+            String myPassword = NorthParkCryptUtils.diyDecrypt(EMAIL_PASS);
             // 接收者邮箱
             String to = toEmail;
             String subject = "~~~~(>_<)~~~~找回northpark的密码";
@@ -238,7 +240,7 @@ public class EmailUtils {
             //smtp.qq.com || smtp.163.com
             String host = "smtp.163.com";
             String myEmail = "qhdsoftware@163.com";
-            String myPassword = EnDecryptUtils.diyDecrypt("emhhbmd5YW5nMjI2MDAwMDAw");
+            String myPassword = NorthParkCryptUtils.diyDecrypt(EMAIL_PASS);
             // 接收者邮箱
             String to = emailHost;
             String subject = title;
@@ -296,7 +298,7 @@ public class EmailUtils {
     	//        list.add("1143991340@qq.com");
     	//        list.add("2985075841@qq.com");
     	//        list.add("1401518328@qq.com");
-    	
+
     	//        list.add("2319113876@qq.com");
     	//        list.add("1275566257@qq.com");
     	//        list.add("maoxiaoyan@biosan.cn");
@@ -361,13 +363,13 @@ public class EmailUtils {
         // 	      list.add("1523971965@qq.com");
         // 	      list.add("lading81734@gmail.com");
     	//        list.add("mondhou@qq.com");
-    	//        list.add("522571294@qq.com");    	
+    	//        list.add("522571294@qq.com");
     	//    	  list.add("1065122440@qq.com");
     	//		  list.add("ipaint@qq.com");
         //        list.add("dalao.orz@gmail.com");
-    	//        list.add("wei014127@hotmail.com"); 
-    	//        list.add("121942010@qq.com"); 
-    	//        list.add("jameshunter7641@gmail.com"); 
+    	//        list.add("wei014127@hotmail.com");
+    	//        list.add("121942010@qq.com");
+    	//        list.add("jameshunter7641@gmail.com");
 		//    	  list.add("tobeymarshall@qq.com");
 		//    	  list.add("goodyuhan123@163.com");
 		//    	  list.add("694863929@qq.com");
@@ -419,7 +421,7 @@ public class EmailUtils {
     	//		  list.add("232475782@qq.com");
 
     	//        list.add("r48866@gmail.com");
-//    	list.add("r48866@gmail.com");    	
+//    	list.add("r48866@gmail.com");
 //    	list.add("807876064@qq.com");
 //    	list.add("370429633@qq.com");
 //    	list.add("pollux.liu@gmail.com");
@@ -467,9 +469,9 @@ public class EmailUtils {
 //    	list.add("312910298@sohu.com");
 //    	list.add("lijiadong14@gail.com");
 //    	list.add("270753031@qq.com");
-//    	list.add("qlkdsalkl@shit.com");  
-    	
-    	
+//    	list.add("qlkdsalkl@shit.com");
+
+
 //    	list.add("lightinfection@sina.com");
 //    	list.add("carolding1013@163.com");
 //    	list.add("hhhzy113@gmail.com");
@@ -482,8 +484,8 @@ public class EmailUtils {
 //    	list.add("253019169@qq.com");
 //    	list.add("616012777@qq.com");
 //    	list.add("475124896@qq.com");
-    	
-    	
+
+
     	for (int i = 0; i < list.size(); i++) {
     		EmailUtils.getInstance().ThanksReg(list.get(i));
     	}
