@@ -246,6 +246,10 @@ public class EmailUtils {
             String subject = title;
 
 
+            // 使用HTML标签包裹邮件内容
+            msg = "<html><body>" + msg + "</body></html>";
+
+
             HtmlEmail email = new HtmlEmail();
             email.setHostName(host);
             email.setAuthenticator(new DefaultAuthenticator(myEmail, myPassword));

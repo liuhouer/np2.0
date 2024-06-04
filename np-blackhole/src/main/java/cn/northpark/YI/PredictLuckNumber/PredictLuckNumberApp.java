@@ -11,7 +11,7 @@ import java.util.List;
  *
  */
 public class PredictLuckNumberApp {
-	
+
 	public static void main(String[] args) throws Exception {
 		// 获取当前日期时间
 		// 获取当前日期
@@ -62,10 +62,16 @@ public class PredictLuckNumberApp {
 		System.out.println("今日幸运数字: " + heLuoNo);
 
 		StringBuilder sb = new StringBuilder();
+		sb.append("<br>");
 		sb.append("当前日期时间: " + currentDateTimeString);
-		sb.append("\n");
+		sb.append("<br>");
 		sb.append("今日幸运数字: " + heLuoNo);
-		String sendEMAIL = EmailUtils.getInstance().sendEMAIL("654714226@qq.com", "今日预测3D幸运数字", sb.toString());
+		sb.append("<br>");
+		sb.append("=======================================");
+		sb.append("<br>");
+		//星座运势
+		sb.append(XZYS.getXZYS());
+		String sendEMAIL = EmailUtils.getInstance().sendEMAIL("654714226@qq.com", "今日运势预测", sb.toString());
 
 		System.err.println("sendEMAIL flag====="+sendEMAIL);
 	}
