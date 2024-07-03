@@ -66,7 +66,7 @@ public class MoviesController {
      * 每页展示多少条电影数
      */
     private static int MoviesCount = 15;
-    
+
     /**
      * @param request
      * @param map
@@ -88,7 +88,7 @@ public class MoviesController {
 
 		return "/page/common/" + result;
 	}
-    
+
     /**
      * @param map
      * @return
@@ -220,7 +220,7 @@ public class MoviesController {
         String rs = "success";
         try {
             String id = request.getParameter("id");
-            
+
             Movies m = moviesService.findMovies(Integer.parseInt(id));
             if (m != null) {
                 m.setDisplayed("N");
@@ -244,11 +244,11 @@ public class MoviesController {
     @RequestMapping("/movies/add")
     @BruceOperation
     public String toAdd(ModelMap map, HttpServletRequest request) {
-    	
+
         return "/page/admin/movies/moviesAdd";
     }
-    
-    
+
+
     /**
      * 跳转到电影编辑页面
      *
@@ -300,7 +300,7 @@ public class MoviesController {
                     model.setMovieDescMinio(MinioUtils.uploadText(model.getMovieDesc()));
                     model.setUseMinio(model.getUseMinio());
                 }
-                model.setAddTime(TimeUtils.nowdate());
+                model.setAddTime(TimeUtils.nowDate());
         		moviesService.updateMovies(model);
 
                 //从redis set里面删除更新的失效资源
@@ -354,18 +354,18 @@ public class MoviesController {
                         }
                     });
                 }
-        			
+
         	}else {//新增
 
                  model.setRetCode(MD5Utils.encrypt(model.getMovieName(),MD5Utils.MD5_KEY));
-        		 model.setAddTime(TimeUtils.nowdate());
+        		 model.setAddTime(TimeUtils.nowDate());
                 //BRUCETIPS! 富文本处理
                 if(StringUtils.equals("1",model.getUseMinio())){
                     model.setMovieDescMinio(MinioUtils.uploadText(model.getMovieDesc()));
                 }
                  moviesService.addMovies(model);
         	}
-           
+
         } catch (Exception e) {
             log.error("movies action------>", e);
             rs = "ex";
@@ -631,8 +631,8 @@ public class MoviesController {
         session.setAttribute("tabs", "movies");
 
         String whereSql = " where displayed is  null ";
-        
-        
+
+
         //搜索
         String keyword = request.getParameter("keyword");
         if (StringUtils.isNotEmpty(keyword)) {
@@ -772,7 +772,7 @@ public class MoviesController {
         String tags_str = RedisUtil.getInstance().get("moviesTags");
         String movies_hot_list_str = RedisUtil.getInstance().get("movies_hot_list");
         if(StringUtils.isNotEmpty(tags_str) && StringUtils.isNotEmpty(movies_hot_list_str)) {
-        	
+
         	movies_hot_list = JsonUtil.json2ListMap(movies_hot_list_str);
         	tags = JsonUtil.json2list(tags_str, Tags.class);
         }
@@ -792,7 +792,7 @@ public class MoviesController {
 
         }
 
-        
+
         map.put("movies_hot_list", movies_hot_list);
         map.put("moviesTags", tags);
 

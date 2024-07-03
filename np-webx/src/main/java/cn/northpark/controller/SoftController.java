@@ -62,7 +62,7 @@ public class SoftController {
      * 每页展示多少条mac数
      */
     private static int SoftCount = 16;
-    
+
 
 
     //===========================编辑资源================================
@@ -140,11 +140,11 @@ public class SoftController {
     @RequestMapping("/add")
     @BruceOperation
     public String toAdd(ModelMap map, HttpServletRequest request) {
-    	
+
         return "/page/admin/soft/softAdd";
     }
-    
-    
+
+
     /**
      * 跳转到软件编辑页面
      *
@@ -170,7 +170,7 @@ public class SoftController {
 
         return "/page/admin/soft/softAdd";
     }
-    
+
     /**
      * 保存软件的方法
      *
@@ -190,7 +190,7 @@ public class SoftController {
                     model.setContentMinio(MinioUtils.uploadText(model.getContent()));
                     model.setUseMinio(model.getUseMinio());
                 }
-                model.setPostDate(TimeUtils.nowdate());
+                model.setPostDate(TimeUtils.nowDate());
         		softService.updateSoft(model);
 
 
@@ -243,12 +243,12 @@ public class SoftController {
                         }
                     });
                 }
-        			
+
         	}else {//新增
-        		
-        		 model.setPostDate(TimeUtils.nowdate());
-        		 model.setYear(TimeUtils.getYear(TimeUtils.nowdate()));
-                 model.setMonth(TimeUtils.getMonth(TimeUtils.nowdate()));
+
+        		 model.setPostDate(TimeUtils.nowDate());
+        		 model.setYear(TimeUtils.getYear(TimeUtils.nowDate()));
+                 model.setMonth(TimeUtils.getMonth(TimeUtils.nowDate()));
 
                  //BRUCETIPS! 富文本处理
                  if(StringUtils.equals("1",model.getUseMinio())){
@@ -256,7 +256,7 @@ public class SoftController {
                  }
         		 softService.addSoft(model);
         	}
-           
+
         } catch (Exception e) {
 
             log.error("Soft action------>", e);
@@ -430,7 +430,7 @@ public class SoftController {
                 map.addAttribute("list", list);
                 map.addAttribute("pagein", "no");
             }
-            
+
             //获取标签模块
             getTags(map, request);
 
@@ -607,14 +607,14 @@ public class SoftController {
         List<Map<String, Object>> hot_list = null;
         List<Map<String, Object>> date_list = null;
 
-        
+
         //从redis取
         String soft_tags_str = RedisUtil.getInstance().getInstance().get("soft_tags");
         String soft_hot_list_str = RedisUtil.getInstance().getInstance().get("soft_hot_list");
         String soft_date_list_str = RedisUtil.getInstance().getInstance().get("soft_date_list");
-        
+
         if(StringUtils.isNotEmpty(soft_tags_str) && StringUtils.isNotEmpty(soft_hot_list_str) && StringUtils.isNotEmpty(soft_date_list_str)) {
-        	
+
         	tags = JsonUtil.json2ListMap(soft_tags_str);
         	hot_list = JsonUtil.json2ListMap(soft_hot_list_str);
         	date_list = JsonUtil.json2ListMap(soft_date_list_str);
@@ -635,12 +635,12 @@ public class SoftController {
             String date_sql = "select distinct(month) as month  from bc_soft  order by month  desc";
             date_list = softService.querySqlMap(date_sql);
 
-            
+
             RedisUtil.getInstance().getInstance().set("soft_tags", JsonUtil.object2json(tags), 24 * 60 * 60);
             RedisUtil.getInstance().getInstance().set("soft_hot_list", JsonUtil.object2json(hot_list), 24 * 60 * 60);
             RedisUtil.getInstance().getInstance().set("soft_date_list", JsonUtil.object2json(date_list), 24 * 60 * 60);
         }
-        
+
         map.put("soft_tags", tags);
         map.put("hot_list", hot_list);
         map.put("date_list", date_list);

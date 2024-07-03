@@ -31,7 +31,7 @@ public class PredictLuckNumberApp {
 //			predictNumbers(formattedDate);
 //		}
 
-		predictNumbers(TimeUtils.nowdate());
+		predictNumbers(TimeUtils.nowDate());
 
 	}
 

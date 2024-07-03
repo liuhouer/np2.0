@@ -46,7 +46,7 @@ import java.util.Objects;
  * @date 2021-10-25
  * @email zhangyang226@gmail.com
  * @site http://blog.northpark.cn | http://northpark.cn | orginazation https://github.com/jellyband
- * 
+ *
  */
 @Controller
 @RequestMapping("/learning")
@@ -55,7 +55,7 @@ public class KnowledgeController {
 
 	@Autowired
 	private KnowledgeService knowledgeService;
-	
+
 	@Autowired
 	private TagsService tagsService;
 
@@ -64,7 +64,7 @@ public class KnowledgeController {
 	 */
 	private static int LearningCount = 15;
 
-	
+
 	/**
 	 * 查看列表
 	 * @param map
@@ -82,7 +82,7 @@ public class KnowledgeController {
 		session.setAttribute("tabs", "learning");
 
 		String whereSql = " where displayed is null ";
-		
+
 
 
 		//搜索
@@ -118,7 +118,7 @@ public class KnowledgeController {
 		} else {
 			_orderBy = "post_date desc,id desc" ;
 		}
-		
+
 		PageHelper.startPage(1,LearningCount);
 		List<Knowledge> result_list = knowledgeService.findByCondition(whereSql,_orderBy);
 		PageInfo pageInfo = new PageInfo(result_list);
@@ -136,8 +136,8 @@ public class KnowledgeController {
 
 		return "learning";
 	}
-	
-	
+
+
 
 	/**
 	 * 查看列表分页
@@ -423,7 +423,7 @@ public class KnowledgeController {
 					hot_index = (Integer) list.get(0).get("hot_index");
 					hot_index++;
 			}
-			
+
 			if (hot_index > 0) {
 				Knowledge m = knowledgeService.findKnowledge(Integer.parseInt(id));
 				if (m != null) {
@@ -544,7 +544,7 @@ public class KnowledgeController {
 			}else {//新增
 
 				model.setRetCode(MD5Utils.encrypt(model.getTitle(),MD5Utils.MD5_KEY));
-				model.setPostDate(TimeUtils.nowdate());
+				model.setPostDate(TimeUtils.nowDate());
 				knowledgeService.addKnowledge(model);
 			}
 

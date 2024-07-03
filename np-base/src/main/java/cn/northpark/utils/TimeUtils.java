@@ -4,7 +4,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 时间工具类
@@ -14,168 +24,64 @@ import java.util.*;
  */
 @Slf4j
 public class TimeUtils {
-    private static final long ONE_MINUTE = 60L;
-    private static final long ONE_HOUR = 3600L;
-    private static final long ONE_DAY = 86400L;
-    private static final long ONE_MONTH = 2592000L;
-    private static final long ONE_YEAR = 31104000L;
+    private static final long ONE_MINUTE = TimeUnit.MINUTES.toSeconds(1);
+    private static final long ONE_HOUR = TimeUnit.HOURS.toSeconds(1);
+    private static final long ONE_DAY = TimeUnit.DAYS.toSeconds(1);
+    private static final long ONE_MONTH = TimeUnit.DAYS.toSeconds(30);
+    private static final long ONE_YEAR = TimeUnit.DAYS.toSeconds(365);
 
-    private static final String ONE_SECOND_AGO = "秒前";
-    private static final String ONE_MINUTE_AGO = "分钟前";
-    private static final String ONE_HOUR_AGO = "小时前";
-    private static final String ONE_DAY_AGO = "天前";
-    private static final String ONE_MONTH_AGO = "月前";
-    private static final String ONE_YEAR_AGO = "年前";
+    private static final String[] TIME_UNITS = {"秒前", "分钟前", "小时前", "天前", "月前", "年前"};
 
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static final SimpleDateFormat SHORT_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat ENGLISH_DATE_FORMAT = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
 
-    //格式化时间串成为  几天前 几秒前 几小时前  几分钟前 几年前sth.....
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+    private static final ZoneId ZONE_ID = ZoneId.systemDefault();
+
     public static String formatToNear(String str) {
-
         try {
-            SimpleDateFormat format = null;
-            if (str.length() > 10) {
-                format = new SimpleDateFormat("yyyy-MM-dd HH:m:s");
-            } else {
-                format = new SimpleDateFormat("yyyy-MM-dd");
-            }
-            Date date;
-            date = format.parse(str);
-            str = TimeUtils.format(date);
+            SimpleDateFormat format = str.length() > 10 ? DATE_FORMAT : SHORT_DATE_FORMAT;
+            Date date = format.parse(str);
+            return format(date);
         } catch (ParseException e) {
-
-            log.error("TimeUtils------->", e);
-            ;
+            log.error("TimeUtils parsing error", e);
+            return str;
         }
-
-        return str;
-
     }
 
-    //格式化时间串成为  几天前 几秒前 几小时前  几分钟前 几年前sth.....
-
-    /**
-     * 距离今天多久
-     *
-     * @param date
-     * @return
-     */
-    public static String fromToday(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-
-        long time = date.getTime() / 1000;
-        long now = new Date().getTime() / 1000;
-        long ago = now - time;
-        if (ago <= ONE_HOUR)
-            return ago / ONE_MINUTE + "分钟前";
-        else if (ago <= ONE_DAY)
-            return ago / ONE_HOUR + "小时" + (ago % ONE_HOUR / ONE_MINUTE)
-                    + "分钟前";
-        else if (ago <= ONE_DAY * 2)
-            return "昨天" + calendar.get(Calendar.HOUR_OF_DAY) + "点"
-                    + calendar.get(Calendar.MINUTE) + "分";
-        else if (ago <= ONE_DAY * 3)
-            return "前天" + calendar.get(Calendar.HOUR_OF_DAY) + "点"
-                    + calendar.get(Calendar.MINUTE) + "分";
-        else if (ago <= ONE_MONTH) {
-            long day = ago / ONE_DAY;
-            return day + "天前" + calendar.get(Calendar.HOUR_OF_DAY) + "点"
-                    + calendar.get(Calendar.MINUTE) + "分";
-        } else if (ago <= ONE_YEAR) {
-            long month = ago / ONE_MONTH;
-            long day = ago % ONE_MONTH / ONE_DAY;
-            return month + "个月" + day + "天前"
-                    + calendar.get(Calendar.HOUR_OF_DAY) + "点"
-                    + calendar.get(Calendar.MINUTE) + "分";
-        } else {
-            long year = ago / ONE_YEAR;
-            int month = calendar.get(Calendar.MONTH) + 1;// JANUARY which is 0 so month+1
-            return year + "年前" + month + "月" + calendar.get(Calendar.DATE)
-                    + "日";
-        }
-
-    }
-
-
-    /**
-     * 距离今天多久  简短的  只包含 年|月|日|小时|分 前的一种
-     *
-     * @param date
-     * @return
-     */
     public static String format(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
+        long ago = (System.currentTimeMillis() - date.getTime()) / 1000;
 
-        long time = date.getTime() / 1000;
-        long now = new Date().getTime() / 1000;
-        long ago = now - time;
-        if (ago <= ONE_MINUTE)
-            return ago + ONE_SECOND_AGO;
-        else if (ago <= ONE_HOUR)
-            return ago / ONE_MINUTE + ONE_MINUTE_AGO;
-        else if (ago <= ONE_DAY)
-            return ago / ONE_HOUR + ONE_HOUR_AGO;
-        else if (ago <= ONE_DAY * 2)
-            return "昨天";
-        else if (ago <= ONE_DAY * 3)
-            return "前天";
-        else if (ago <= ONE_MONTH) {
-            long day = ago / ONE_DAY;
-            return day + ONE_DAY_AGO;
-        } else if (ago <= ONE_YEAR) {
-            long month = ago / ONE_MONTH;
-            return month + ONE_MONTH_AGO;
-        } else {
-            long year = ago / ONE_YEAR;
-            return year + ONE_YEAR_AGO;
-        }
-
+        if (ago <= ONE_MINUTE) return ago + TIME_UNITS[0];
+        if (ago <= ONE_HOUR) return ago / ONE_MINUTE + TIME_UNITS[1];
+        if (ago <= ONE_DAY) return ago / ONE_HOUR + TIME_UNITS[2];
+        if (ago <= ONE_DAY * 2) return "昨天";
+        if (ago <= ONE_DAY * 3) return "前天";
+        if (ago <= ONE_MONTH) return ago / ONE_DAY + TIME_UNITS[3];
+        if (ago <= ONE_YEAR) return ago / ONE_MONTH + TIME_UNITS[4];
+        return ago / ONE_YEAR + TIME_UNITS[5];
     }
 
-    /**
-     * 取得系统当前时间(格式：1970年1月1日0时起到当前的毫秒)
-     *
-     * @return 当前时间
-     */
-    public static long getCurrentTiem() {
-        return System.currentTimeMillis();
-    }
-
-    /**
-     * 取得当前时间，格式： yyyy-MM-dd hh:mm:ss
-     *
-     * @return 当前时间
-     */
     public static String getNowTime() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(new Date().getTime());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.format(calendar.getTime());
+        return DATE_FORMAT.format(new Date());
     }
 
-
-    /**
-     * 取得英文日期时间，格式： 29 Sep 2011
-     *
-     * @return 当前时间
-     */
     public static String getEnglishDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(new Date().getTime());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
-        return sdf.format(calendar.getTime());
+        return ENGLISH_DATE_FORMAT.format(new Date());
     }
 
-    /**
-     * 转化取得英文日期时间，从 2016-07-22 格式： 29 Sep 2011
-     *
-     * @return 当前时间
-     */
     public static String parse2EnglishDate(String date) {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
-        return sdf.format(stringToMillis(date));
+        try {
+            Date parsedDate = SHORT_DATE_FORMAT.parse(date);
+            return ENGLISH_DATE_FORMAT.format(parsedDate);
+        } catch (ParseException e) {
+            log.error("Error parsing date", e);
+            return date;
+        }
     }
 
 
@@ -185,93 +91,65 @@ public class TimeUtils {
      * @return 毫秒数(1970年1月1日0时起到当前字符串时间的毫秒)
      */
     public static long stringToMillis(String source) {
-        Date date = null;
-        SimpleDateFormat dateFormat = null;
-        if (source.length() > 10) {
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        } else {
-            dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        }
         try {
-            date = dateFormat.parse(source);
-        } catch (ParseException e) {
-            log.error("TimeUtils------->", e);
-            ;
-            date = new Date();
+            LocalDateTime dateTime = source.length() > 10
+                    ? LocalDateTime.parse(source, DATE_TIME_FORMATTER)
+                    : LocalDate.parse(source, DATE_FORMATTER).atStartOfDay();
+            return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        } catch (DateTimeParseException e) {
+            log.error("Error parsing date: " + source, e);
+            return System.currentTimeMillis();
         }
-        if (null == date) return 0;
-        return date.getTime();
     }
 
     /**
      * @author bruce 取得当前时间 格式yyyy-MM-dd hh:mm:ss
      */
     public static String nowTime() {
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(new Date().getTime());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.format(c.getTime());
+        return LocalDateTime.now().format(DATE_TIME_FORMATTER);
     }
 
     /**
      * @author bruce 取得时钟表时间 hh:mm:ss
      */
     public static String nowClock() {
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(new Date().getTime());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        return dateFormat.format(c.getTime());
+        return LocalTime.now().format(TIME_FORMATTER);
     }
 
     /**
      * @author bruce 取得当前日期
      */
-    public static String nowdate() {
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(new Date().getTime());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(c.getTime());
+    public static String nowDate() {
+        return LocalDate.now().format(DATE_FORMATTER);
     }
 
     /**
      * @author bruce 取得N个月以后的日期
      */
     public static String N_MonthDate(int n) {
-        Calendar c = Calendar.getInstance();
-        c.add(GregorianCalendar.MONTH, n);
-        return "" + c.get(GregorianCalendar.YEAR) + "-" + (c.get(GregorianCalendar.MONTH) + 1) + "-" + c.get(GregorianCalendar.DATE);
+        return LocalDate.now().plusMonths(n).format(DATE_FORMATTER);
     }
 
     /**
      * @author bruce 取得N年以后的日期
      */
     public static String N_YearDate(int n) {
-        Calendar c = Calendar.getInstance();
-        c.add(GregorianCalendar.YEAR, n);
-        return "" + c.get(GregorianCalendar.YEAR) + "-" + (c.get(GregorianCalendar.MONTH) + 1) + "-" + c.get(GregorianCalendar.DATE);
+        return LocalDate.now().plusYears(n).format(DATE_FORMATTER);
     }
-
 
     /**
      * @author bruce 取得N年以后的日期
      */
     public static String N_YearTime(int n) {
-        Calendar c = Calendar.getInstance();
-        c.add(GregorianCalendar.YEAR, n);
-        return "" + c.get(GregorianCalendar.YEAR) + "-" + (c.get(GregorianCalendar.MONTH) + 1) + "-" + c.get(GregorianCalendar.DATE) + " " + c.get(GregorianCalendar.HOUR) + ":" + c.get(GregorianCalendar.MINUTE) + ":" + c.get(GregorianCalendar.SECOND);
+        return LocalDateTime.now().plusYears(n).format(DATE_TIME_FORMATTER);
     }
 
     /**
      * @author bruce
      * @function 取得标准时间 2014-05-23从格式yyyy-MM-dd hh:mm:ss
      */
-
     public static String getHalfDate(String timeStr) {
-        String t = timeStr;
-        if (timeStr.contains("-")) {
-            t = timeStr.substring(0, 10);
-        }
-        return t;
+        return timeStr.length() > 10 ? timeStr.substring(0, 10) : timeStr;
     }
 
     /**
@@ -279,11 +157,7 @@ public class TimeUtils {
      * @function 取得标准时间 2014从格式yyyy-MM-dd hh:mm:ss
      */
     public static String getYear(String timeStr) {
-        String t = timeStr;
-        if (timeStr.contains("-")) {
-            t = timeStr.substring(0, 4);
-        }
-        return t;
+        return timeStr.length() >= 4 ? timeStr.substring(0, 4) : timeStr;
     }
 
     /**
@@ -293,160 +167,92 @@ public class TimeUtils {
      * @return 月份
      */
     public static String getMonth(String time) {
-        String t = time;
-        if (null == time) return null;
-        if (time.contains("-")) {
-        	 String[] str = time.split("-");
-             if (str.length >= 1) {
-                 t = str[1];
-             }
-            return t;
+        if (time == null || !time.contains("-")) {
+            return null;
         }
-        return null;
+        String[] parts = time.split("-");
+        return parts.length > 1 ? parts[1] : null;
     }
 
     /**
      * @author bruce
      * @function 取得标准时间 2014从格式yyyy-MM-dd hh:mm:ss
      */
-
     public static String getDay(String timeStr) {
-        String t = timeStr;
-        if (timeStr.contains("-")) {
-            String[] str = timeStr.split("-");
-            if (str.length >= 2) {
-                t = str[2];
-            }
+        if (timeStr == null || !timeStr.contains("-")) {
+            return timeStr;
         }
-        return t;
+        String[] parts = timeStr.split("-");
+        return parts.length > 2 ? parts[2].split(" ")[0] : timeStr;
     }
 
-    /**
-     * @param --例子"2004-01-02 11:30:24"
-     * @throws ParseException
-     * @author bruce
-     * @function 计算两个时间的差：耗时多少
-     */
-
-    public static String getPastTime(String nowtime, String oldtime) throws ParseException {//
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = df.parse(nowtime);
-        Date date = df.parse(oldtime);
-        long l = now.getTime() - date.getTime();
-        long day = l / (24 * 60 * 60 * 1000);
-        long hour = (l / (60 * 60 * 1000) - day * 24);
-        long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-        long s = (l / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
-        String pastTime = "" + day + "天" + hour + "小时" + min + "分" + s + "秒";
-
-        return pastTime;
-    }
 
     /**
+     * @param nowtime  当前时间
+     * @param overtime 过期时间
+     * @return true未过期；false过期
      * @throws ParseException
      * @author bruce
      * @function 计算是否过期, true未过期；false过期
      */
-
-    public static boolean isInvalid(String nowtime, String overtime) throws ParseException {//
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = df.parse(nowtime);
-        Date over = df.parse(overtime);
-        long l = now.getTime() - over.getTime();
-        boolean flag = true;
-        if (l > 0) {
-            flag = false;
-        } else {
-            flag = true;
-        }
-        return flag;
+    public static boolean isInvalid(String nowtime, String overtime) throws ParseException {
+        LocalDateTime now = LocalDateTime.parse(nowtime, DATE_TIME_FORMATTER);
+        LocalDateTime over = LocalDateTime.parse(overtime, DATE_TIME_FORMATTER);
+        return now.isBefore(over) || now.isEqual(over);
     }
 
     /**
-     * @param specifiedDay
-     * @return
+     * @param specifiedDay 指定日期
+     * @return 前一天的时间
      * @desc 取得前一天的时间
      */
     public static String getDayBefore(String specifiedDay) {
-        // SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        Calendar c = Calendar.getInstance();
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(specifiedDay);
-        } catch (ParseException e) {
-            log.error("TimeUtils------->", e);
-            ;
-        }
-        c.setTime(date);
-        int day = c.get(Calendar.DATE);
-        c.set(Calendar.DATE, day - 1);
-
-        String dayBefore = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime());
-        return dayBefore;
+        LocalDateTime dateTime = LocalDateTime.parse(specifiedDay, DATE_TIME_FORMATTER);
+        return dateTime.minusDays(1).format(DATE_TIME_FORMATTER);
     }
 
     /**
-     * @param specifiedDay
-     * @return
+     * @param specifiedDay 指定日期
+     * @return 后一天的时间
      * @desc 取得后一天的时间
      */
     public static String getDayAfter(String specifiedDay) {
-        Calendar c = Calendar.getInstance();
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(specifiedDay);
-        } catch (ParseException e) {
-            log.error("TimeUtils------->", e);
-            ;
-        }
-        c.setTime(date);
-        int day = c.get(Calendar.DATE);
-        c.set(Calendar.DATE, day + 1);
-
-        String dayAfter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime());
-        return dayAfter;
+        LocalDateTime dateTime = LocalDateTime.parse(specifiedDay, DATE_TIME_FORMATTER);
+        return dateTime.plusDays(1).format(DATE_TIME_FORMATTER);
     }
 
 
     /**
-     * @param specifiedDay
-     * @return
+     * @param specifiedDay 指定日期
+     * @param N            偏移量
+     * @param type         类型[D:DAY | M:MONTH |Y:YEAR |H:HOUR | MIN:minute | S:second]
+     * @return 偏移后的时间
      * @author bruce
      * @desc 取得某时间  前后N 天/月/年的时间,N=正负数，type=类型[D:DAY | M:MONTH |Y:YEAR |H:HOUR | MIN:minute | S:second]
      */
     public static String getDateAfterOrBeforeN(String specifiedDay, int N, String type) {
-        Calendar c = Calendar.getInstance();
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(specifiedDay);
-        } catch (ParseException e) {
-            log.error("TimeUtils------->", e);
-            ;
+        LocalDateTime dateTime = LocalDateTime.parse(specifiedDay, DATE_TIME_FORMATTER);
+        switch (type) {
+            case "D":
+                dateTime = dateTime.plusDays(N);
+                break;
+            case "M":
+                dateTime = dateTime.plusMonths(N);
+                break;
+            case "Y":
+                dateTime = dateTime.plusYears(N);
+                break;
+            case "H":
+                dateTime = dateTime.plusHours(N);
+                break;
+            case "MIN":
+                dateTime = dateTime.plusMinutes(N);
+                break;
+            case "S":
+                dateTime = dateTime.plusSeconds(N);
+                break;
         }
-        c.setTime(date);
-
-        if ("D".equals(type)) {
-            int day = c.get(Calendar.DATE);
-            c.set(Calendar.DATE, day + N);
-        } else if ("M".equals(type)) {
-            int month = c.get(Calendar.MONTH);
-            c.set(Calendar.MONTH, month + N);
-        } else if ("Y".equals(type)) {
-            int year = c.get(Calendar.YEAR);
-            c.set(Calendar.YEAR, year + N);
-        } else if ("H".equals(type)) {
-            int hour = c.get(Calendar.HOUR);
-            c.set(Calendar.HOUR, hour + N);
-        } else if ("MIN".equals(type)) {
-            int minute = c.get(Calendar.MINUTE);
-            c.set(Calendar.MINUTE, minute + N);
-        } else if ("S".equals(type)) {
-            int second = c.get(Calendar.SECOND);
-            c.set(Calendar.SECOND, second + N);
-        }
-
-        String After = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime());
-        return After;
+        return dateTime.format(DATE_TIME_FORMATTER);
     }
 
     /**
@@ -456,20 +262,15 @@ public class TimeUtils {
      * @desc 取得前后N天的时间, N=正负数
      */
     public static String getDayAfterOrBeforeN(String specifiedDay, int N) {
-        Calendar c = Calendar.getInstance();
-        Date date = null;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(specifiedDay);
-        } catch (ParseException e) {
-            log.error("TimeUtils------->", e);
-            ;
-        }
-        c.setTime(date);
-        int day = c.get(Calendar.DATE);
-        c.set(Calendar.DATE, day + N);
 
-        String dayAfter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime());
-        return dayAfter;
+        try {
+            LocalDateTime dateTime = LocalDateTime.parse(specifiedDay, DATE_TIME_FORMATTER);
+            LocalDateTime resultDateTime = dateTime.plusDays(N);
+            return resultDateTime.format(DATE_TIME_FORMATTER);
+        } catch (DateTimeParseException e) {
+            log.error("TimeUtils------->Error parsing date: " + specifiedDay, e);
+            return null;
+        }
     }
 
     /**
@@ -479,24 +280,17 @@ public class TimeUtils {
      * @desc 取得前后N分钟后的时间, N=正负数
      */
     public static String getMinuteAfterOrBeforeN(String specifiedDay, int N) {
-        Calendar c = Calendar.getInstance();
-        Date date = null;
         try {
-            date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(specifiedDay);
-        } catch (ParseException e) {
-            log.error("TimeUtils------->", e);
-            ;
+            LocalDateTime dateTime = LocalDateTime.parse(specifiedDay, DATE_TIME_FORMATTER);
+            LocalDateTime resultDateTime = dateTime.plusMinutes(N);
+            return resultDateTime.format(DATE_TIME_FORMATTER);
+        } catch (DateTimeParseException e) {
+            log.error("TimeUtils------->Error parsing date: " + specifiedDay, e);
+            return null;
         }
-        c.setTime(date);
-        int minute = c.get(Calendar.MINUTE);
-        c.set(Calendar.MINUTE, minute + N);
-
-        String minuteAfter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(c.getTime());
-        return minuteAfter;
     }
 
     /**
-     * @param specifiedDay
      * @return
      * @author bruce
      * @desc 取得当前的年月比如： 1407
@@ -517,24 +311,7 @@ public class TimeUtils {
      */
     public static String longToString(Long time) {
         Date date = new Date(time);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateString = formatter.format(date);
-        //log.info("TIME:::"+dateString);
-        return dateString;
-    }
-
-    /**
-     * @return
-     * @author bruce
-     * @desc 把long转化成String
-     * 将长时间格式字符串转换为字符串 yyyy-MM-dd HH:mm:ss
-     */
-    public static String longToDateStrng(Long time) {
-        Date date = new Date(time);
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String dateString = formatter.format(date);
-        log.info("TIME:::" + dateString);
-        return dateString;
+        return DATE_FORMAT.format(date);
     }
 
 
@@ -617,74 +394,6 @@ public class TimeUtils {
     }
 
 
-    /**
-     * @param currentDate
-     * @param days
-     * @return
-     * @author bruce
-     * 获取N个工作日以后的日期
-     */
-    public static Date getWorkDate(Date currentDate, int days) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        int i = 0;
-        while (i < days) {
-            calendar.add(Calendar.DATE, 1);
-            i++;
-            if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ||
-                    calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                i--;
-            }
-        }
-        return calendar.getTime();
-    }
-
-
-    /**
-     * @param currentDate
-     * @param days
-     * @return
-     * @author bruce
-     * 获取从今天N个工作日以后的具体时间
-     */
-    public static String getWorkDateTime(int days) {
-        Date Ndate = getWorkDate(new Date(), days);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.format(Ndate);
-    }
-
-    public static String Ten2Two(int number) {
-        String result = "";
-        int sum = 0;
-        for (int i = number; i >= 1; i /= 2) {
-
-            if (i % 2 == 0) {
-                sum = 0;
-            } else {
-                sum = 1;
-            }
-            result = sum + result;
-
-        }
-        log.info(result);
-        return result;
-    }
-
-//    public static void main(String[] args) {
-//        //log.info(getWorkDateTime(11));;
-//        String time = 8 + ONE_SECOND_AGO;
-////	          String time = 8+ONE_MINUTE_AGO ;  
-////	          String time = 8+ONE_HOUR_AGO ;  
-////	          String time = 8+ONE_DAY_AGO;  
-////	          String time = 8+ONE_MONTH_AGO;  
-////	          String time = 8+ONE_YEAR_AGO;  
-//        String dateAfterOrBeforeN = getTimeByFanyi(time);
-//
-//
-//        System.out.println(dateAfterOrBeforeN);
-//
-//
-//    }
 
     /**
      * 根据 几年前|几秒前|几分钱|几天前|几个月前 分析出具体时间啊
@@ -693,59 +402,35 @@ public class TimeUtils {
      * @return
      */
     public static String getTimeByFanyi(String time) {
-        String dateAfterOrBeforeN = "";
-        if (time.contains(ONE_YEAR_AGO)) {
-            String delta = time.replace(ONE_YEAR_AGO, "");
-            System.out.println(delta);
-            dateAfterOrBeforeN = TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), "Y");
+        String[] unitCodes = { "S", "MIN", "H", "D", "M" ,"Y"};
 
-        } else if (time.contains(ONE_SECOND_AGO)) {
-            String delta = time.replace(ONE_SECOND_AGO, "");
-            System.out.println(delta);
-            dateAfterOrBeforeN = TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), "S");
-
-        } else if (time.contains(ONE_MINUTE_AGO)) {
-            String delta = time.replace(ONE_MINUTE_AGO, "");
-            System.out.println(delta);
-            dateAfterOrBeforeN = TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), "MIN");
-
-        } else if (time.contains(ONE_HOUR_AGO)) {
-            String delta = time.replace(ONE_HOUR_AGO, "");
-            System.out.println(delta);
-            dateAfterOrBeforeN = TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), "H");
-
-        } else if (time.contains("昨天")) {
-            String delta = "1";
-            System.out.println(delta);
-            dateAfterOrBeforeN = TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), "D");
-
-        } else if (time.contains(ONE_DAY_AGO)) {
-            String delta = time.replace(ONE_DAY_AGO, "");
-            System.out.println(delta);
-            dateAfterOrBeforeN = TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), "D");
-
-        } else if (time.contains(ONE_MONTH_AGO)) {
-            String delta = time.replace(ONE_MONTH_AGO, "");
-            System.out.println(delta);
-            dateAfterOrBeforeN = TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), "M");
-
+        for (int i = 0; i < TIME_UNITS.length; i++) {
+            if (time.contains(TIME_UNITS[i])) {
+                String delta = time.replace(TIME_UNITS[i], "");
+                System.out.println(delta);
+                return TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), Integer.parseInt("-" + delta), unitCodes[i]);
+            }
         }
-        return dateAfterOrBeforeN;
-    }
 
+        if (time.contains("昨天")) {
+            System.out.println("1");
+            return TimeUtils.getDateAfterOrBeforeN(TimeUtils.nowTime(), -1, "D");
+        }
+
+        return "";
+    }
 
     /**
      * 把2020.01.01 转为 2020-01-01
      * @param date
      * @return
-     * @throws ParseException
      */
-    public static String pointToSimle(String date) throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
-        Date parse = formatter.parse(date);
-        SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
-        return formatter2.format(parse);
+    public static String pointToSimle(String date) throws ParseException{
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        LocalDate localDate = LocalDate.parse(date, inputFormatter);
+        return localDate.format(DATE_FORMATTER);
     }
+
 
     /**
      * 判断当前时间是否在[startTime, endTime]区间，注意时间格式要一致
@@ -757,25 +442,7 @@ public class TimeUtils {
      * @author bruce
      */
     public static boolean isEffectiveDate(Date nowTime, Date startTime, Date endTime) {
-        if (nowTime.getTime() == startTime.getTime()
-                || nowTime.getTime() == endTime.getTime()) {
-            return true;
-        }
-
-        Calendar date = Calendar.getInstance();
-        date.setTime(nowTime);
-
-        Calendar begin = Calendar.getInstance();
-        begin.setTime(startTime);
-
-        Calendar end = Calendar.getInstance();
-        end.setTime(endTime);
-
-        if (date.after(begin) && date.before(end)) {
-            return true;
-        } else {
-            return false;
-        }
+        return !nowTime.before(startTime) && !nowTime.after(endTime);
     }
 
     /**
@@ -785,47 +452,20 @@ public class TimeUtils {
      * @author bruce
      */
     public static boolean isWorkClockTime() {
-        boolean flag = false;
         try {
-            String format = "HH:mm:ss";
-            System.out.println("now clock--"+TimeUtils.nowClock());
-            Date nowTime = new SimpleDateFormat(format).parse(TimeUtils.nowClock());
-            Date startTime = new SimpleDateFormat(format).parse("09:00:00");
-            Date endTime = new SimpleDateFormat(format).parse("19:00:00");
-            flag = isEffectiveDate(nowTime, startTime, endTime);
-            System.out.println(flag);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            Date nowTime = sdf.parse(nowClock());
+            Date startTime = sdf.parse("09:00:00");
+            Date endTime = sdf.parse("19:00:00");
 
+            boolean flag = isEffectiveDate(nowTime, startTime, endTime);
+            System.out.println("now clock--" + nowClock());
+            System.out.println(flag);
+            return flag;
         } catch (ParseException e) {
             e.printStackTrace();
+            return false;
         }
-        return  flag;
     }
 
-
-    public static void main(String[] args) throws Exception{
-        System.out.println(Timestamp2DateStr(1610401225l*1000));
-
-    }
-
-    /**
-     * Unix时间互转（日期-毫秒）
-     * @param timestamp
-     * @return
-     */
-    public static String Timestamp2DateStr(Long timestamp) {
-        try {
-            if(timestamp.toString().length()<=10){
-                timestamp = timestamp *1000;
-            }
-            Date date = new Date(timestamp);
-
-            String format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
-
-            return format;
-        }catch (Exception ig){
-            return TimeUtils.nowdate();
-        }
-
-
-    }
 }

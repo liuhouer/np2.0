@@ -37,7 +37,7 @@ public class RetMovieAndSendMQTask {
 //    @Scheduled(cron = "0 */1 * * * ?")//每1分钟执行一次
     @Scheduled(cron = "0 30 11 * * ?")//每天中午11:30执行一次
     public void RetMovieAndSendMQTask() {
-        log.info("#####开始获取["+ TimeUtils.nowdate() +"]电影信息#######");
+        log.info("#####开始获取["+ TimeUtils.nowDate() +"]电影信息#######");
 
         for (int i = 1; i < 3; i++) {
             log.info("正在执行task " + i);
@@ -77,7 +77,7 @@ public class RetMovieAndSendMQTask {
     }
 
     public static void main(String[] args) {
-        log.info("#####开始获取["+ TimeUtils.nowdate() +"]电影信息#######");
+        log.info("#####开始获取["+ TimeUtils.nowDate() +"]电影信息#######");
 
         for (int i = 1; i < 20; i++) {
             log.info("正在执行task " + i);

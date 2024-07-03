@@ -875,11 +875,11 @@ public class HTMLParserUtil {
 
                     } catch (Exception e2) {
 
-                        date = TimeUtils.nowdate();
+                        date = TimeUtils.nowDate();
                     }
 
 
-                    if (StringUtils.isNotEmpty(date) && date.contains("前")) date = TimeUtils.nowdate();
+                    if (StringUtils.isNotEmpty(date) && date.contains("前")) date = TimeUtils.nowDate();
                     date = date.replaceAll("年", "-").replaceAll("月", "-").replaceAll("日", "");
                     log.info("date====================" + date);
 
@@ -1184,11 +1184,11 @@ public class HTMLParserUtil {
 
                     } catch (Exception e2) {
 
-                        date = TimeUtils.nowdate();
+                        date = TimeUtils.nowDate();
                     }
 
 
-                    if (StringUtils.isNotEmpty(date) && date.contains("前")) date = TimeUtils.nowdate();
+                    if (StringUtils.isNotEmpty(date) && date.contains("前")) date = TimeUtils.nowDate();
                     date = date.replaceAll(" ", "");
                     date = date.replaceAll("年", "-").replaceAll("月", "-").replaceAll("日", "");
                     log.info("date====================" + date);
@@ -1196,7 +1196,7 @@ public class HTMLParserUtil {
                     try {
                         date = TimeUtils.pointToSimle(date);
                     } catch (ParseException ex) {
-                        date = TimeUtils.nowdate();
+                        date = TimeUtils.nowDate();
 
                     }
                     //月
@@ -1483,11 +1483,11 @@ public class HTMLParserUtil {
 
                     } catch (Exception e2) {
 
-                        date = TimeUtils.nowdate();
+                        date = TimeUtils.nowDate();
                     }
 
 
-                    if (StringUtils.isNotEmpty(date) && date.contains("前")) date = TimeUtils.nowdate();
+                    if (StringUtils.isNotEmpty(date) && date.contains("前")) date = TimeUtils.nowDate();
                     date = date.replace(" ", "").replace("年", "-").replace("月", "-").replace("日", "");
                     log.info("date====================" + date);
 
@@ -1832,7 +1832,7 @@ public class HTMLParserUtil {
                     String desc = logo_p + info.html() +"<p></p>" + info3_html;
 
 
-                    map.put("date", TimeUtils.nowdate());
+                    map.put("date", TimeUtils.nowDate());
                     map.put("article", desc);
 
                     System.err.println(JsonUtil.object2json(map));
@@ -1878,7 +1878,7 @@ public class HTMLParserUtil {
 
                     String path = "";
 
-                    String date = TimeUtils.nowdate();
+                    String date = TimeUtils.nowDate();
 
 
                     //判断code在系统不存在再去处理后面的事
@@ -2113,7 +2113,7 @@ public class HTMLParserUtil {
                     try {
                         date = li.select("div.pure-u-19-24 > div > div.tags").get(0).ownText();
                     }catch (Exception e){
-                        date =  TimeUtils.nowdate();
+                        date =  TimeUtils.nowDate();
                     }
 
 
@@ -2546,7 +2546,7 @@ public class HTMLParserUtil {
                     if (!article_alls.isEmpty()) {
 
                         Elements imgs = article_alls.get(0).select("img");
-                        String date = TimeUtils.nowdate();
+                        String date = TimeUtils.nowDate();
                         for (int j = 0; j < imgs.size(); j++) {
                             try {
                                 String weburl = imgs.get(j).attr("src");
@@ -2644,7 +2644,7 @@ public class HTMLParserUtil {
 
                     String path = "/Users/zhangyang/Pictures/";
 
-                    String date = TimeUtils.nowdate() + "/";
+                    String date = TimeUtils.nowDate() + "/";
                     path = path + date;
 
                     File filepath = new File(path);

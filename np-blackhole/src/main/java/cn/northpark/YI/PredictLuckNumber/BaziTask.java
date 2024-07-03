@@ -18,7 +18,7 @@ public class BaziTask {
     public void executeBaziTask() {
         try {
             // 获取当前日期时间
-            String prefixDay = TimeUtils.nowdate();
+            String prefixDay = TimeUtils.nowDate();
 
             // 创建格式化类，设定格式为 yyyy-MM-dd HH:mm:ss
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

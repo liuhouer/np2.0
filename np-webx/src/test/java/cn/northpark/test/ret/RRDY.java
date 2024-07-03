@@ -71,10 +71,10 @@ public class RRDY {
             Object area = d_info_map.get("area");
             Object year = d_info_map.get("year");
             Object channel_cn = d_info_map.get("channel_cn");
-            String expire_date = TimeUtils.nowdate();
+            String expire_date = TimeUtils.nowDate();
             if (Objects.nonNull(d_info_map.get("expire"))) {
                 //timestamp
-                expire_date = TimeUtils.getHalfDate(TimeUtils.Timestamp2DateStr(Long.parseLong(d_info_map.get("expire").toString())));
+                expire_date = TimeUtils.getHalfDate(TimeUtils.longToString(Long.parseLong(d_info_map.get("expire").toString())));
             }
 
             //下载资源解析
