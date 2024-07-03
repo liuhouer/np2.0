@@ -13,37 +13,37 @@ import java.sql.*;
  *
  * -- 读书类查询
  * select uid,name,count(uid) as nums from user_reading
- * where tag= '科技科普'
+ * where tag= '计算机与互联网'
  * and uid in (SELECT uid from v_hd)
  * GROUP BY uid,name
  *
  * -- 活动类查询
  * select uid,name,count(uid) as nums from user_event
- * where event_type = '公益'
+ * where event_type = '戏剧'
  * and uid in (SELECT uid from v_hd)
  * GROUP BY uid,name
  *
  * -- 社区类查询
  *
  * select uid,name,count(uid) as nums from user_sq
- * where sq_type = '游戏'
+ * where sq_type = '美食'
  * and uid in (SELECT uid from v_hd)
  * GROUP BY uid,name
  *
  */
 @Slf4j
 public class T0 {
-    private static final String DATABASE_NAME = "dd1";//TODO 1 数据库名
-    private static final String V_NAME = "v_hdhd";      //TODO 2 视图名
+    private static final String DATABASE_NAME = "d6";//TODO 1 数据库名
+    private static final String V_NAME = "v_mdyl";      //TODO 2 视图名
 
     //TODO 3 视图查询语句
     private static final String selectSQL =
-            "select uid,name,count(uid) as nums from user_reading\n" +
-                    "where tag= '科技科普'\n" +
+            "select uid,name,count(uid) as nums from user_sq\n" +
+                    "where sq_type = '美食'\n" +
                     "and uid in (SELECT uid from v_hd)\n" +
                     "GROUP BY uid,name";
 
-    private static final String kpiName = "读书-科技科普 T0 活动互动\n\n";//TODO  4 指标名称
+    private static final String kpiName = "门店引流 T0 社区-美食 \n";//TODO  4 指标名称
 
     //TODO 5 检查T6~ T1的左右数值区间
 

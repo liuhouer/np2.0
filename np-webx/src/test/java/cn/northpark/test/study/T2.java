@@ -30,13 +30,13 @@ import java.sql.*;
  */
 @Slf4j
 public class T2 {
-    private static final String DATABASE_NAME = "dd1";  //TODO 1 数据库名
-    private static final String VIEW_NAME = "v_qdtg";    //TODO 2 视图名称
-    private static final String FIELD_NAME = "followers";   //TODO 3 统计字段名称
+    private static final String DATABASE_NAME = "d6";  //TODO 1 数据库名
+    private static final String VIEW_NAME = "v_xshd";    //TODO 2 视图名称
+    private static final String FIELD_NAME = "follows";   //TODO 3 统计字段名称
 
     //TODO 4 修改 T6 ~ T1的左右区间
 
-    private static final String kpiName = "获得关注数 T2 渠道推广";//TODO  5 指标名称
+    private static final String kpiName = "线上互动 T2 关注数";//TODO  5 指标名称
 
     public static void main(String[] args) {
         String url = "jdbc:mysql://localhost:3306/" + DATABASE_NAME + "?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC";
@@ -54,12 +54,12 @@ public class T2 {
 
             //0~90 91~181 182~272 273~363 364~454 455~545 546~636
             // 统计各个级别的人数
-            int t6Count = getCount(statement, VIEW_NAME, 546, 636);
-            int t5Count = getCount(statement, VIEW_NAME, 455, 545);
-            int t4Count = getCount(statement, VIEW_NAME, 364, 454);
-            int t3Count = getCount(statement, VIEW_NAME, 273, 363);
-            int t2Count = getCount(statement, VIEW_NAME, 182, 272);
-            int t1Count = getCount(statement, VIEW_NAME, 91 , 181);
+            int t6Count = getCount(statement, VIEW_NAME, 126, 146);
+            int t5Count = getCount(statement, VIEW_NAME, 105, 125);
+            int t4Count = getCount(statement, VIEW_NAME, 84, 104);
+            int t3Count = getCount(statement, VIEW_NAME, 63, 83);
+            int t2Count = getCount(statement, VIEW_NAME, 42, 62);
+            int t1Count = getCount(statement, VIEW_NAME, 21 , 41);
 
             // 计算T0
             int t0Count = getTotalCount(statement, "v_hd") - t6Count - t5Count - t4Count - t3Count - t2Count - t1Count;
