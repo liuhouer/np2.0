@@ -101,22 +101,26 @@ public class NPQueryRunner {
 
 	}
 
-	
+
 	public static void main(String[] args) throws SQLException {
 
 
 
 
 //		List<Map<String, Object>> query = runner.query(JdbcUtils.getConnection(), "select * from bc_soft limit 0,50",  new MapListHandler());
-		
-		String insSql = "INSERT INTO `northpark`.`bc_knowledge_test`(`id`, `add_time1`, `add_time2`, `add_time3`) VALUES (00000521735, '2019-07-23 02:37:19', '2019-07-23', '2019-07-23 02:37:19');\r\n" +
-				"";
-		
-		
-		String insSql2 = "INSERT INTO `flink`.`t_word_counts`(`id`, `word`, `times`) VALUES (?, ?, ?);";
+
+//		String insSql = "INSERT INTO `northpark`.`bc_knowledge_test`(`id`, `add_time1`, `add_time2`, `add_time3`) VALUES (00000521735, '2019-07-23 02:37:19', '2019-07-23', '2019-07-23 02:37:19');\r\n" +
+//				"";
+//
+//
+//		String insSql2 = "INSERT INTO `flink`.`t_word_counts`(`id`, `word`, `times`) VALUES (?, ?, ?);";
 
 
-		NPQueryRunner.update(insSql2,IDUtils.getInstance().getUniqueSceneid(),IDUtils.getInstance().generateString(6),TimeUtils.nowTime());
+//		NPQueryRunner.update(insSql2,IDUtils.getInstance().getUniqueSceneid(),IDUtils.getInstance().generateString(6),TimeUtils.nowTime());
+
+		List<Map<String, Object>> mapList = NPQueryRunner.query("select * from bc_soft limit 0,50", new MapListHandler());
+
+		log.info("HAHHA",mapList);
 	}
 }
 
