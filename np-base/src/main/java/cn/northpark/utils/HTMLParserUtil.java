@@ -13,13 +13,14 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.util.CollectionUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -2189,7 +2190,7 @@ public class HTMLParserUtil {
 
                     //处理图片上传和格式化
 
-                    handleMoviePic(title, date, detail);
+                    handleMoviePicMinio(title, date, detail);
 
                     StringBuilder sb_tag = new StringBuilder();
 
@@ -2350,6 +2351,97 @@ public class HTMLParserUtil {
             }
 
         }
+    }
+
+    /**
+     * minio处理电影的图片上传和格式化
+     *
+     * @param title
+     * @param date
+     * @param element
+     */
+    private static void handleMoviePicMinio(String title, String date, Element element) {
+        Elements imgs = element.select("img");
+        String currentDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        SimpleDateFormat timestampFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+
+        for (int j = 0; j < imgs.size(); j++) {
+            try {
+                String weburl = imgs.get(j).attr("src");
+                if(!BC_Constant.ignore_pic_list.contains(weburl)) {
+                    // 获取图片后缀
+                    String extension = getImageExtension(weburl);
+                    // 生成新文件名
+                    String newFileName = timestampFormat.format(new Date()) + extension;
+                    // Minio的目标路径
+                    String minioPath = date + "/" + newFileName;
+
+                    // 上传图片到Minio
+                    String minioUrl = uploadWebImageToMinio(weburl, "movies", minioPath);
+
+                    // 更新图片元素属性
+                    imgs.get(j).attr("src", minioUrl);
+                    imgs.get(j).removeAttr("srcset");
+                    imgs.get(j).removeAttr("sizes");
+                    imgs.get(j).attr("alt", title);
+                    imgs.get(j).addClass("col-xs-12 col-sm-6 margin-b20");
+                }
+            } catch (Exception e) {
+                log.error("处理图片异常: " + e.toString(), e);
+                continue;
+            }
+        }
+    }
+
+    /**
+     * 获取图片后缀
+     */
+    private static String getImageExtension(String imageUrl) {
+        String extension = ".jpg"; // 默认后缀
+        if (StringUtils.isNotEmpty(imageUrl)) {
+            String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+            if (fileName.contains("?")) {
+                fileName = fileName.substring(0, fileName.indexOf("?"));
+            }
+            int dotIndex = fileName.lastIndexOf(".");
+            if (dotIndex > 0) {
+                extension = fileName.substring(dotIndex);
+            }
+        }
+        return extension.toLowerCase();
+    }
+
+    /**
+     * 上传网络图片到Minio
+     */
+    private static String uploadWebImageToMinio(String imageUrl, String bucketName, String objectName) throws Exception {
+        // 下载图片
+        URL url = new URL(imageUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+        try (InputStream inputStream = conn.getInputStream()) {
+            // 压缩图片
+            ByteArrayOutputStream compressedImageStream = new ByteArrayOutputStream();
+            Thumbnails.of(inputStream)
+                    .scale(1f)
+                    .outputQuality(0.5f)
+                    .toOutputStream(compressedImageStream);
+
+            // 将压缩后的图片上传到Minio
+            try (ByteArrayInputStream uploadStream = new ByteArrayInputStream(compressedImageStream.toByteArray())) {
+                MinioUtils.putObject(
+                        bucketName,
+                        objectName,
+                        uploadStream,
+                        compressedImageStream.size(),
+                        "image/" + objectName.substring(objectName.lastIndexOf(".") + 1)
+                );
+            }
+        }
+
+        // 返回Minio URL
+        return EnvCfgUtil.getValByCfgName("MINIO_DOMAIN") + "/" + bucketName + "/" + objectName;
     }
 
     /**
