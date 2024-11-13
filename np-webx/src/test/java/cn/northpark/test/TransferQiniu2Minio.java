@@ -1,5 +1,7 @@
 package cn.northpark.test;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.IoUtil;
 import cn.northpark.utils.MinioUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,10 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -77,14 +76,27 @@ public class TransferQiniu2Minio {
      * @return 失败文件的路径列表
      */
     public static List<String> findFailedFiles(String sourceDir, String bucketName) throws Exception {
-        List<String> failedFiles = new ArrayList<>();
-        Files.walk(Paths.get(sourceDir))
+        List<String> failedFiles = new CopyOnWriteArrayList<>();
+
+        // 获取所有文件路径
+        List<Path> filePaths = Files.walk(Paths.get(sourceDir))
                 .filter(Files::isRegularFile)
-                .forEach(filePath -> {
+                .collect(Collectors.toList());
+
+        // 使用CompletableFuture并发处理文件
+        List<CompletableFuture<Void>> futures = filePaths.stream()
+                .map(filePath -> CompletableFuture.runAsync(() -> {
+
                     try {
                         // 获取相对路径
                         Path relativePath = Paths.get(sourceDir).relativize(filePath);
-                        String objectName = relativePath.toString().replace("\\", "/");
+                        String objectName = null;
+
+                        if("soft".equals(bucketName)){
+                            objectName = "soft/"+ relativePath.toString().replace("\\", "/");
+                        }else {
+                            objectName = relativePath.toString().replace("\\", "/");
+                        }
 
                         // 检查文件是否存在于Minio
                         try {
@@ -97,7 +109,12 @@ public class TransferQiniu2Minio {
                     } catch (Exception e) {
                         log.error("检查文件失败: " + filePath, e);
                     }
-                });
+
+                }, executorService))
+                .collect(Collectors.toList());
+        // 等待所有任务完成
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
         return failedFiles;
     }
 
@@ -262,16 +279,17 @@ public class TransferQiniu2Minio {
 //        }
 
         //=======================查找上传失败的=======================
-//        try {
-//            String sourceDir = "C:\\Users\\Bruce\\Desktop\\qiniu\\movies";
-//            String bucketName = "movies";
-//
-//            // 1. 找出失败的文件
-//            log.info("开始查找失败的文件...");
-//            List<String> failedFiles = findFailedFiles(sourceDir, bucketName);
-//            log.info("找到 {} 个失败的文件", failedFiles.size());
-//
-//            // 2. 重新上传失败的文件
+        try {
+            String sourceDir = "C:\\Users\\Bruce\\Desktop\\qiniu\\soft";
+            String bucketName = "soft";
+
+            // 1. 找出失败的文件
+            log.info("开始查找失败的文件...");
+            List<String> failedFiles = findFailedFiles(sourceDir, bucketName);
+            FileUtil.appendLines(failedFiles,new File("C:\\Users\\Bruce\\Desktop\\softFailedFiles.txt"),"UTF-8");
+            log.info("找到 {} 个失败的文件", failedFiles.size());
+
+            // 2. 重新上传失败的文件
 //            if (!failedFiles.isEmpty()) {
 //                log.info("开始重新上传失败的文件...");
 //                Map<String, String> pathMapping = reuploadFailedFiles(failedFiles, bucketName);
@@ -281,34 +299,34 @@ public class TransferQiniu2Minio {
 //                pathMapping.forEach((oldPath, newPath) ->
 //                        log.info("原文件: {} -> 新文件: {}", oldPath, newPath));
 //            }
-//
-//        } catch (Exception e) {
-//            log.error("处理失败", e);
-//        } finally {
-//            executorService.shutdown();
-//        }
-        //=======================重新处理有问题的文件============================
-        try {
-            String sourceDir = "C:\\Users\\Bruce\\Desktop\\qiniu\\soft";
-            String bucketName = "soft";
 
-            long startTime = System.currentTimeMillis();
-            log.info("开始处理文件...");
-
-            Map<String, String> pathMapping = fixFileNamesAndUpload(sourceDir, bucketName);
-
-            // 打印文件名映射关系
-            log.info("文件处理完成，映射关系如下：");
-            pathMapping.forEach((oldName, newName) ->
-                    log.info("原文件名: {} -> 新文件名: {}", oldName, newName));
-            long endTime = System.currentTimeMillis();
-            log.info("总耗时：{}ms", endTime - startTime);
         } catch (Exception e) {
             log.error("处理失败", e);
         } finally {
-            // 关闭线程池
             executorService.shutdown();
         }
+        //=======================重新处理有问题的文件============================
+//        try {
+//            String sourceDir = "C:\\Users\\Bruce\\Desktop\\qiniu\\soft";
+//            String bucketName = "soft";
+//
+//            long startTime = System.currentTimeMillis();
+//            log.info("开始处理文件...");
+//
+//            Map<String, String> pathMapping = fixFileNamesAndUpload(sourceDir, bucketName);
+//
+//            // 打印文件名映射关系
+//            log.info("文件处理完成，映射关系如下：");
+//            pathMapping.forEach((oldName, newName) ->
+//                    log.info("原文件名: {} -> 新文件名: {}", oldName, newName));
+//            long endTime = System.currentTimeMillis();
+//            log.info("总耗时：{}ms", endTime - startTime);
+//        } catch (Exception e) {
+//            log.error("处理失败", e);
+//        } finally {
+//            // 关闭线程池
+//            executorService.shutdown();
+//        }
 
     }
 }

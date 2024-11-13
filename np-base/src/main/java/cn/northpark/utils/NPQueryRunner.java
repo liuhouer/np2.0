@@ -120,7 +120,7 @@ public class NPQueryRunner {
 
 		List<Map<String, Object>> mapList = NPQueryRunner.query("select * from bc_soft limit 0,50", new MapListHandler());
 
-		log.info("HAHHA",mapList);
+		log.info("HAHHA,{}",mapList);
 	}
 }
 

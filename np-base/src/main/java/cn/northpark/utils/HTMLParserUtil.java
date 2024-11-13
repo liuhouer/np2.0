@@ -2441,7 +2441,7 @@ public class HTMLParserUtil {
         }
 
         // 返回Minio URL
-        return EnvCfgUtil.getValByCfgName("MINIO_DOMAIN") + "/" + bucketName + "/" + objectName;
+        return EnvCfgUtil.getValByCfgName("MINIO_API_") + "/" + bucketName + "/" + objectName;
     }
 
     /**
@@ -3030,118 +3030,9 @@ public class HTMLParserUtil {
 
     public static void main(String[] args) {
         try {
-            //retMeizitu();
-//                retTodayEq();
-//                List<Map<String, String>> retEQArticle = retEQArticle();
-//                log.info(retEQArticle.size());
-//                readPic2Disk();
-//                retV2Romeo();
-//                url2markdown();
-//                String cutString = CutString("荒烟蔓草的年头，就连分手都很沉默", 12);
-//                log.info(cutString);
-//                retSoft(1);
-//                webPic2Disk("http://www.sdifenzhou.com/wp-content/uploads/2016/02/Fantastical2.jpg", "D:\\BZ\\soft\\" );
+            String pic = uploadWebImageToMinio("https://p0.pipi.cn/mmdb/54ecde022ffddd7df5e19bcd40fe1e3b5a182.jpg?imageView2/1/w/464/h/677", "pic", "54ecde022ffddd7df5e19bcd40fe1e3b5a182.jpg");
 
-//                retMovies(78);
-//                String url = "http://www.vip588660.com/page/"+77+"/";
-////                url = "http://northpark.cn/soft/mac/page77";
-//                String pickData = pickData(url);
-//                log.info(pickData);
-//            	 String tag  =  "1,2,3,4,5,6,";
-//            	 if(tag.endsWith(",")){
-//                 	tag  =  tag.substring(0, tag.length()-1);
-//                 	log.info(tag);
-//                 }
-
-
-//            	retPoem(26);
-//            	log.info(EnDecryptUtils.md5Encrypt("速度与激情8"));
-//            	retEQArticle();
-//            	retCaiMai(1);
-
-//            	String retCaiMaiZAN = retCaiMaiZT_ZAN("shui-jue");
-//            	String sql2 = "select id from bc_user where tail_slug in ("+retCaiMaiZAN+")";
-//            	System.out.println(sql2);
-
-//            	 retCaiMaiZT_PL("shui-jue");
-//            	 System.out.println(replaceBlank("\n\t\t\t\t丫丫的小贝壳屋：能够睡到自然醒就是一种幸福\n\t\t\t\t\t\t\t"));
-//
-//            	retPicByName("刘德华", "liu-de-hua");
-//            	Result parse = ToAnalysis.parse("冬日里温暖的灯光");
-//            	System.out.println(parse);
-//
-//            	List<Term> terms = parse.getTerms();
-//
-//            	String term = terms.get(terms.size()-1).getName();
-//            	System.out.println(term);
-//            	for (Term t: terms) {
-//					System.out.println(t.getName());
-//				}
-//            	retSoftNew(3);
-//            retEQArticle(1);
-//        	retSoftNew(0);
-
-//        	retMovies(1,"http://m.orisi.cn/movie_bt_series/movie/page/");
-//            retSoftChaoxzCom(1);
-//            retSoftNew(1);
-
-
-//            retSQ_hema()
-
-//            System.err.println(getLocalFolderByOS());
-//            System.err.println(getLocalFolderByOS("mv"));
-//            System.err.println(getLocalFolderByOSMovies());
-
-
-
-
-            String desc = "";
-
-
-            String a_url = "https://www.rrdynb.com/dianshiju/2022/1110/30955.html";
-            String dataResult_ = HttpGetUtils.getDataResult(a_url);
-
-            Document doc_ = Jsoup.parse(dataResult_, a_url);
-
-
-            Element detail = doc_.select("div.movie-des.shadow > div.movie-txt").get(0);
-
-
-            //========================解析路径start======================================
-            //删除打赏和微信二维码信息
-
-            StringBuilder sb = new StringBuilder();
-
-
-
-            //处理div中的连接，就去p磁力链查找下载地址，删除后，设置到path
-            Elements ps = detail.select("div.movie-txt > div");
-            if (!CollectionUtils.isEmpty(ps)) {
-                for (Iterator iterator = ps.iterator(); iterator.hasNext(); ) {
-                    Element link = (Element) iterator.next();
-                    if(link.select("a").size()>0){
-                        //把iterater里面的元素连接提取到path中
-                        handleLink(sb, link, "div");
-                    }
-                }
-            }
-
-            //处理完div后 处理样式有问题的span
-            Elements spans = detail.select("div.movie-txt > span");
-            if (!CollectionUtils.isEmpty(spans)) {
-                for (Iterator iterator = spans.iterator(); iterator.hasNext(); ) {
-                    Element link = (Element) iterator.next();
-                    //把iterater里面的元素连接提取到path中
-                    handleLink(sb, link, "span");
-                }
-            }
-
-
-            String path = sb.toString();
-
-            log.info("path,,,,{}",path);
-
-            //========================解析路径======================================
+            System.err.println(pic);
         } catch (Exception e) {
 
             log.error("HTMLPARSERutils------->", e);

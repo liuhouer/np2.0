@@ -126,7 +126,7 @@ public class MinioUtils {
                         .contentType(file.getContentType())
                         .build());
         String url = EnvCfgUtil.getValByCfgName("MINIO_API") + "/" + bucketName + "/" + fileName;
-        String urlHost = EnvCfgUtil.getValByCfgName("MINIO_DOMAIN") + "/" + bucketName + "/" + fileName;
+        String urlHost = EnvCfgUtil.getValByCfgName("MINIO_API_") + "/" + bucketName + "/" + fileName;
         log.info("上传文件成功url ：[{}], urlHost ：[{}]", url, urlHost);
         return new FileUploadResponse(url, urlHost);
     }
