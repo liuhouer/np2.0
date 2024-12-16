@@ -119,15 +119,8 @@
 
 
                     <!-- donate  -->
-                    <div class="clearfix sidebar radius-5 ">
-                        <div class="clearfix border-bottom">
-                            <h4><span class=" glyphicon  glyphicon-usd margin5"></span> Donate</h4>
-                        </div>
                         <!-- load donate list  -->
                         <%@ include file="page/common/donate.jsp" %>
-
-
-                    </div>
                     <!-- donate  -->
 
                     <!-- hot  -->

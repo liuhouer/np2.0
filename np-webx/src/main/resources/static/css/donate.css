@@ -1,0 +1,98 @@
+/* 捐助榜样式 */
+.donate-panel {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,.08);
+}
+
+.donate-panel .panel-heading {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 15px 20px;
+}
+
+.donate-panel .panel-title {
+    font-size: 16px;
+    color: #333;
+}
+
+.donate-panel .panel-title i {
+    color: #f0ad4e;
+    margin-right: 5px;
+}
+
+.donate-tabs {
+    padding: 15px 15px 0;
+}
+
+.donate-tabs > li > a {
+    color: #666;
+    padding: 8px 12px;
+    border-radius: 15px;
+    transition: all .3s;
+}
+
+.donate-tabs > li > a:hover {
+    background-color: #f8f9fa;
+}
+
+.donate-tabs > li.active > a {
+    background-color: #337ab7;
+    color: #fff;
+}
+
+.donate-tabs > li > a i {
+    margin-right: 5px;
+}
+
+.donate-content {
+    padding: 20px;
+}
+
+/* 捐助记录样式 */
+.donate-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.donate-item:last-child {
+    border-bottom: none;
+}
+
+.donate-item .time {
+    color: #999;
+    font-size: 13px;
+}
+
+.donate-item .user {
+    color: #333;
+    font-weight: 500;
+    margin: 5px 0;
+}
+
+.donate-item .amount {
+    color: #f0ad4e;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.donate-item .message {
+    color: #666;
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+/* 分页样式 */
+.donate-pagination {
+    text-align: center;
+    padding-top: 20px;
+}
+
+/* 页脚样式 */
+.donate-footer {
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    padding: 20px 0 10px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 20px;
+} 

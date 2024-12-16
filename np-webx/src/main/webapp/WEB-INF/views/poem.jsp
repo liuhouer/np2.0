@@ -119,7 +119,7 @@
                                     <input type="text" id="keyword" name="keyword" value="${keyword}"
                                         class="form-control input-lg" placeholder="搜索诗词名句...">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-primary btn-lg" type="button" id="J_ser_btn">
+                                        <button class="btn btn-warning btn-lg" type="button" id="J_ser_btn">
                                             <i class="glyphicon glyphicon-search"></i> 搜索
                                         </button>
                                     </span>
@@ -141,7 +141,7 @@
                                 <span>类别：<a href="/poem/types/${s.typesCode}">${s.types}</a></span>
                             </div>
                             <div class="poem-content">${s.content}</div>
-                            <a class="btn btn-primary" href="/poem/enjoy/${s.id}.html">
+                            <a class="btn btn-warning" href="/poem/enjoy/${s.id}.html">
                                 阅读全文 <i class="glyphicon glyphicon-arrow-right"></i>
                             </a>
                         </div>

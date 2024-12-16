@@ -15,371 +15,206 @@
     %>
 
     <c:forEach var="y" items="${list }" varStatus="ss">
-        <div 
-                    <c:if test="${ss.index == 0 }">
-                       class=" clearfix border-bottom padding-t10"
-		  </c:if>
-                    <c:if test="${ss.index > 0 }">
-                       class=" clearfix border-bottom padding-t20"
-		  </c:if>
-         >
-            <p>
-                <span class="glyphicon glyphicon-time margin5"></span>
-                    ${y.add_time}
+        <div class="donate-item">
+            <p class="time">
+                <i class="fa fa-clock-o"></i>
+                ${y.add_time}
             </p>
-            <p>
+            <p class="user">
+                <i class="fa fa-user"></i>
+                ${y.account_name}
             </p>
-            <p>
-                <span class="glyphicon glyphicon-user margin5"></span>
-                    ${y.account_name}
+            <p class="message">
+                ${y.reward_msg}
             </p>
-            <p>
-                <span class="glyphicon glyphicon-barcode margin5"></span>
-                    ${y.alipay_trans_id}
-            </p>
-            <p>
-                <span class="glyphicon glyphicon-comment margin5"></span>
-                    ${y.reward_msg}
-            </p>
-            <p>
-                <span class="glyphicon  margin5">￥</span>
-                    ${y.order_amount}
+            <p class="amount">
+                <i class="fa fa-jpy"></i>
+                ${y.order_amount}
             </p>
         </div>
     </c:forEach>
 
 
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2018-04-10 08:51
         </p>
-
-        <p>
-
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             黄婧怡
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
-            20180410210***507700812
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-retweet margin5"></span>
+        <p class="message">
             人非常好，重要的是网速特快
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="https://jillhuang1085.github.io/" target="_blank">https://github.com/JillHuang1085</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             99.00
         </p>
-
     </div>
 
 
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2018-03-29 22:17:15
         </p>
-
-        <p>
-
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             fromqtoj
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             10000395010***730739800
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="https://fromqtoj.github.io/" target="_blank">https://github.com/fromqtoj</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             100.00
         </p>
-
     </div>
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2018-03-29 10:56:54
         </p>
-
-        <p>
-
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             augustvino
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             10000395010***560211665
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="http://blog.augustvino.cn/" target="_blank">http://blog.augustvino.cn/</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             99.00
         </p>
-
     </div>
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2018-02-12 15:42
         </p>
-
-        <p>
-
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             韩锡勋哦哦
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             20180212210***247083668
-
         </p>
-        <p>
-            <span class="glyphicon glyphicon-retweet margin5"></span>
-            同学挺好的！山西的大学生！！
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-comment margin5"></span>
-            大哥人很好，支持
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="http://hanxixun.github.io/" target="_blank">http://hanxixun.github.io/</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             99.00
         </p>
-
     </div>
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2018-01-09 22:30
         </p>
-
-        <p>
-
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             b***re
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             20180109210***234125769
         </p>
-        <p>
-            <span class="glyphicon glyphicon-retweet margin5"></span>
-            这位同学很谦虚好学，赞！
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-comment margin5"></span>
-            教导非常细心
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="http://billvampire.github.io/" target="_blank">http://billvampire.github.io/</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             99.00
         </p>
-
     </div>
 
 
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2017-08-29 22:00
         </p>
-
-        <p>
-            <span class="glyphicon  glyphicon-phone margin5"></span>
-
-
-            2751874403
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             Billvampire
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             20170829210***205016276
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="http://billvampire.github.io/" target="_blank">http://billvampire.github.io/</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             99.00
         </p>
-
     </div>
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2017-08-13 01:31
         </p>
-
-        <p>
-            <span class="glyphicon  glyphicon-phone margin5"></span>
-
-
-            544510*5
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             *梓涵
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             20170813210***217537854
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="https://zihanedric.github.io/" target="_blank">https://zihanedric.github.io</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             100.00
         </p>
-
     </div>
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2017-08-05 23:02:42
         </p>
-
-        <p>
-            <span class="glyphicon  glyphicon-phone margin5"></span>
-
-
-            178****2085
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             季*菲
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             20170805210***203034131
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-            <a href="http://xxxfei.github.io" target="_blank">http://xxxfei.github.io</a>
-
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             99.00
         </p>
-
     </div>
 
 
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2017-07-03 18:41
         </p>
-
-        <p>
-            <span class="glyphicon  glyphicon-phone margin5"></span>
-
-
-            139****1786
-
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             臧*康
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             20170703210***217675150
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="https://wl059.github.io/" target="_blank">https://wl059.github.io/</a>
-        </p>
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             99.00
         </p>
-
     </div>
 
 
-    <div class=" clearfix border-bottom padding-t20">
-        <p>
-            <span class="glyphicon glyphicon-time margin5"></span>
+    <div class="donate-item">
+        <p class="time">
+            <i class="fa fa-clock-o"></i>
             2017-04-28 23:08:59
         </p>
-
-        <p>
-            <span class="glyphicon  glyphicon-phone margin5"></span>
-
-
-            139****1786
-
-        </p>
-        <p>
-            <span class="glyphicon glyphicon-user margin5"></span>
+        <p class="user">
+            <i class="fa fa-user"></i>
             lo***ng
         </p>
-        <p>
-            <span class="glyphicon glyphicon-barcode margin5"></span>
+        <p class="message">
             10000394010***323845052
         </p>
-        <p>
-            <span class="glyphicon glyphicon-link margin5"></span>
-
-            <a href="http://leopardpan.github.io" target="_blank">http://baixin.io/</a>
-        </p>
-
-        <p>
-            <span class="glyphicon  margin5">￥</span>
+        <p class="amount">
+            <i class="fa fa-jpy"></i>
             100.00
         </p>
-
     </div>
 
-	<div class=" clearfix center pageinfo ">
+	<div class="donate-pagination">
     <ul class="qinco-pagination pagination-sm ">
         <li><a onclick="loadDonates(<%=type_id%>,1)">‹‹</a></li>
         <li><a onclick="loadDonates(<%=type_id%>,<%=pageInfo.getPrePage()%>)"
@@ -410,11 +245,7 @@
 	
 	</div> 
 	
-    <div class=" clearfix ">
-        <!-- <p>
-            <span class="glyphicon  glyphicon-asterisk margin5"></span>
-
-        </p> -->
+    <div class="donate-footer">
         <p>
             ~ 生活不止苟且，还有诗和远方 ~
         </p>

@@ -15,43 +15,28 @@
         <div class="tab-pane fade in active" id="3">
 
             <c:forEach var="y" items="${list }" varStatus="ss">
-               
-                  <div 
-                             <c:if test="${ss.index == 0 }">
-                                class=" clearfix border-bottom padding-t10"
-                             </c:if>
-                             <c:if test="${ss.index > 0 }">
-                                class=" clearfix border-bottom padding-t20"
-                             </c:if>
-                  >     
-                    <p>
-                        <span class="glyphicon glyphicon-time margin5"></span>
-                            ${y.add_time}
+                <div class="donate-item">
+                    <p class="time">
+                        <i class="fa fa-clock-o"></i>
+                        ${y.add_time}
                     </p>
-                    <p>
+                    <p class="user">
+                        <i class="fa fa-user"></i>
+                        ${y.account_name}
                     </p>
-                    <p>
-                        <span class="glyphicon glyphicon-user margin5"></span>
-                            ${y.account_name}
+                    <p class="message">
+                        ${y.reward_msg}
                     </p>
-                    <p>
-                        <span class="glyphicon glyphicon-barcode margin5"></span>
-                            ${y.alipay_trans_id}
-                    </p>
-                    <p>
-                        <span class="glyphicon glyphicon-comment margin5"></span>
-                            ${y.reward_msg}
-                    </p>
-                    <p>
-                        <span class="glyphicon  margin5">￥</span>
-                            ${y.order_amount}
+                    <p class="amount">
+                        <i class="fa fa-jpy"></i>
+                        ${y.order_amount}
                     </p>
                 </div>
             </c:forEach>
 
 	
 
-		<div class=" clearfix center pageinfo ">
+		<div class="donate-pagination">
 
             <ul class="qinco-pagination pagination-sm ">
                 <li><a onclick="loadDonates(<%=type_id%>,1)">‹‹</a></li>
@@ -82,11 +67,7 @@
             </ul>
 			</div>
 
-            <div class=" clearfix ">
-               <%-- <p>
-                    <span class="glyphicon  glyphicon-asterisk margin5"></span>
-
-                </p>--%>
+            <div class="donate-footer">
                 <p>
                     ~ 生活不止苟且，还有诗和远方 ~
                 </p>
