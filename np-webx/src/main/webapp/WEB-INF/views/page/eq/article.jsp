@@ -16,9 +16,9 @@
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>${model.title} | NorthPark </title>
-    <meta name="keywords" content="NorthPark,情商提升,情圣日记，撩妹技巧">
-    <meta name="description" content="${eq_desc}">
+    <title>${model.title} - 情商提升 | NorthPark</title>
+    <meta name="keywords" content="${model.title},情商提升,NorthPark,${fn:substring(model.brief,0,30)}">
+    <meta name="description" content="${model.title}">
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
@@ -33,35 +33,27 @@
             <div class="col-md-12">
                 <div class="col-sm-8  col-md-offset-2 ">
                     <div class="clearfix bg-white margin-t10 margin-b10 padding20 " id="J_white_div">
-                        <div class="row margin10 post_article">
+                        <div class="row margin10 post_article" itemscope itemtype="http://schema.org/Article">
                             <div class="thumbnail border-0 center">
                                 <p>
-                                    <small class="green-text">
-                                        <h1>
-                                            ${model.title}
-
-                                        </h1>
-                                    </small>
+                                        <h1 itemprop="headline">${model.title}</h1>
                                 </p>
 
                                 <p>
-                                    <a class="common-a" title="${article.postDate}">
-                                        ${model.date }
-                                    </a>
+                                    <time itemprop="datePublished" datetime="${model.date}">${model.date}</time>
                                 </p>
 
                                 <hr>
                             </div>
                             <p class="margin-t10">
-                                <a title="${model.title}">
-                                    <img src="${model.img }" alt="${model.title}">
+                                <a href="/romeo/${model.id}.html" title="${model.title}" itemprop="url">
+                                    <img itemprop="image" src="${model.img}" alt="${model.title}" class="img-responsive">
                                 </a>
                             </p>
 
-                            <p id="content_">
-
-                                ${model.article }
-                            </p>
+                            <div id="content_" itemprop="articleBody">
+                                ${model.article}
+                            </div>
                             <div class="clearfix visible-xs">
                                 <hr>
                             </div>
@@ -111,39 +103,30 @@
 
 
                         <!-- northpark评论模块 -->
-                        <div id="comment" class="col-md-10" >
+                        <div id="comment" class="col-md-10">
                             <hr>
-                            <%--展示评论详情--%>
-                            <div class="clearfix" id="stuffCommentBox_${model.id}">
-
-
-                            </div>
-
+                            <section class="clearfix comments" id="stuffCommentBox_${model.id}"
+                                    itemscope itemtype="http://schema.org/Comment">
+                            </section>
 
                             <div id="J_progress" class="center padding-t20"></div>
 
-
-                            <div class="form-group clearfix note-comment margin-t10 " id="comment_${model.id}">
-                                <textarea id="input_cm_${model.id}" placeholder="说点什么吧..."
-                                   class="form-control bg-lyellow"
-                                   rows="3"></textarea>
-
+                            <div class="form-group clearfix note-comment margin-t10" id="comment_${model.id}">
+                                <textarea id="input_cm_${model.id}"
+                                          placeholder="说点什么吧..."
+                                          class="form-control bg-lyellow"
+                                          rows="3"></textarea>
 
                                 <button title="发布评论"
-
-
                                         class="btn btn-hero margin-t5 click2save"
                                         topic-id="${model.id}"
                                         topic-type="6"
                                         from-uid="${user.id}"
                                         from-uname="${user.username}"
                                         data-input="#input_cm_${model.id}">
-                                    <span class="fa fa-floppy-o padding5"></span>发布评论</button>
-
-
+                                    <span class="fa fa-floppy-o padding5"></span>发布评论
+                                </button>
                             </div>
-
-
                         </div>
                         <!-- northpark评论模块 -->
 
@@ -181,5 +164,13 @@
         $("#J_progress").empty();
     }
 </script>
+
+<footer class="article-footer">
+    <div class="article-meta" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="NorthPark">
+        <meta itemprop="url" content="https://northpark.cn">
+    </div>
+    <meta itemprop="dateModified" content="${model.date}">
+</footer>
 </body>
 </html>

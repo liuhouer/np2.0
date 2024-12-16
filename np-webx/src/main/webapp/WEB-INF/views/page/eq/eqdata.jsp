@@ -6,45 +6,27 @@
 
     <c:forEach items="${list }" var="s" varStatus="ss">
         <div class="col-sm-6">
-            <div class="clearfix bg-white margin-t10 margin-b10 padding20">
+            <article class="clearfix bg-white margin-t10 margin-b10 padding20" itemscope itemtype="http://schema.org/Article">
                 <div class="row">
                     <div class="col-sm-4">
-                        <div class="thumbnail border-0 center" style="">
-                            <a title="${s.title}">
-                                <c:if test="${s.img==null ||s.img==''}">
-                                    <img src="https://northpark.cn/statics/img/davatar.jpg" class="imgbreath" alt="${s.title}">
-                                </c:if>
-                                <c:if test="${s.img!=null }">
-                                    <img src="${s.img }" class="imgbreath" alt="${s.title}">
-                                </c:if>
+                        <div class="thumbnail border-0 center">
+                            <a href="/romeo/${s.id}.html" title="${s.title}" itemprop="url">
+                                <img itemprop="image" src="${s.img == null ? 'https://northpark.cn/statics/img/davatar.jpg' : s.img}" 
+                                     class="imgbreath" alt="${s.title}">
                             </a>
-                            <p><label class="bold-text cutline " title="${s.title}">${s.title}</label></p>
-
-                            <div class="clearfix visible-xs">
-                                <hr>
-                            </div>
+                            <p><label class="bold-text cutline" itemprop="headline" title="${s.title}">${s.title}</label></p>
                         </div>
                     </div>
-
+                    
                     <div class="col-sm-8">
                         <p>
-                            <small class="label label-gray">${s.date }</small>
-                            <a href="/romeo/${s.id }.html#comment">
-                                <small class="label label-gray ds-thread-count" data-thread-key="romeo${s.id }">
-                            </a></small><br><br>
-
-
-                            <a href="/romeo/${s.id }.html" class="no-decoration" title="${s.title}">${s.title}</a> ：
+                            <time itemprop="datePublished" datetime="${s.date}" class="label label-gray">${s.date}</time>
+                            <a href="/romeo/${s.id}.html#comment">
+                                <small class="label label-gray"><span class="glyphicon glyphicon-comment margin5"></span></small>
+                            </a>
                         </p>
-                        <div id="brief_${ss.index}">
-
-                                ${s.brief }
-                            <c:if test="${s.brief!=s.article }">
-                                <button class="clearfix btn btn-gray btn-xs click2show"
-                                        data-dismiss="#brief_${ss.index}" data-target="#text_${ss.index}"> &nbsp; <span
-                                        class="glyphicon glyphicon-chevron-down"></span> &nbsp;
-                                </button>
-                            </c:if>
+                        <div itemprop="description" id="brief_${ss.index}">
+                            ${s.brief}
                         </div>
                         <div class="clearfix hidden" id="text_${ss.index}">
                                 ${s.article }
@@ -52,7 +34,7 @@
 
                     </div>
                 </div>
-            </div>
+            </article>
         </div>
     </c:forEach>
 
