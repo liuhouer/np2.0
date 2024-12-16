@@ -55,7 +55,7 @@
                 <li cname="learning"><a href="/learning" title="学习/课程/书籍/知识"><i class="fa fa-graduation-cap padding5"></i>学习</a></li>
 <%--                <li cname="soft"><a href="/soft/mac" title="丰富的Mac软件资源"><i class="fa fa-music padding5"></i>音乐</a></li>--%>
                 <li cname="pic"><a href="/love" title="最爱主题"><i class="fa fa-picture-o padding5"></i>最爱</a></li>
-                <li cname="note"><a href="/note" title="碎碎念的精神角落"><i class="fa fa-comment padding5"></i>树洞</a> </li>
+                <li cname="note"><a href="/note" title="树洞的精神角落"><i class="fa fa-comment padding5"></i>树洞</a> </li>
                 <li>
                     <c:if test="${user==null }">
                         <a id="J_log_info_r" title="登录-个人中心" href="/login">

@@ -15,7 +15,7 @@
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>${MyInfo.username}的碎碎念 -精神角落 | NorthPark </title>
+    <title>${MyInfo.username}的树洞 -精神角落 | NorthPark </title>
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
 </head>

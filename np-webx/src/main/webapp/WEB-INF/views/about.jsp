@@ -57,7 +57,7 @@
                     </p>
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;想到这里，他起身坐到电脑桌旁敲起了代码，用两天时间完成了一个初版，包括
                         <a target="_blank" class="text-color-9" href="/love">图册互动</a>，
-                        <a target="_blank" class="text-color-8"  href="/note">碎碎念树洞</a>
+                        <a target="_blank" class="text-color-8"  href="/note">树洞</a>
                         的功能。
                     </p>
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;很喜欢看南方公园，里面的小动漫故事透露出形形色色的社会现象，我注册北方公园-NorthPark域名，

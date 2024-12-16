@@ -17,15 +17,21 @@
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <c:if test="${page==null || page==''}">
-        <title>碎碎念-精神角落 | NorthPark</title>
+        <title>树洞-心灵驿站 | NorthPark</title>
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>碎碎念-精神角落::第${page}页 | NorthPark</title>
+        <title>树洞-心灵驿站::第${page}页 | NorthPark</title>
     </c:if>
 
 
-    <meta name="keywords" content="NorthPark,碎碎念,树洞,精神角落">
-    <meta name="description" content="NorthPark碎碎念的精神角落。富有交互性和趣味性，文艺范和小清新。">
+    <meta name="keywords" content="NorthPark,树洞,心情分享,情感交流,心灵驿站,倾诉空间">
+    <meta name="description" content="NorthPark树洞是一个让人倾诉心声的温暖空间。在这里,你可以分享生活点滴、记录心情感悟,与志同道合的朋友交流互动。一个充满人文关怀、富有交互性和趣味性的心灵驿站。">
+
+    <meta property="og:title" content="树洞-心灵驿站 | NorthPark">
+    <meta property="og:description" content="NorthPark树洞是一个让人倾诉心声的温暖空间。在这里,你可以分享生活点滴、记录心情感悟。">
+    <meta property="og:image" content="https://northpark.cn/statics/img/tree-hole-banner.jpg">
+    <meta property="og:url" content="https://northpark.cn/note/story">
+    <link rel="stylesheet" href="/static/css/story.css">
 </head>
 
 <body>
@@ -33,7 +39,7 @@
 <%@ include file="/WEB-INF/views/page/common/navigation.jsp" %>
 
 <!-- 页面标题 -->
-<h1 class="font-elegant">碎碎念-精神角落</h1>
+<h1 class="font-elegant">树洞-心灵驿站</h1>
 <div class="clearfix maincontent grayback">
     <div class="container">
         <div class="mainbody padding-t20" id="J_maincontent" style="margin-top:70px;">

@@ -19,8 +19,8 @@
 
     <title>NorthPark - Mac软件下载|最新影视资源|学习资源|最爱主题 - 文艺清新的互动社区</title>
 
-    <meta name="keywords" content="NorthPark,Mac软件下载,最新影视资源,学习资源,情商提升,最爱主题,互动社区,文艺范,小清新,碎碎念">
-    <meta name="description" content="NorthPark是一个集Mac软件下载、最新影视资源分享、学习资源、情商提升技巧、最爱主题于一体的文艺清新互动社区。这里有丰富的Mac软件资源、最新影视剧资源、专业的情商提升指导、精选最爱主题,以及碎碎念等互动版块。加入我们,发现更多精彩！">
+    <meta name="keywords" content="NorthPark,Mac软件下载,最新影视资源,学习资源,情商提升,最爱主题,互动社区,文艺范,小清新,树洞">
+    <meta name="description" content="NorthPark是一个集Mac软件下载、最新影视资源分享、学习资源、情商提升技巧、最爱主题于一体的文艺清新互动社区。这里有丰富的Mac软件资源、最新影视剧资源、专业的情商提升指导、精选最爱主题,以及树洞等互动版块。加入我们,发现更多精彩！">
 
     <!-- Schema.org 结构化数据标记 -->
     <script type="application/ld+json">
@@ -61,7 +61,7 @@
 
 <!-- load css -->
 <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
-<link media="all" type="text/css" rel="stylesheet" href="/static/css/flexslider.css"><!-- 碎碎念轮播css -->
+<link media="all" type="text/css" rel="stylesheet" href="/static/css/flexslider.css"><!-- 树洞轮播css -->
 
 
 </head>
@@ -117,7 +117,7 @@
     <div class="container">
         <div class="clearfix center logbox gray-text">
             <h2>
-                碎碎念
+                树洞
             </h2>
         </div>
 
@@ -131,7 +131,7 @@
             </div>
         </div>
     </div>
-    <!-- 碎碎念 模块代码-->
+    <!-- 树洞 模块代码-->
     <div class="container grayback" id="J_container_note">
 
     </div>
@@ -200,7 +200,7 @@
 
 <!-- load js -->
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
-<script type="text/javascript" src="/static/js/jquery.flexslider.js"></script><!-- 碎碎念轮播js -->
+<script type="text/javascript" src="/static/js/jquery.flexslider.js"></script><!-- 树洞轮播js -->
 <script src="static/js/main.js"></script>
 
 </body>

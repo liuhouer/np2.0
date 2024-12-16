@@ -70,11 +70,11 @@
                     </li>
                     <li>
                         <div class="slider-caption">
-                            <img src="https://northpark.cn/statics/img/index/slide2.jpg" alt="碎碎念的精神角落"/>
+                            <img src="https://northpark.cn/statics/img/index/slide2.jpg" alt="树洞的精神角落"/>
 
                             <span style="">
 
-									    <h2>碎碎念</h2>
+									    <h2>树洞</h2>
 										<p>
 											扯淡、吐槽、心情、树洞……想说啥就说啥！... <br>
 											<br>NorthPark就是你的树洞。

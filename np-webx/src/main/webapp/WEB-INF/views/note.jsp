@@ -15,10 +15,10 @@
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>${user.username}的碎碎念-精神角落 | NorthPark </title>
-    <meta name="keywords" content="NorthPark,碎碎念,精神角落">
+    <title>${user.username}的树洞-精神角落 | NorthPark </title>
+    <meta name="keywords" content="NorthPark,树洞,精神角落">
     <meta name="description"
-          content="NorthPark碎碎念的精神角落,它富有交互性和趣味性.">
+          content="NorthPark树洞的精神角落,它富有交互性和趣味性.">
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <link href="https://northpark.cn/statics/wangEditor/css/wangEditor-1.3.12.css" rel="stylesheet"/>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-inverse btn-md"><span
-                                    class="glyphicon glyphicon-music"></span> 添加碎碎念
+                                    class="glyphicon glyphicon-music"></span> 添加树洞
                             </button>
                             &nbsp; &nbsp;
                             <span class="bg-lyellow"><input name="opened" type="checkbox" value="no"> <small>仅供自己看到，不对外公布</small></span>

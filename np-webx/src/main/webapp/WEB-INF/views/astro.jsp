@@ -16,7 +16,7 @@
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/lemon_favicon.png">
     <title>星座塔罗牌 | NorthPark</title>
-    <meta name="description" content="NorthPark,文艺,小清新,Mac软件,影视窝,碎碎念,图册,情圣,情商提升">
+    <meta name="description" content="NorthPark,文艺,小清新,Mac软件,影视窝,树洞,图册,情圣,情商提升">
     <meta name="keywords"
           content="NorthPark是一个很小清新的互动公园。NorthPark包含了丰富的Mac软件资源、最新的影视剧资源、大量提升男生情商的文章、大家吐槽的，喜爱的，心情日记的精神角落、图册互动等版块。它富有交互性和趣味性，文艺范和小清新，并且可以和你的朋友们为某个兴趣互动。">
 
