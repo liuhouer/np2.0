@@ -13,14 +13,14 @@
 
 <meta http-equiv="Content-Language" content="zh-CN">
 
-<meta name="author" content="www.qinco.net">
+<meta name="author" content="NorthPark">
 <meta name="robots" content="index,follow,archive">
 <link rel="shortcut icon"
 	href="https://northpark.cn/statics/img/favicon.ico">
-<title>${article.title}|NorthPark</title>
+<title>${article.title} | Mac软件下载 | NorthPark</title>
 <meta name="keywords"
-	content="${article.title},${article.tags},NorthPark">
-<meta name="description" content="${soft_desc}">
+	content="${article.title},${article.tags},Mac软件下载,NorthPark">
+<meta name="description" content="下载${article.title}。${soft_desc}">
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 <style>
 	.bold-line {
@@ -43,16 +43,19 @@
 				<div class="col-md-12">
 					<div class="col-sm-10  col-md-offset-1 ">
 						<div class="clearfix bg-white margin-t10 margin-b10 padding20 "
-							id="J_white_div">
+							id="J_white_div" itemscope itemtype="http://schema.org/SoftwareApplication">
 							<div class="row margin10 post_article">
 								<div class="border-0 center">
 									<p>
 										<small class="green-text">
 											<h1><font size="5">
-												<strong>${article.title}</strong></font>
+												<strong itemprop="name">${article.title}</strong></font>
 											</h1>
 										</small>
 									</p>
+									<meta itemprop="operatingSystem" content="${article.os}">
+									<meta itemprop="applicationCategory" content="${article.tags}">
+									<meta itemprop="datePublished" content="${article.postDate}">
 
 
 
@@ -87,56 +90,65 @@
 										</c:if>
 								</p>
 								<p id="content_${article.id}">${article.content }</p>
+<!-- 下载部分 -->
+								<div class="download-section">
+									<!-- 下载地址 -->
+									<h4 class="download-title">
+									  <i class="fa fa-download"></i> 下载地址
+									</h4>
 
-								<p class="col-md-12">
-								<div class="dashed center col-md-10 padding-b20">
-
-									<c:if test="${user==null }">
-										<p class="center hidden-content">
-											本文隐藏内容 <a target="_blank" class="flatbtn"
-												id="J_login_see"><i class="fa fa-sign-in padding5" aria-hidden="true"></i>登录</a>
-											后才可以浏览
+									<c:if test="${user==null}">
+									  <div class="text-center">
+										<p class="hidden-content">
+										  本文隐藏内容
+										  <a target="_blank" class="btn btn-primary" id="J_login_see">
+											<i class="fa fa-sign-in"></i> 登录
+										  </a>
+										  后查看
 										</p>
-									</c:if>
-									<c:if test="${user!=null }">
-										<p id="J_show_path">${article.path }</p>
+									  </div>
 									</c:if>
 
-									<hr class="bold-line"> <!-- 添加横线 -->
+									<c:if test="${user!=null}">
+									  <p id="J_show_path">${article.path}</p>
+									</c:if>
 
-									<!-- 历史下载表格标题 -->
-									<h4 class="section-title">历史下载</h4>
+									<!-- 历史版本 -->
+									<h4 class="download-title">
+									  <i class="fa fa-history"></i> 历史版本
+									</h4>
 
-								    <%--历史数据--%>
 									<c:if test="${user != null}">
-										<table class="table table-bordered">
-											<thead>
+									  <table class="table table-bordered download-table">
+										<thead>
+										  <tr>
+											<th width="60%">版本</th>
+											<th width="40%">下载</th>
+										  </tr>
+										</thead>
+										<tbody>
+										  <c:forEach var="merge" items="${soft_merge_list}">
 											<tr>
-												<th>Title</th>
-												<th>Path</th>
+											  <td>${merge.title}</td>
+											  <td>${merge.path}</td>
 											</tr>
-											</thead>
-											<tbody>
-											<c:forEach var="merge" items="${soft_merge_list}">
-												<tr>
-													<td>${merge.title}</td>
-													<td>${merge.path}</td>
-												</tr>
-											</c:forEach>
-											</tbody>
-										</table>
+										  </c:forEach>
+										</tbody>
+									  </table>
 									</c:if>
-								    <%--历史数据--%>
 
-									<small class="text-muted padding-l10">资源失效、缺失、错误 不要慌 </small>
-									<span class="fa fa-hand-o-right padding-l10"></span>
-									<input id="J_feedback_btn" class="btn tag-node" style="width:150px;" type="button" value="戳我,失效反馈">
-
-							</div>
-								</p>
-								<div class="clearfix visible-xs">
-									<hr>
-								</div>
+									<!-- 反馈区 -->
+									<div class="feedback-section text-center">
+									  <small class="text-muted">
+										<i class="fa fa-info-circle"></i>
+										资源失效、缺失、错误不要慌
+									  </small>
+									  <button id="J_feedback_btn" class="btn feedback-btn">
+										<i class="fa fa-exclamation-circle"></i>
+										反馈资源失效
+									  </button>
+									</div>
+								  </div>
 
 								<!-- 打赏 -->
 								<div class="col-md-10">

@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <meta http-equiv="Content-Language" content="zh-CN">
-    <meta name="author" content="www.qinco.net">
+    <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <title>忘记密码 | NorthPark</title>

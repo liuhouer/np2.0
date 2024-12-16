@@ -14,7 +14,7 @@
     <meta http-equiv="Content-Language" content="zh-CN">
     <meta name="description" content="添加我的最爱:NorthPark / 记住美好,保留回忆,分享最爱。">
     <meta name="keywords" content="NorthPark">
-    <meta name="author" content="www.qinco.net">
+    <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
 

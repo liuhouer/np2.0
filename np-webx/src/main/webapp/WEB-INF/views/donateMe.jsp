@@ -10,7 +10,7 @@
 			<meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
 			<meta name="apple-mobile-web-app-status-bar-style" content="black">
 			<meta http-equiv="Content-Language" content="zh-CN">
-			<meta name="author" content="www.qinco.net">
+			<meta name="author" content="NorthPark">
 			<meta name="robots" content="index,follow,archive">
 			<link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
 			<title>

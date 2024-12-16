@@ -12,20 +12,20 @@
 
     <meta http-equiv="Content-Language" content="zh-CN">
 
-    <meta name="author" content="www.qinco.net">
+    <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <%@ include file="page/common/common.jsp" %>
     <c:if test="${page==null || page==''}">
-        <title>Mac软件 | NorthPark</title>
+        <title>Mac软件下载 | 精品Mac破解软件资源 | NorthPark</title>
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>Mac软件 ::第${page}页 | NorthPark</title>
+        <title>Mac软件下载第${page}页 | 精品Mac破解软件资源 | NorthPark</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark,Mac软件,破解软件,破解Mac资源">
+    <meta name="keywords" content="NorthPark,Mac软件下载,Mac破解软件,精品Mac资源,macOS软件">
     <meta name="description"
-          content="NorthPark包含了丰富的Mac软件资源、破解资源、Mac使用技巧、Mac私人教程">
+          content="NorthPark提供海量精品Mac软件下载,包括办公软件、图像处理、视频剪辑等各类Mac破解软件资源,同时提供macOS使用技巧和教程">
 </head>
 
 <body>
@@ -56,20 +56,25 @@
                     <c:forEach items="${list }" var="s" varStatus="ss">
 
                         <div class="col-sm-12">
-                            <div class="clearfix bg-white margin-t10 margin-b10 padding20 ">
+                            <div class="clearfix bg-white margin-t10 margin-b10 padding20" itemscope itemtype="http://schema.org/SoftwareApplication">
                                 <div class="row margin5">
                                     <div class="border-0 center">
                                         <p>
-                                            <a href="/soft/${s.retCode }.html">
+                                            <a href="/soft/${s.retCode}.html">
                                                 <small class="green-text">
-                                                    <font size="5"><strong>
+                                                    <font size="5">
+                                                        <strong itemprop="name">
                                                             <c:if test="${s.hotIndex>0}">
                                                                 <i class="fa fa-thumb-tack" title="已置顶"></i>
                                                             </c:if>
-                                                            ${s.title}</strong></font>
+                                                            ${s.title}
+                                                        </strong>
+                                                    </font>
                                                 </small>
                                             </a>
                                         </p>
+                                        <meta itemprop="operatingSystem" content="${s.os}">
+                                        <meta itemprop="applicationCategory" content="${s.tags}">
 
 
                                         <div class="clearfix visible-xs">

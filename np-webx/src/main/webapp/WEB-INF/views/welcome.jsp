@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Content-Language" content="zh-CN">
-    <meta name="author" content="www.qinco.net">
+    <meta name="author" content="NorthPark">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <%@ include file="page/common/common.jsp" %>
     <c:if test="${page==null || page==''}">
@@ -51,4 +51,4 @@
 <script src="/static/js/page/welcome.js"></script>
 </body>
 
-</html>    
+</html>

@@ -12,7 +12,7 @@
 
     <meta http-equiv="Content-Language" content="zh-CN">
 
-    <meta name="author" content="www.qinco.net">
+    <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <title>${MyInfo.username}的碎碎念 -精神角落 | NorthPark </title>

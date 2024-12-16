@@ -766,3 +766,51 @@ a:focus, a:hover {
         text-align: center
     }
 }
+
+/*下载区域*/
+.download-section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px 0;
+  }
+
+  .download-title {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+  }
+
+  .download-table {
+    margin: 15px 0;
+  }
+
+  .download-table th {
+    background: #666;
+    color: #fff;
+    font-weight: normal;
+  }
+
+  .download-table td {
+    color: #666;
+  }
+
+  .feedback-section {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px dashed #ddd;
+  }
+
+  .feedback-btn {
+    background: #6c757d;
+    border-color: #6c757d;
+    padding: 8px 20px;
+    color: #fff;
+  }
+
+  .feedback-btn:hover {
+    background: #5a6268;
+    border-color: #5a6268;
+  }
