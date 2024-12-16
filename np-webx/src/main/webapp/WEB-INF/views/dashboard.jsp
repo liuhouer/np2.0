@@ -16,11 +16,11 @@
     <meta name="msvalidate.01" content="B11539DE5DB069595F60D57A3EDCDBE9"/>
     <link rel="canonical" href="https://northpark.cn/" />
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    
-    <title>NorthPark - Mac软件下载|最新影视资源|学习资源|主题图册 - 文艺清新的互动社区</title>
-    
-    <meta name="keywords" content="NorthPark,Mac软件下载,最新影视资源,学习资源,情商提升,主题图册,互动社区,文艺范,小清新,碎碎念">
-    <meta name="description" content="NorthPark是一个集Mac软件下载、最新影视资源分享、学习资源、情商提升技巧、主题图册于一体的文艺清新互动社区。这里有丰富的Mac软件资源、最新影视剧资源、专业的情商提升指导、精选主题图册,以及碎碎念等互动版块。加入我们,发现更多精彩！">
+
+    <title>NorthPark - Mac软件下载|最新影视资源|学习资源|最爱主题 - 文艺清新的互动社区</title>
+
+    <meta name="keywords" content="NorthPark,Mac软件下载,最新影视资源,学习资源,情商提升,最爱主题,互动社区,文艺范,小清新,碎碎念">
+    <meta name="description" content="NorthPark是一个集Mac软件下载、最新影视资源分享、学习资源、情商提升技巧、最爱主题于一体的文艺清新互动社区。这里有丰富的Mac软件资源、最新影视剧资源、专业的情商提升指导、精选最爱主题,以及碎碎念等互动版块。加入我们,发现更多精彩！">
 
     <!-- Schema.org 结构化数据标记 -->
     <script type="application/ld+json">
@@ -29,7 +29,7 @@
       "@type": "WebSite",
       "name": "NorthPark",
       "url": "https://northpark.cn",
-      "description": "文艺清新的互动社区,提供Mac软件下载、最新影视资源、情商提升指导、主题图册等服务",
+      "description": "文艺清新的互动社区,提供Mac软件下载、最新影视资源、情商提升指导、最爱主题等服务",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://northpark.cn/search?q={search_term_string}",
