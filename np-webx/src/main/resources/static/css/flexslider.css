@@ -118,7 +118,7 @@ html[xmlns] .slides {
 
 /* Direction Nav */
 .flex-direction-nav {
-    *height: 0;
+    height: 0;
 }
 
 .flex-direction-nav a {
@@ -218,10 +218,7 @@ html[xmlns] .slides {
 }
 
 .flex-control-nav li {
-    margin: 0 6px;
     display: inline-block;
-    zoom: 1;
-    *display: inline;
 }
 
 .flex-control-paging li a {
@@ -291,4 +288,102 @@ html[xmlns] .slides {
         opacity: 1;
         right: 10px;
     }
+}
+
+.mainlist, .swaplist {
+    transition: left 0.3s ease-in-out;
+}
+
+/* 电影轮播样式 */
+.moviebox {
+    position: relative;
+    width: 100%;
+    padding: 0 40px;
+    height: 50px;
+}
+
+.picbox {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    overflow: hidden;
+    height: 50px;
+}
+
+.piclist {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 10000px;
+}
+
+.piclist li {
+    float: left;
+    width: 200px;
+    padding: 0 10px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.piclist li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    height: 100%;
+}
+
+.piclist li img {
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.piclist li .movie-title {
+    flex: 1;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+/* 前后按钮样式 */
+.og_prev,
+.og_next {
+    position: absolute;
+    top: 0;
+    width: 30px;
+    height: 50px;
+    background: rgba(0,0,0,0.5);
+    cursor: pointer;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+    font-size: 24px;
+    border-radius: 3px;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.og_prev {
+    left: 0;
+}
+
+.og_next {
+    right: 0;
+}
+
+.og_prev:hover,
+.og_next:hover {
+    background: rgba(0,0,0,0.8);
+}
+
+/* 添加箭头图标 */
+.og_prev:before {
+    content: "‹";
+}
+
+.og_next:before {
+    content: "›";
 }

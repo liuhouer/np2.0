@@ -54,9 +54,78 @@ $(function () {
         success: function (data) {
             if (data) {
                 $("#J_container_romeo").prepend(data);
+                
+                // 添加确保等高的处理
+                function adjustRomeoHeight() {
+                    var maxHeight = 0;
+                    $('.romeo-item').each(function() {
+                        var height = $(this).height();
+                        maxHeight = Math.max(maxHeight, height);
+                    });
+                    $('.romeo-item').height(maxHeight);
+                }
+                
+                // 页面加载完成后执行一次
+                adjustRomeoHeight();
+                
+                // 窗口大小改变时重新计算
+                $(window).resize(function() {
+                    adjustRomeoHeight();
+                });
             }
         }
     });
+
+
+    function initMovieSlider() {
+        var itemWidth = 200; // 每个电影项的宽度
+        var visibleItems = 4; // 可见的电影数量
+        var linum = $('.piclist.mainlist li').length;
+        var totalWidth = linum * itemWidth;
+        
+        // 设置列表总宽度
+        $('.piclist').css('width', totalWidth + 'px');
+        
+        // 初始化位置
+        $('.mainlist').css({
+            'left': '0px'
+        });
+        
+        // 复制内容到交换列表并设置位置
+        $('.swaplist').html($('.mainlist').html()).css({
+            'left': totalWidth + 'px'
+        });
+
+        // 计算最大滚动距离
+        var maxScroll = -(totalWidth - visibleItems * itemWidth);
+        
+        // 绑定点击事件
+        $('.og_next').off('click').on('click', function() {
+            if ($('.mainlist').is(':animated')) return;
+            
+            var currentLeft = parseInt($('.mainlist').css('left'));
+            var newLeft = currentLeft - (itemWidth * visibleItems);
+            
+            if (newLeft < maxScroll) {
+                newLeft = 0;
+            }
+            
+            $('.mainlist').animate({left: newLeft + 'px'}, 300);
+        });
+        
+        $('.og_prev').off('click').on('click', function() {
+            if ($('.mainlist').is(':animated')) return;
+            
+            var currentLeft = parseInt($('.mainlist').css('left'));
+            var newLeft = currentLeft + (itemWidth * visibleItems);
+            
+            if (newLeft > 0) {
+                newLeft = maxScroll;
+            }
+            
+            $('.mainlist').animate({left: newLeft + 'px'}, 300);
+        });
+    }
 
     //加载movies
     $.ajax({
@@ -66,11 +135,17 @@ $(function () {
             if (data) {
                 $("#J_container_movies").prepend(data);
                 /*电影轮播*/
+                initMovieSlider();
 
                 /***不需要自动滚动，去掉即可***/
-                time = window.setInterval(function () {
-                    $('.og_next').click();
-                }, 5000);
+                // time = window.setInterval(function () {
+                //     //$('.og_next').click();
+                // }, 5000);
+
+                // 替换为初始化位置
+                $('.mainlist').css('left', '0px');
+                $('.swaplist').css('left', '1000px');
+
                 /***不需要自动滚动，去掉即可***/
                 linum = $('.piclist.mainlist li').length; //图片数量
                 w = linum * 250;//ul宽度
@@ -78,25 +153,30 @@ $(function () {
                 $('.swaplist').html($('.mainlist').html());//复制内容
 
                 $('.og_next').click(function () {
-
                     if ($('.swaplist,.mainlist').is(':animated')) {
-                        $('.swaplist,.mainlist').stop(true, true);
+                        return;
                     }
 
-                    if ($('.mainlist li').length > 4) {//多于6张图片
-                        ml = parseInt($('.mainlist').css('left'));//默认图片ul位置
-                        sl = parseInt($('.swaplist').css('left'));//交换图片ul位置
-                        if (ml <= 0 && ml > w * -1) {//默认图片显示时
-                            $('.swaplist').css({left: '1000px'});//交换图片放在显示区域右侧
-                            $('.mainlist').animate({left: ml - 1000 + 'px'}, 'slow');//默认图片滚动
-                            if (ml == (w - 1000) * -1) {//默认图片最后一屏时
-                                $('.swaplist').animate({left: '0px'}, 'slow');//交换图片滚动
+                    if ($('.mainlist li').length > 4) { // 修改判断条件
+                        var ml = parseInt($('.mainlist').css('left'));
+                        var sl = parseInt($('.swaplist').css('left'));
+                        var itemWidth = 220;
+                        var w = $('.mainlist li').length * itemWidth;
+                        var scrollWidth = 880; // 一次滚动4个项目的宽度
+
+                        if (ml <= 0 && ml > w * -1) {
+                            $('.swaplist').css({left: '1000px'});
+                            $('.mainlist').animate({left: ml - scrollWidth + 'px'}, 300);
+                            
+                            if (ml == (w - scrollWidth) * -1) {
+                                $('.swaplist').animate({left: '0px'}, 300);
                             }
-                        } else {//交换图片显示时
-                            $('.mainlist').css({left: '1000px'})//默认图片放在显示区域右
-                            $('.swaplist').animate({left: sl - 1000 + 'px'}, 'slow');//交换图片滚动
-                            if (sl == (w - 1000) * -1) {//交换图片最后一屏时
-                                $('.mainlist').animate({left: '0px'}, 'slow');//默认图片滚动
+                        } else {
+                            $('.mainlist').css({left: '1000px'});
+                            $('.swaplist').animate({left: sl - scrollWidth + 'px'}, 300);
+                            
+                            if (sl == (w - scrollWidth) * -1) {
+                                $('.mainlist').animate({left: '0px'}, 300);
                             }
                         }
                     }
@@ -143,21 +223,4 @@ $(function () {
 });
 
 
-// var num = 0;
-// if(num==0){
-// 	art.dialog({
-// 	    id: 'msg',
-// 	    title: '公告',
-// 	    time: 3,
-// 	    content: '上个月国外网络段封锁，今天重新上线，请大家谅解。。。',
-// 	    width: 320,
-// 	    height: 240,
-// 	    left: '100%',
-// 	    top: '100%',
-// 	    fixed: true,
-// 	    drag: false,
-// 	    resize: false
-// 	})
-// 	num ++;
-// }
 

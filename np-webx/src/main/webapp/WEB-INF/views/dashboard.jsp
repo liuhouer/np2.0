@@ -10,14 +10,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Content-Language" content="zh-CN">
-    <meta name="author" content="bruce">
-    <meta name="google-site-verification" content="Av5O436-yp3doL_sBZPluCUvSVYJywMpFGjVDi8Qu7k"/><!-- google -->
-    <meta name="msvalidate.01" content="B11539DE5DB069595F60D57A3EDCDBE9"/><!-- bing -->
+    <meta name="author" content="NorthPark">
+    <meta name="robots" content="index,follow">
+    <meta name="google-site-verification" content="Av5O436-yp3doL_sBZPluCUvSVYJywMpFGjVDi8Qu7k"/>
+    <meta name="msvalidate.01" content="B11539DE5DB069595F60D57A3EDCDBE9"/>
+    <link rel="canonical" href="https://northpark.cn/" />
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>NorthPark中文网-Mac软件|影视窝|碎碎念|最爱主题图册|情商提升-充满文艺范和小清新的互动公园</title>
-    <meta name="keywords" content="NorthPark,Mac软件,影视窝,碎碎念,最爱主题图册和情商提升兼具文艺范和小清新">
-    <meta name="description"
-          content="NorthPark是一个很小清新的互动公园。NorthPark包含了丰富的Mac软件资源、影视窝包含最新的影视剧资源、情商提升的技巧和讲解、碎碎念的精神角落、最爱主题图册互动、评论、关注等版块。它富有交互性和趣味性，文艺范和小清新，并且可以和你的朋友们为某个兴趣互动。">
+    
+    <title>NorthPark - Mac软件下载|最新影视资源|学习资源|主题图册 - 文艺清新的互动社区</title>
+    
+    <meta name="keywords" content="NorthPark,Mac软件下载,最新影视资源,学习资源,情商提升,主题图册,互动社区,文艺范,小清新,碎碎念">
+    <meta name="description" content="NorthPark是一个集Mac软件下载、最新影视资源分享、学习资源、情商提升技巧、主题图册于一体的文艺清新互动社区。这里有丰富的Mac软件资源、最新影视剧资源、专业的情商提升指导、精选主题图册,以及碎碎念等互动版块。加入我们,发现更多精彩！">
+
+    <!-- Schema.org 结构化数据标记 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NorthPark",
+      "url": "https://northpark.cn",
+      "description": "文艺清新的互动社区,提供Mac软件下载、最新影视资源、情商提升指导、主题图册等服务",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://northpark.cn/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
     <!-- /**
      *
      * 　　　┏┓　　　┏┓
@@ -41,7 +61,7 @@
 
 <!-- load css -->
 <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
-<link media="all" type="text/css" rel="stylesheet" href="https://northpark.cn/statics/css/flexslider.css"><!-- 碎碎念轮播css -->
+<link media="all" type="text/css" rel="stylesheet" href="/static/css/flexslider.css"><!-- 碎碎念轮播css -->
 
 
 </head>
@@ -180,8 +200,8 @@
 
 <!-- load js -->
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
-<script type="text/javascript" src="https://northpark.cn/statics/js/jquery.flexslider.js"></script><!-- 碎碎念轮播js -->
-<script src="https://northpark.cn/statics/js/main.js"></script>
+<script type="text/javascript" src="/static/js/jquery.flexslider.js"></script><!-- 碎碎念轮播js -->
+<script src="static/js/main.js"></script>
 
 </body>
 
