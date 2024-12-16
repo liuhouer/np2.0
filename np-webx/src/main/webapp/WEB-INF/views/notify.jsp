@@ -17,14 +17,18 @@
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <c:if test="${page==null || page==''}">
-        <title>提醒系统 | NorthPark</title>
+        <title>个人消息通知中心 - 评论回复/点赞/关注动态 | NorthPark</title>
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>提醒系统 ::第${page}页 | NorthPark</title>
+        <title>个人消息通知中心::第${page}页 - 评论回复/点赞/关注动态 | NorthPark</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark,提醒系统">
-    <meta name="description" content="NorthPark提醒系统">
+    <meta name="keywords" content="NorthPark通知系统,消息提醒,评论回复,点赞通知,关注动态,站内消息">
+    <meta name="description" content="NorthPark个人消息通知中心,及时获取评论回复、点赞、新增关注、站内消息等动态提醒,随时掌握互动最新状态。">
+    <meta property="og:title" content="个人消息通知中心 | NorthPark">
+    <meta property="og:description" content="NorthPark个人消息通知中心,及时获取评论回复、点赞、新增关注、站内消息等动态提醒">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://northpark.cn/notifications">
 </head>
 
 <body>
@@ -32,19 +36,23 @@
 <%@ include file="/WEB-INF/views/page/common/navigation.jsp" %>
 
 <!-- 页面标题 -->
-<h1 class="font-elegant center">提醒系统</h1>
+<h1 class="font-elegant center" style="margin:30px 0;color:#2c3e50;">
+    <i class="fa fa-bell"></i> 消息通知中心
+</h1>
 <div class="clearfix maincontent grayback">
     <div class="container">
         <div class="mainbody" style="margin-top:100px; ">
 
 
             <div class="row padding20">
-                <input class="btn tag-node" style="width:50px;" oid="1" type="button" value="文章">
-                <input class="btn tag-node" style="width:50px;" oid="2" type="button" value="点赞">
-                <input class="btn tag-node" style="width:50px;" oid="3" type="button" value="树洞">
-                <input class="btn tag-node" style="width:50px;" oid="4" type="button" value="关注">
-                <input class="btn tag-node" style="width:50px;" oid="5" type="button" value="站内">
-                <input class="btn tag-node" style="width:50px;" oid="6" type="button" value="资源">
+                <div class="btn-group" role="group" aria-label="消息类型">
+                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="1" type="button" value="文章评论">
+                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="2" type="button" value="收到点赞">
+                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="3" type="button" value="树洞回复">
+                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="4" type="button" value="新增关注">
+                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="5" type="button" value="站内消息">
+                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="6" type="button" value="资源动态">
+                </div>
             </div>
 
 
@@ -59,6 +67,7 @@
                                 <%-- 1类：在某文章界面评论被回复【通知-被回复人】【通知-站长】--%>
                                 <c:if test="${y.remindId==1}">
                                         <p>
+                                        <i class="fa fa-comments-o text-primary padding5"></i>
                                         <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
                                                 ${y.senderName.substring(0,1) }
                                         </span>
@@ -84,6 +93,7 @@
                                 <%--留言--%>
                                 <c:if test="${y.remindId==3}">
                                     <p>
+                                        <i class="fa fa-commenting-o text-primary padding5"></i>
                                         <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
                                                 ${y.senderName.substring(0,1) }
                                         </span>
@@ -109,6 +119,7 @@
                                 <%--最爱--%>
                                 <c:if test="${y.remindId==2}">
                                     <p>
+                                        <i class="fa fa-heart-o text-primary padding5"></i>
                                         <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
                                                 ${y.senderName.substring(0,1) }
                                         </span>
@@ -127,6 +138,7 @@
                                 <%--关注--%>
                                 <c:if test="${y.remindId==4}">
                                     <p>
+                                        <i class="fa fa-user-plus text-primary padding5"></i>
                                         <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
                                                 ${y.senderName.substring(0,1) }
                                         </span>
@@ -144,6 +156,7 @@
                                 <%--5类-站内消息--%>
                                 <c:if test="${y.remindId==5}">
                                     <p>
+                                        <i class="fa fa-envelope text-primary padding5"></i>
                                         <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
                                                 ${y.senderName.substring(0,1) }
                                         </span>
@@ -160,6 +173,7 @@
                                 <%--6类-资源提醒消息--%>
                                 <c:if test="${y.remindId==6}">
                                         <p>
+                                        <i class="fa fa-file-text-o text-primary padding5"></i>
                                         <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
                                                 ${y.senderName.substring(0,1) }
                                         </span>
@@ -249,7 +263,9 @@
     //禁止图片拉伸
     $(function () {
         $("img").each(function () {
-            $(this).css('max-width', $(".bg-white").width());
+            $(this).css('max-width', '100%')
+                  .css('height', 'auto')
+                  .attr('loading', 'lazy');
         })
 
     })
@@ -317,18 +333,24 @@
             })
         }
 
+        // 高亮当前选中的消息类型
+        if(remindID) {
+            $(".tag-node[oid='" + remindID + "']").addClass('active');
+        }
 
+        // 优化未读消息处理
+        readNotify();
 
     })
 
 
     //1、随机色的函数-rgb
     function getRandomColor() {
-        var rgb = 'rgb(' + Math.floor(Math.random() * 255) + ','
-            + Math.floor(Math.random() * 255) + ','
-            + Math.floor(Math.random() * 255) + ')';
-        console.log(rgb);
-        return rgb;
+        const colors = [
+            '#3498db', '#2ecc71', '#e74c3c', '#f1c40f', 
+            '#9b59b6', '#1abc9c', '#e67e22', '#34495e'
+        ];
+        return colors[Math.floor(Math.random() * colors.length)];
     }
 </script>
 </body>
