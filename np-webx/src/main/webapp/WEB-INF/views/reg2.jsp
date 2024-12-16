@@ -73,7 +73,7 @@
 <!-- 页面标题 -->
 <h1 class="font-elegant">Signup</h1>
 
-<div class="maincontent " style="min-height: 620px;">
+<div class="maincontent " style="min-height: 800px;">
     <div class="container">
 
 

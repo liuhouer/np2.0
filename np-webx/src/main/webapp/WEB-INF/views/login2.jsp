@@ -74,7 +74,7 @@
 </div>
 <!-- 页面标题 -->
 <h1 class="font-elegant">Login</h1>
-<div class="maincontent margin-b10" style="min-height: 620px;">
+<div class="maincontent margin-b10" style="min-height: 800px;">
     <div class="container">
 
 
