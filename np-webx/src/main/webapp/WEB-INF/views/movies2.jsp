@@ -18,15 +18,14 @@
     <%@ include file="page/common/common.jsp" %>
 
     <c:if test="${page==null || page==''}">
-        <title>影视窝 | NorthPark</title>
+        <title>NorthPark影视窝 - 最新电影、电视剧、动漫资源分享下载</title>
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>影视窝 ::第${page}页 | NorthPark</title>
+        <title>NorthPark影视窝第${page}页 - 最新电影、电视剧、动漫资源分享下载</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark,影视窝">
-    <meta name="description"
-          content="NorthPark影视窝包含最新的影视剧资源,每天自动更新哦">
+    <meta name="keywords" content="NorthPark影视窝,最新电影,电视剧,动漫,电影下载,在线观看,${keyword}">
+    <meta name="description" content="NorthPark影视窝提供最新电影、电视剧、动漫资源,支持在线观看和下载,每天实时更新热门影视资源。${keyword}相关影视资源尽在NorthPark影视窝。">
 
     <style>
         hr{
@@ -42,9 +41,9 @@
 
 <!-- 页面标题 -->
 <h1 class="font-elegant">影视窝</h1>
-<div class="clearfix maincontent grayback">
+<main class="clearfix maincontent grayback">
     <div class="container">
-        <div class="mainbody" style="margin-top:80px; ">
+        <article class="mainbody" style="margin-top:80px; ">
 
 
             <div class="row">
@@ -257,9 +256,9 @@
             </div>
 
 
-        </div>
+        </article>
     </div>
-</div>
+</main>
 
 
 <%@ include file="page/common/container.jsp" %>

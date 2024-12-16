@@ -295,11 +295,6 @@ public class MoviesController {
         try {
         	//更新
         	if(model.getId()!=null && model.getId()!=0) {
-                //BRUCETIPS! 富文本处理
-                if(StringUtils.equals("1",model.getUseMinio())){
-                    model.setMovieDescMinio(MinioUtils.uploadText(model.getMovieDesc()));
-                    model.setUseMinio(model.getUseMinio());
-                }
                 model.setAddTime(TimeUtils.nowDate());
         		moviesService.updateMovies(model);
 
@@ -359,10 +354,6 @@ public class MoviesController {
 
                  model.setRetCode(MD5Utils.encrypt(model.getMovieName(),MD5Utils.MD5_KEY));
         		 model.setAddTime(TimeUtils.nowDate());
-                //BRUCETIPS! 富文本处理
-                if(StringUtils.equals("1",model.getUseMinio())){
-                    model.setMovieDescMinio(MinioUtils.uploadText(model.getMovieDesc()));
-                }
                  moviesService.addMovies(model);
         	}
 
@@ -743,11 +734,6 @@ public class MoviesController {
                 //页面描述
             	if(StringUtils.isNotEmpty(model.getMovieDesc())) map.put("movieDesc", Jsoup.parse(model.getMovieDesc()).text());
 
-
-                //BRUCETIPS! 富文本处理 -- 从minio读取
-                if(StringUtils.equals("1",model.getUseMinio())){
-                    model.setMovieDesc(MinioUtils.readText(model.getMovieDescMinio()));
-                }
             	map.addAttribute("model", model);
             }
         }

@@ -10,8 +10,6 @@ public class Movies {
 
     private String movieName;
 
-    private String movieDescMinio;
-
     private Integer price;
 
     private String addTime;
@@ -27,8 +25,6 @@ public class Movies {
     private Integer hotIndex;
 
     private String displayed;
-
-    private String useMinio;
 
     private String brief;
 
@@ -62,14 +58,6 @@ public class Movies {
 
     public void setMovieName(String movieName) {
         this.movieName = movieName == null ? null : movieName.trim();
-    }
-
-    public String getMovieDescMinio() {
-        return movieDescMinio;
-    }
-
-    public void setMovieDescMinio(String movieDescMinio) {
-        this.movieDescMinio = movieDescMinio == null ? null : movieDescMinio.trim();
     }
 
     public Integer getPrice() {
@@ -134,14 +122,6 @@ public class Movies {
 
     public void setDisplayed(String displayed) {
         this.displayed = displayed == null ? null : displayed.trim();
-    }
-
-    public String getUseMinio() {
-        return useMinio;
-    }
-
-    public void setUseMinio(String useMinio) {
-        this.useMinio = useMinio == null ? null : useMinio.trim();
     }
 
     public String getBrief() {

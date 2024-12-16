@@ -5,7 +5,6 @@
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="ret_code" property="retCode" jdbcType="VARCHAR" />
     <result column="movie_name" property="movieName" jdbcType="VARCHAR" />
-    <result column="movie_desc_minio" property="movieDescMinio" jdbcType="VARCHAR" />
     <result column="price" property="price" jdbcType="INTEGER" />
     <result column="add_time" property="addTime" jdbcType="VARCHAR" />
     <result column="tag" property="tag" jdbcType="VARCHAR" />
@@ -14,7 +13,6 @@
     <result column="color" property="color" jdbcType="VARCHAR" />
     <result column="hot_index" property="hotIndex" jdbcType="INTEGER" />
     <result column="displayed" property="displayed" jdbcType="VARCHAR" />
-    <result column="use_minio" property="useMinio" jdbcType="VARCHAR" />
     <result column="brief" property="brief" jdbcType="LONGVARCHAR" />
     <result column="movie_desc" property="movieDesc" jdbcType="LONGVARCHAR" />
     <result column="path" property="path" jdbcType="LONGVARCHAR" />
@@ -27,16 +25,16 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bc_movies (ret_code, movie_name, movie_desc_minio, 
-      price, add_time, tag, 
-      tag_code, view_num, color, 
-      hot_index, displayed, use_minio, 
+    insert into bc_movies (ret_code, movie_name,
+      price, add_time, tag,
+      tag_code, view_num, color,
+      hot_index, displayed,
       brief, movie_desc, path
       )
-    values (#{retCode,jdbcType=VARCHAR}, #{movieName,jdbcType=VARCHAR}, #{movieDescMinio,jdbcType=VARCHAR}, 
-      #{price,jdbcType=INTEGER}, #{addTime,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR}, 
-      #{tagCode,jdbcType=VARCHAR}, #{viewNum,jdbcType=INTEGER}, #{color,jdbcType=VARCHAR}, 
-      #{hotIndex,jdbcType=INTEGER}, #{displayed,jdbcType=VARCHAR}, #{useMinio,jdbcType=VARCHAR}, 
+    values (#{retCode,jdbcType=VARCHAR}, #{movieName,jdbcType=VARCHAR},
+      #{price,jdbcType=INTEGER}, #{addTime,jdbcType=VARCHAR}, #{tag,jdbcType=VARCHAR},
+      #{tagCode,jdbcType=VARCHAR}, #{viewNum,jdbcType=INTEGER}, #{color,jdbcType=VARCHAR},
+      #{hotIndex,jdbcType=INTEGER}, #{displayed,jdbcType=VARCHAR},
       #{brief,jdbcType=LONGVARCHAR}, #{movieDesc,jdbcType=LONGVARCHAR}, #{path,jdbcType=LONGVARCHAR}
       )
   </insert>
@@ -44,7 +42,6 @@
     update bc_movies
     set ret_code = #{retCode,jdbcType=VARCHAR},
       movie_name = #{movieName,jdbcType=VARCHAR},
-      movie_desc_minio = #{movieDescMinio,jdbcType=VARCHAR},
       price = #{price,jdbcType=INTEGER},
       add_time = #{addTime,jdbcType=VARCHAR},
       tag = #{tag,jdbcType=VARCHAR},
@@ -53,21 +50,20 @@
       color = #{color,jdbcType=VARCHAR},
       hot_index = #{hotIndex,jdbcType=INTEGER},
       displayed = #{displayed,jdbcType=VARCHAR},
-      use_minio = #{useMinio,jdbcType=VARCHAR},
       brief = #{brief,jdbcType=LONGVARCHAR},
       movie_desc = #{movieDesc,jdbcType=LONGVARCHAR},
       path = #{path,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, ret_code, movie_name, movie_desc_minio, price, add_time, tag, tag_code, 
-    view_num, color, hot_index, displayed, use_minio, brief, movie_desc, path
+    select id, ret_code, movie_name,  price, add_time, tag, tag_code,
+    view_num, color, hot_index, displayed, brief, movie_desc, path
     from bc_movies
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, ret_code, movie_name, movie_desc_minio, price, add_time, tag, tag_code, 
-    view_num, color, hot_index, displayed, use_minio, brief, movie_desc, path
+    select id, ret_code, movie_name,  price, add_time, tag, tag_code,
+    view_num, color, hot_index, displayed, brief, movie_desc, path
     from bc_movies
   </select>
 

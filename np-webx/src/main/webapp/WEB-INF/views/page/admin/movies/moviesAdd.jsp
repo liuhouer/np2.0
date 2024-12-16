@@ -78,12 +78,6 @@
 						    </textarea>
                     </div>
 
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="useMinio" value="1"  ${model.useMinio == 1 ? 'checked' : ''} > 使用Minio
-                        </label>
-                    </div>
-
                     <div class="form-group">
                         <input id="formSubmit" data-activetext="添加 ››"
                                class="btn btn-hero btn-xlg margin-t10 grid50" value="添加"

@@ -17,10 +17,10 @@
 <meta name="robots" content="index,follow,archive">
 <link rel="shortcut icon"
 	href="https://northpark.cn/statics/img/favicon.ico">
-<title>${model.movieName}:影视窝|NorthPark</title>
+<title>${model.movieName} - NorthPark影视窝在线观看下载_${model.tag}</title>
 <meta name="keywords"
-	content="NorthPark,${model.movieName},${model.tag}">
-<meta name="description" content="${movieDesc}">
+	content="${model.movieName},${model.tag},在线观看,下载,NorthPark影视窝">
+<meta name="description" content="${model.movieName}在线观看下载,${fn:substring(movieDesc,0,100)}... 更多精彩内容尽在NorthPark影视窝">
 
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 </head>
@@ -29,12 +29,28 @@
 
 	<%@ include file="/WEB-INF/views/page/common/navigation.jsp"%>
 
-	<div class="clearfix maincontent grayback">
+	<main class="clearfix maincontent grayback">
 		<div class="container mainbody">
-			<div class="row">
-
+			<article class="row">
 				<div class="col-md-12">
-					<div class="col-sm-10  col-md-offset-1 ">
+					<div class="col-sm-10 col-md-offset-1">
+						<script type="application/ld+json">
+						{
+							"@context": "http://schema.org",
+							"@type": "Movie",
+							"name": "${model.movieName}",
+							"description": "${movieDesc}",
+							"keywords": "${model.tag}"
+						}
+						</script>
+
+						<!-- 面包导航 -->
+						<ol class="breadcrumb" style="background-color: transparent">
+							<li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+							<li><a href="/movies">影视</a></li>
+							<li class="active">${model.movieName}</li>
+						</ol>
+
 						<div class="clearfix bg-white margin-t10 margin-b10 padding20"
 							id="J_white_div">
 							<div class="row margin10 post_article">
@@ -200,11 +216,9 @@
 
 					</div>
 				</div>
-			</div>
-
-
+			</article>
 		</div>
-	</div>
+	</main>
 
 	<%@ include file="/WEB-INF/views/page/common/container.jsp"%>
 	<script type="text/javascript">
