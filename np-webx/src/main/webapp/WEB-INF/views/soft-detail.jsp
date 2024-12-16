@@ -41,7 +41,15 @@
 		<div class="container mainbody">
 			<div class="row">
 				<div class="col-md-12">
+
 					<div class="col-sm-10  col-md-offset-1 ">
+						<!-- 面包导航 -->
+						<ol class="breadcrumb" style="background-color: transparent">
+							<li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+							<li><a href="/soft/${article.os}">软件下载</a></li>
+							<li class="active">${article.title}</li>
+						</ol>
+
 						<div class="clearfix bg-white margin-t10 margin-b10 padding20 "
 							id="J_white_div" itemscope itemtype="http://schema.org/SoftwareApplication">
 							<div class="row margin10 post_article">
