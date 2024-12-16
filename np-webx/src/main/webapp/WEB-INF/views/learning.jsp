@@ -18,15 +18,29 @@
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
     <c:if test="${page==null || page==''}">
-        <title>学习/课程/书籍/知识 | NorthPark</title>
+        <title>NorthPark学习频道 - 优质课程、电子书籍、知识分享平台</title>
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>学习/课程/书籍/知识 ::第${page}页 | NorthPark</title>
+        <title>NorthPark学习频道第${page}页 - 优质课程、电子书籍、知识分享平台</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark,学习,课程,书籍,知识">
-    <meta name="description"
-          content="NorthPark学习包含技术课程、书籍、和知识分享">
+    <meta name="keywords" content="NorthPark学习,在线课程,电子书籍,知识分享,技术教程,编程学习">
+    <meta name="description" content="NorthPark学习频道,提供优质的在线课程、电子书籍和知识分享,包含编程技术、个人成长、职场技能等多个领域的学习资源。">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "NorthPark学习频道",
+      "url": "https://northpark.cn/learning/",
+      "description": "提供优质的在线课程、电子书籍和知识分享",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://northpark.cn/learning/page/1?keyword={search_term}",
+        "query-input": "required name=search_term"
+      }
+    }
+    </script>
 
 </head>
 

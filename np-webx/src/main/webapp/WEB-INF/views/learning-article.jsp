@@ -17,12 +17,35 @@
 <meta name="robots" content="index,follow,archive">
 <link rel="shortcut icon"
 	href="https://northpark.cn/statics/img/favicon.ico">
-<title>${model.title}:学习/课程/书籍/知识|NorthPark</title>
+<title>${model.title} - NorthPark学习频道 | 在线课程与知识分享</title>
 <meta name="keywords"
-	content="NorthPark,${model.title},${model.tags}">
-<meta name="description" content="${content}">
+	content="${model.title},${model.tags},NorthPark学习,在线课程,知识分享">
+<meta name="description" content="${fn:substring(model.brief, 0, 150)}">
 
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "${model.title}",
+  "datePublished": "${model.postDate}",
+  "description": "${fn:substring(model.brief, 0, 150)}",
+  "keywords": "${model.tags}",
+  "author": {
+    "@type": "Organization",
+    "name": "NorthPark"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "NorthPark",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://northpark.cn/statics/img/favicon.ico"
+    }
+  }
+}
+</script>
 </head>
 
 <body>
@@ -35,6 +58,14 @@
 
 				<div class="col-md-12">
 					<div class="col-sm-10  col-md-offset-1 ">
+
+						<!-- 面包导航 -->
+						<ol class="breadcrumb" style="background-color: transparent">
+							<li><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+							<li><a href="/learning">学习</a></li>
+							<li class="active">${model.title}</li>
+						</ol>
+
 						<div class="clearfix bg-white margin-t10 margin-b10 padding20"
 							id="J_white_div">
 							<div class="row margin10 post_article">
