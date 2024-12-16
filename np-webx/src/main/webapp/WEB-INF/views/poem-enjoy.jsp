@@ -16,32 +16,77 @@
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <title>${poem_enjoy.title }-${poem_enjoy.author }:诗词秀 | NorthPark</title>
-    <meta name="keywords" content="${poem_enjoy.title },${poem_enjoy.author },诗词秀,诗词赏析,诗词天地,爱诗词,NorthPark">
+    <meta name="keywords" content="${poem_enjoy.title},${poem_enjoy.author},${poem_enjoy.years},诗词赏析,古诗文,NorthPark">
     <meta name="description"
-          content="${poem_enjoy.content }">
+          content="${poem_enjoy.title} - ${poem_enjoy.author}：${poem_enjoy.content1}">
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <style>
-
         body {
-            background-color: #2D2D2D;
-            color: white;
+            background: #f5f5f5;
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        p {
+        .poem-container {
+            flex: 1;
+            max-width: 800px;
+            margin: 120px auto 40px;
+            padding: 30px;
+            background: #fff;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+        }
 
-            font-size: 24px;
-            line-height: 1.67;
-            font-weight: 400;
-            letter-spacing: normal;
-            margin: 0 20px 5px 0;
-            vertical-align: bottom;
-            margin-top: 0px;
-            margin-right: 20px;
-            margin-bottom: 5px;
-            padding: 0px;
-            -webkit-font-smoothing: antialiased;
-            color: rgb(153, 153, 153);
+        .poem-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, #ff6b6b, #ff8787);
+        }
+
+        .poem-title {
+            font-size: 32px;
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .poem-author {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .poem-content {
+            font-size: 20px;
+            line-height: 2;
+            color: #444;
+            text-align: center;
+            margin: 30px 0;
+            letter-spacing: 1px;
+            white-space: pre-line;
+        }
+
+        .poem-divider {
+            width: 50px;
+            height: 2px;
+            background: #ff6b6b;
+            margin: 30px auto;
+        }
+
+        footer {
+            margin-top: auto;
         }
     </style>
 </head>
@@ -53,81 +98,29 @@
 <!-- <div id="mydiv" style="height:500px;"></div> -->
 
 
-<div id="mydiv">
-
-
-    <div class="container">
-
-        <div class="mainbody" style="margin-top:120px; ">
-
-
-            <div class="row">
-                <div class="col-md-12">
-
-
-                    <div class="col-sm-8  col-md-offset-2 clearfix  margin-t20 margin-b10 padding20  ">
-                        <div class="row ">
-                            <!-- 文字区不需要请连css部分代码一并删除 -->
-                            <h1><p>${poem_enjoy.title }</p></h1>
-                            <p style="font-style: italic;">${poem_enjoy.author }</p>
-                            <p>${poem_enjoy.content1 }</p>
-
-                            <%-- <p >${poem_enjoy.enjoys }</p>	    --%>
-
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-        </div>
-    </div>
+<div class="poem-container">
+    <h1 class="poem-title">${poem_enjoy.title}</h1>
+    <div class="poem-divider"></div>
+    <div class="poem-author">${poem_enjoy.author}</div>
+    <div class="poem-content">${poem_enjoy.content1}</div>
+    <div class="poem-divider"></div>
+    <div class="poem-content">${poem_enjoy.enjoys}</div>
 </div>
 
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
-<script type="text/javascript" src="https://northpark.cn/statics/js/canvas-particle.js"></script>
 <script type="text/javascript">
-    //禁止图片拉伸
-    $(function () {
-    	$(".bg-white").find("img").each(function () {
-            $(this).css('max-width', ($(".bg-white").width()));
-            $(this).css('padding-right', '20%');
-        })
-    })
-
-    $(function () {
-        $(window).resize(function () {
-            $('body').css('min-height', ($(window).height()));
-            $('#mydiv').css('min-height', ($(window).height() - 100));
-            $('body').css('overflowX', 'hidden');
-
-        }).resize();
-    });
-
-</script>
-<script type="text/javascript">
-    window.onload = function () {
-        //配置
-        var config = {
-            vx: 4,	//小球x轴速度,正为右，负为左
-            vy: 4,	//小球y轴速度
-            height: 2,	//小球高宽，其实为正方形，所以不宜太大
-            width: 2,
-            count: 200,		//点个数
-            color: "121, 162, 185", 	//点颜色
-            stroke: "130,255,255", 		//线条颜色
-            dist: 6000, 	//点吸附距离
-            e_dist: 20000, 	//鼠标吸附加速距离
-            max_conn: 10 	//点到点最大连接数
+    $(function() {
+        function adjustHeight() {
+            var windowHeight = $(window).height();
+            var headerHeight = $('header').outerHeight();
+            var footerHeight = $('footer').outerHeight();
+            var minContentHeight = windowHeight - headerHeight - footerHeight;
+            $('.poem-container').css('min-height', minContentHeight + 'px');
         }
 
-        //调用
-        CanvasParticle(config);
-    }
+        $(window).on('resize load', adjustHeight);
+    });
 </script>
 
 

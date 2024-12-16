@@ -23,9 +23,73 @@
         <title>诗词秀::第${page}页 | NorthPark</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark,诗词秀,诗词赏析,诗词天地,爱诗词">
-    <meta name="description"
-          content="NorthPark诗词秀，包含丰富的诗词，涵盖了唐宋元明清,五代十国南北朝诗词作品。">
+    <meta name="keywords" content="诗词,古诗文,${keyword},诗词赏析,诗词名句,NorthPark">
+    <meta name="description" content="NorthPark诗词频道，收录历代诗词名句、诗词赏析。包含唐诗宋词元曲等，按朝代、作者、题材分类展示。">
+
+    <style>
+        .poem-list-item {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .poem-list-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .poem-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .poem-title a {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .poem-meta {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .poem-meta a {
+            color: #d7c374;
+            margin: 0 5px;
+            transition: color 0.3s ease;
+        }
+
+        .poem-meta a:hover {
+            color: #dac658;
+            text-decoration: none;
+        }
+
+        .poem-content {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .sidebar-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+    </style>
 
 </head>
 
@@ -49,71 +113,37 @@
 
                     <div class="col-sm-12">
 
-                        <form class="form-search " id="J_ser_from" method="post" accept-charset="UTF-8"
-                              action="/poem/page/1">
-                            <input id="keyword" placeholder="诗词名句" value="${keyword }"
-                                   class="width100 input-medium search-query input-lg  border-light-1 bg-lyellow  radius-0"
-                                   name="keyword" type="text">
-                            <input data-activetext="搜索 ››" class="btn btn-hero " value="搜索" type="button"
-                                   id="J_ser_btn">
-                        </form>
+                        <div class="search-box">
+                            <form class="form-search" id="J_ser_from" method="post" action="/poem/page/1">
+                                <div class="input-group">
+                                    <input type="text" id="keyword" name="keyword" value="${keyword}"
+                                        class="form-control input-lg" placeholder="搜索诗词名句...">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary btn-lg" type="button" id="J_ser_btn">
+                                            <i class="glyphicon glyphicon-search"></i> 搜索
+                                        </button>
+                                    </span>
+                                </div>
+                            </form>
+                        </div>
 
                     </div>
 
                     <c:forEach items="${list }" var="s" varStatus="ss">
 
-                        <div class="col-sm-12 ">
-                            <div class="clearfix bg-white margin-t10 margin-b10 padding20 ">
-                                <div class="row margin5">
-                                    <div class="border-0 center">
-                                        <p>
-                                            <a href="/poem/enjoy/${s.id }.html">
-                                                <small class="green-text">
-                                                    <font size="5"><strong>${s.title}</strong></font>
-                                                </small>
-                                            </a>
-                                        </p>
-
-
-                                        <div class="clearfix visible-xs">
-                                            <hr>
-                                        </div>
-                                    </div>
-
-                                    <p>
-
-
-                                        <c:if test="${s.picPoem!='' }"><img
-                                                title="${s.title}" alt="${s.title}" src="${s.picPoem }"></c:if>
-
-
-                                    </p>
-                                    <p>
-
-                                        收录于：<a class="common-a-right" title="${s.author}">${s.author}</a>
-
-                                        <a class="common-a-right" title="${s.years}"
-                                           href="/poem/dynasty/${s.yearsCode }">${s.years}</a>
-
-                                        <a class="common-a" title="${s.types}"
-                                           href="/poem/types/${s.typesCode }">${s.types}</a>
-
-
-                                    </p>
-                                    <p id="brief_${ss.index}">
-
-                                            ${s.content }
-                                    </p>
-
-                                    <p>
-                                        <a class="btn btn-warning margin-t10" href="/poem/enjoy/${s.id }.html">
-                                            Read More
-                                            <span class="glyphicon  glyphicon-circle-arrow-right padding5"></span>
-                                        </a>
-                                    </p>
-
-                                </div>
+                        <div class="poem-list-item">
+                            <h2 class="poem-title">
+                                <a href="/poem/enjoy/${s.id}.html">${s.title}</a>
+                            </h2>
+                            <div class="poem-meta">
+                                <span>作者：${s.author} </span>
+                                <span>朝代：<a href="/poem/dynasty/${s.yearsCode}">${s.years}</a></span>
+                                <span>类别：<a href="/poem/types/${s.typesCode}">${s.types}</a></span>
                             </div>
+                            <div class="poem-content">${s.content}</div>
+                            <a class="btn btn-primary" href="/poem/enjoy/${s.id}.html">
+                                阅读全文 <i class="glyphicon glyphicon-arrow-right"></i>
+                            </a>
                         </div>
                     </c:forEach>
                     <c:if test="${pagein!='no' }">
