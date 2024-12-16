@@ -50,21 +50,21 @@
 
                     <li>
                         <div class="slider-caption">
-                            <img src="https://northpark.cn/statics/img/index/slide4.jpg" alt="最爱主题图册"/>
+                            <img src="https://northpark.cn/statics/img/index/slide4.jpg" alt="最爱主题"/>
 
 
                             <span>
-								 <h2>最爱主题图册</h2>
+								 <h2>最爱主题</h2>
 								 <p>
 								 <br>
 								 <br>
 								 </p>
-								 
+
 								<p>
 									什么时候爱上一首曲子，什么时候恋上一张贴画，什么时候迷上一种习惯 <br>
 									<br>一件件美好的事物，勾勒出您最真实的生命轨迹。
 								</p>
-								 <a href="/love">More Details</a>		
+								 <a href="/love">More Details</a>
 								 </span>
                         </div>
                     </li>
@@ -73,14 +73,14 @@
                             <img src="https://northpark.cn/statics/img/index/slide2.jpg" alt="碎碎念的精神角落"/>
 
                             <span style="">
-										 
+
 									    <h2>碎碎念</h2>
 										<p>
 											扯淡、吐槽、心情、树洞……想说啥就说啥！... <br>
 											<br>NorthPark就是你的树洞。
 										</p>
 										<a href="/note">More Details</a>
-															
+
 									    </span>
                         </div>
                     <li>
@@ -88,14 +88,14 @@
                             <img src="https://northpark.cn/statics/img/index/slide3.jpg" alt="情圣时刻"/>
 
                             <span>
-										 
+
 										<h2>情商提升</h2>
 										<p>
 											情商提升的技巧和讲解 <br>
 											<br>情圣专业讲解、解决各种各样的宅男问题.
 										</p>
 										<a href="/romeo">Get Ready</a>
-												
+
 										 </span>
                         </div>
 

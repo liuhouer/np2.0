@@ -9,20 +9,19 @@
             <div class="col-xs-6 col-sm-3 margin-b20 ">
                 <div class="blog-post">
                     <div class="blog-thumb">
-                        <a href="/love/${s.title_code }.html">
+                        <a href="/love/${s.title_code}.html" title="${s.title}">
                             <img class="imgbreath" width="257" height="193"
                             <c:choose>
-                            <c:when test="${fn:contains(s.album_img ,'http://') }">
-                                 src="${s.album_img }"
-                            </c:when>
-                            <c:otherwise>
-                                 src="/bruce/${s.album_img }"
-                            </c:otherwise>
+                                <c:when test="${fn:contains(s.album_img,'http://')}">
+                                    src="${s.album_img}"
+                                </c:when>
+                                <c:otherwise>
+                                    src="/bruce/${s.album_img}"
+                                </c:otherwise>
                             </c:choose>
-
-                                 alt="${s.title }">
+                            alt="${s.title} - ${s.album} - ${s.artist}"
+                            loading="lazy">
                         </a>
-
                     </div>
                     <div class="blog-content">
                         <div class="content-show">

@@ -15,10 +15,9 @@
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>${ dataMap.lrc_title}:最爱主题图册互动 | NorthPark</title>
-    <meta name="keywords" content="NorthPark,最爱主题图册互动">
-    <meta name="description"
-          content="NorthPark最爱主题图册互动、评论、关注.">
+    <title>${dataMap.lrc_title} - 最爱主题详情 | NorthPark</title>
+    <meta name="keywords" content="${dataMap.lrc_title},${dataMap.by_username},最爱主题,NorthPark">
+    <meta name="description" content="查看${dataMap.by_username}分享的${dataMap.lrc_title}。NorthPark最爱主题让你记录生活点滴,分享美好回忆。">
     <link href="https://northpark.cn/statics/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <link href="https://northpark.cn/statics/wangEditor/css/wangEditor-1.3.12.css" rel="stylesheet"/>
@@ -328,6 +327,33 @@
         })
     })
 
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "name": "${dataMap.lrc_title}",
+  "author": {
+    "@type": "Person",
+    "name": "${dataMap.by_username}"
+  },
+  "description": "${dataMap.lrc_title}",
+  "contentUrl": "/bruce/${dataMap.lrc_album_img}",
+  "datePublished": "${dataMap.create_time}",
+  "interactionStatistic": [
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/LikeAction",
+      "userInteractionCount": "${dataMap.zanNum}"
+    },
+    {
+      "@type": "InteractionCounter",
+      "interactionType": "https://schema.org/CommentAction",
+      "userInteractionCount": "${dataMap.plNum}"
+    }
+  ]
+}
 </script>
 
 </body>

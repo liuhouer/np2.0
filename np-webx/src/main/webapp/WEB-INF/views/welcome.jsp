@@ -14,15 +14,26 @@
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
     <%@ include file="page/common/common.jsp" %>
     <c:if test="${page==null || page==''}">
-        <title>最爱主题图册-记住美好,保留回忆,分享最爱。 | NorthPark</title>
+        <title>最爱主题 - 分享生活中的美好瞬间 | NorthPark</title>
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>最爱主题图册::第${page}页-记住美好,保留回忆,分享最爱。 | NorthPark</title>
+        <title>最爱主题第${page}页 - 分享生活中的美好瞬间 | NorthPark</title>
     </c:if>
-    <meta name="keywords" content="NorthPark,最爱主题图册">
-    <meta name="description"
-          content="NorthPark最爱主题图册互动、评论、关注等版块。它富有交互性和趣味性，文艺范和小清新，并且可以和你的朋友们为某个兴趣互动。">
+    <meta name="keywords" content="最爱主题,生活记录,图片分享,美好瞬间,NorthPark">
+    <meta name="description" content="NorthPark最爱主题,记录并分享生活中的美好瞬间。在这里,你可以找到有趣的主题图片,与志同道合的朋友互动交流,留下生活的精彩印记。">
 
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "最爱主题",
+      "description": "NorthPark最爱主题,记录并分享生活中的美好瞬间",
+      "publisher": {
+        "@type": "Organization",
+        "name": "NorthPark"
+      }
+    }
+    </script>
 
 </head>
 
