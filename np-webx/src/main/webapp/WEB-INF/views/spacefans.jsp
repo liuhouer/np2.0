@@ -16,8 +16,31 @@
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>${MyInfo.username}的迷妹们呦 ໒( ͡◕ ᴥ ◕͡ )७| NorthPark</title>
+    <title>${MyInfo.username}的粉丝 - 社交关系展示 | NorthPark</title>
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
+
+    <!-- SEO优化 -->
+    <meta name="description" content="${MyInfo.username}的粉丝主页 - 查看关注${MyInfo.username}的朋友们 | NorthPark">
+    <meta name="keywords" content="${MyInfo.username},粉丝,关注者,社交关系,NorthPark">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="${MyInfo.username}的粉丝 | NorthPark">
+    <meta property="og:description" content="查看关注${MyInfo.username}的朋友们">
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://northpark.cn/cm/fans/${MyInfo.id}">
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfilePage",
+      "mainEntity": {
+        "@type": "Person",
+        "name": "${MyInfo.username}",
+        "followersUrl": "https://northpark.cn/cm/fans/${MyInfo.id}"
+      }
+    }
+    </script>
 
 </head>
 

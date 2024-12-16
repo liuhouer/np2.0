@@ -15,8 +15,34 @@
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>${MyInfo.username}的树洞 -精神角落 | NorthPark </title>
+    <title>${MyInfo.username}的树洞 - 心情随笔与生活感悟 | NorthPark</title>
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
+
+    <!-- SEO优化 -->
+    <meta name="description" content="${MyInfo.username}的树洞空间 - 查看Ta的心情随笔与生活感悟 | NorthPark">
+    <meta name="keywords" content="${MyInfo.username},树洞,心情随笔,生活感悟,留言板,NorthPark">
+    
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="${MyInfo.username}的树洞 | NorthPark">
+    <meta property="og:description" content="探索${MyInfo.username}的内心世界,分享Ta的心情故事">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://northpark.cn/note/viewNotes/${MyInfo.id}">
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://northpark.cn/note/viewNotes/${MyInfo.id}"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "${MyInfo.username}"
+      }
+    }
+    </script>
 
 </head>
 
