@@ -35,224 +35,284 @@
 
 <%@ include file="/WEB-INF/views/page/common/navigation.jsp" %>
 
-<!-- 页面标题 -->
-<h1 class="font-elegant center" style="margin:30px 0;color:#2c3e50;">
-    <i class="fa fa-bell"></i> 消息通知中心
-</h1>
-<div class="clearfix maincontent grayback">
+<!-- 优化布局结构 -->
+<div class="clearfix maincontent">
     <div class="container">
-        <div class="mainbody" style="margin-top:100px; ">
+        <!-- 页面标题部分 -->
+        <div class="row">
+            <div class="col-sm-12">
+                <h1 class="font-elegant text-center" style="margin:30px 0;color:#2c3e50;">
+                    <i class="fa fa-bell"></i> 消息通知中心
+                </h1>
+            </div>
+        </div>
 
-
-            <div class="row padding20">
-                <div class="btn-group" role="group" aria-label="消息类型">
-                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="1" type="button" value="文章评论">
-                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="2" type="button" value="收到点赞">
-                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="3" type="button" value="树洞回复">
-                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="4" type="button" value="新增关注">
-                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="5" type="button" value="站内消息">
-                    <input class="btn tag-node" style="margin:0 5px;border-radius:15px;" oid="6" type="button" value="资源动态">
+        <!-- 消息类型筛选部分 -->
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="notification-filter text-center" style="margin-bottom:30px;">
+                    <div class="btn-group" role="group" aria-label="消息类型">
+                        <button class="btn tag-node" style="margin:0 5px;min-width:90px;border-radius:20px;" oid="1">
+                            <i class="fa fa-comments-o"></i> 文章评论
+                        </button>
+                        <button class="btn tag-node" style="margin:0 5px;min-width:90px;border-radius:20px;" oid="2">
+                            <i class="fa fa-heart-o"></i> 收到点赞
+                        </button>
+                        <button class="btn tag-node" style="margin:0 5px;min-width:90px;border-radius:20px;" oid="3">
+                            <i class="fa fa-commenting-o"></i> 树洞回复
+                        </button>
+                        <button class="btn tag-node" style="margin:0 5px;min-width:90px;border-radius:20px;" oid="4">
+                            <i class="fa fa-user-plus"></i> 新增关注
+                        </button>
+                        <button class="btn tag-node" style="margin:0 5px;min-width:90px;border-radius:20px;" oid="5">
+                            <i class="fa fa-envelope"></i> 站内消息
+                        </button>
+                        <button class="btn tag-node" style="margin:0 5px;min-width:90px;border-radius:20px;" oid="6">
+                            <i class="fa fa-file-text-o"></i> 资源动态
+                        </button>
+                    </div>
                 </div>
             </div>
+        </div>
 
-
-            <div class="row">
-                <div class="col-sm-7">
-                    <c:forEach var="y" items="${list }" varStatus="ss">
-                    <%--remindID--%>
-                        <div class="row bg-white padding20">
-
-                            <div class="col-sm-10 avatar">
-
-                                <%-- 1类：在某文章界面评论被回复【通知-被回复人】【通知-站长】--%>
-                                <c:if test="${y.remindId==1}">
-                                        <p>
-                                        <i class="fa fa-comments-o text-primary padding5"></i>
-                                        <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
-                                                ${y.senderName.substring(0,1) }
-                                        </span>
-                                            <a href="/cm/channel/${y.senderId}" title="${y.senderName }">
-                                                    ${y.senderName }
-                                            </a>
-                                            <label class="padding5">在回复</label>
-                                            <a href="${y.objectLinks}" style="font-size: 12px;line-height: 1.67;font-weight: 400;letter-spacing: normal;">${y.object}</a>
-                                            <label class="padding5">时提到了你</label>
-                                            <c:if test="${y.status==0}">
-                                                <i class="fa fa-bell-o padding5" title="未读"></i>
+        <!-- 主内容区域 -->
+        <div class="row">
+            <!-- 消息列表 -->
+            <div class="col-sm-8">
+                <div class="notification-list">
+                    <c:forEach var="y" items="${list}" varStatus="ss">
+                        <div class="notification-item bg-white">
+                            <!-- 1类：文章评论通知 -->
+                            <c:if test="${y.remindId==1}">
+                                <div class="notification-content">
+                                    <div class="notification-header">
+                                        <div class="avatar-wrapper">
+                                            <span class="avatar-text text-${fn:toLowerCase(fn:substring(y.senderId,0,1))}">
+                                                ${fn:toUpperCase(fn:substring(y.senderName,0,1))}
+                                            </span>
+                                        </div>
+                                        <a href="/cm/channel/${y.senderId}" class="user-link">
+                                            ${y.senderName}
+                                        </a>
+                                        <span class="action-text">在回复</span>
+                                        <a href="${y.objectLinks}" class="object-link">
+                                            ${y.object}
+                                        </a>
+                                        <span class="action-text">时提到了你</span>
+                                        <c:if test="${y.status==0}">
+                                            <span class="unread-badge">
+                                                <i class="fa fa-bell-o" title="未读"></i>
                                                 <input type="hidden" name="unReadId" value="${y.id}">
-                                            </c:if>
-                                        </p>
-                                        <blockquote>
-                                            <p style="font-size: 12px;line-height: 1.67;font-weight: 400;letter-spacing: normal;">
-                                                    ${y.message }
-                                            </p>
+                                            </span>
+                                        </c:if>
+                                    </div>
+                                    <div class="notification-body">
+                                        <blockquote class="message-quote">
+                                            ${y.message}
                                         </blockquote>
+                                    </div>
+                                    <div class="notification-footer">
+                                        <small class="text-muted">
+                                            <i class="fa fa-clock-o"></i> ${y.createTime}
+                                        </small>
+                                    </div>
+                                </div>
+                            </c:if>
 
-                                </c:if>
-
-                                <%--留言--%>
-                                <c:if test="${y.remindId==3}">
-                                    <p>
-                                        <i class="fa fa-commenting-o text-primary padding5"></i>
-                                        <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
-                                                ${y.senderName.substring(0,1) }
-                                        </span>
-                                        <a href="/cm/channel/${y.senderId}" title="${y.senderName }">
-                                                ${y.senderName }
+                            <!-- 2类：点赞通知 -->
+                            <c:if test="${y.remindId==2}">
+                                <div class="notification-content">
+                                    <div class="notification-header">
+                                        <div class="avatar-wrapper">
+                                            <span class="avatar-text text-${fn:toLowerCase(fn:substring(y.senderId,0,1))}">
+                                                ${fn:toUpperCase(fn:substring(y.senderName,0,1))}
+                                            </span>
+                                        </div>
+                                        <a href="/cm/channel/${y.senderId}" class="user-link">
+                                            ${y.senderName}
                                         </a>
-                                        <label class="padding5">在回复</label>
-                                        <a href="${y.objectLinks}" style="font-size: 12px;line-height: 1.67;font-weight: 400;letter-spacing: normal;">${y.object}</a>
-                                        <label class="padding5">时提到了你</label>
-                                        <c:if test="${y.status==0}">
-                                            <i class="fa fa-bell-o padding5" title="未读"></i>
-                                            <input type="hidden" name="unReadId" value="${y.id}">
-                                        </c:if>
-                                    </p>
-                                    <blockquote>
-                                        <p style="font-size: 12px;line-height: 1.67;font-weight: 400;letter-spacing: normal;">
-                                                ${y.message }
-                                        </p>
-                                    </blockquote>
-
-                                </c:if>
-
-                                <%--最爱--%>
-                                <c:if test="${y.remindId==2}">
-                                    <p>
-                                        <i class="fa fa-heart-o text-primary padding5"></i>
-                                        <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
-                                                ${y.senderName.substring(0,1) }
-                                        </span>
-                                        <a href="/cm/channel/${y.senderId}" title="${y.senderName }">
-                                                ${y.senderName }
+                                        <span class="action-text">赞了你的</span>
+                                        <a href="${y.objectLinks}" class="object-link">
+                                            ${y.object}
                                         </a>
-                                        <label class="padding5">${y.message }:</label>
-                                        <a href="${y.objectLinks}">${y.object}</a>
                                         <c:if test="${y.status==0}">
-                                            <i class="fa fa-bell-o padding5" title="未读"></i>
-                                            <input type="hidden" name="unReadId" value="${y.id}">
-                                        </c:if>
-                                    </p>
-                                </c:if>
-
-                                <%--关注--%>
-                                <c:if test="${y.remindId==4}">
-                                    <p>
-                                        <i class="fa fa-user-plus text-primary padding5"></i>
-                                        <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
-                                                ${y.senderName.substring(0,1) }
-                                        </span>
-                                        <a href="/cm/channel/${y.senderId}" title="${y.senderName }">
-                                                ${y.senderName }
-                                        </a>
-                                        <label class="padding5">${y.message }</label>
-                                        <c:if test="${y.status==0}">
-                                            <i class="fa fa-bell-o padding5" title="未读"></i>
-                                            <input type="hidden" name="unReadId" value="${y.id}">
-                                        </c:if>
-                                    </p>
-                                </c:if>
-
-                                <%--5类-站内消息--%>
-                                <c:if test="${y.remindId==5}">
-                                    <p>
-                                        <i class="fa fa-envelope text-primary padding5"></i>
-                                        <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
-                                                ${y.senderName.substring(0,1) }
-                                        </span>
-                                            ${y.senderName }
-                                            <p>
-                                            <label class="padding5  text-primary">${y.message }</label>
-                                            </p>
-                                            <c:if test="${y.status==0}">
-                                                <i class="fa fa-bell-o padding5" title="未读"></i>
+                                            <span class="unread-badge">
+                                                <i class="fa fa-bell-o" title="未读"></i>
                                                 <input type="hidden" name="unReadId" value="${y.id}">
-                                            </c:if>
-                                    </p>
-                                </c:if>
-                                <%--6类-资源提醒消息--%>
-                                <c:if test="${y.remindId==6}">
-                                        <p>
-                                        <i class="fa fa-file-text-o text-primary padding5"></i>
-                                        <span class="text-${y.senderId.substring(0,1) }" style="width: 28px;height: 28px;line-height: 28px;">
-                                                ${y.senderName.substring(0,1) }
-                                        </span>
-                                                ${y.senderName }
-                                        <p>
-                                            <label class="padding5  text-primary">${y.message }</label>
-                                        </p>
-                                        <a href="${y.objectLinks}">${y.object}</a>
-                                        <c:if test="${y.status==0}">
-                                            <i class="fa fa-bell-o padding5" title="未读"></i>
-                                            <input type="hidden" name="unReadId" value="${y.id}">
+                                            </span>
                                         </c:if>
-                                        </p>
-                                </c:if>
-                                <p>
-                                    <small class="label label-gray">${y.createTime }</small>
-                                </p>
-                            </div>
+                                    </div>
+                                    <div class="notification-footer">
+                                        <small class="text-muted">
+                                            <i class="fa fa-clock-o"></i> ${y.createTime}
+                                        </small>
+                                    </div>
+                                </div>
+                            </c:if>
 
+                            <!-- 3类：树洞回复 -->
+                            <c:if test="${y.remindId==3}">
+                                <div class="notification-content">
+                                    <div class="notification-header">
+                                        <div class="avatar-wrapper">
+                                            <span class="avatar-text text-${fn:toLowerCase(fn:substring(y.senderId,0,1))}">
+                                                ${fn:toUpperCase(fn:substring(y.senderName,0,1))}
+                                            </span>
+                                        </div>
+                                        <a href="/cm/channel/${y.senderId}" class="user-link">
+                                            ${y.senderName}
+                                        </a>
+                                        <span class="action-text">回复了你的树洞</span>
+                                        <a href="${y.objectLinks}" class="object-link">
+                                            ${y.object}
+                                        </a>
+                                        <c:if test="${y.status==0}">
+                                            <span class="unread-badge">
+                                                <i class="fa fa-bell-o" title="未读"></i>
+                                                <input type="hidden" name="unReadId" value="${y.id}">
+                                            </span>
+                                        </c:if>
+                                    </div>
+                                    <div class="notification-body">
+                                        <blockquote class="message-quote">
+                                            ${y.message}
+                                        </blockquote>
+                                    </div>
+                                    <div class="notification-footer">
+                                        <small class="text-muted">
+                                            <i class="fa fa-clock-o"></i> ${y.createTime}
+                                        </small>
+                                    </div>
+                                </div>
+                            </c:if>
+
+                            <!-- 4类：关注通知 -->
+                            <c:if test="${y.remindId==4}">
+                                <div class="notification-content">
+                                    <div class="notification-header">
+                                        <div class="avatar-wrapper">
+                                            <span class="avatar-text text-${fn:toLowerCase(fn:substring(y.senderId,0,1))}">
+                                                ${fn:toUpperCase(fn:substring(y.senderName,0,1))}
+                                            </span>
+                                        </div>
+                                        <a href="/cm/channel/${y.senderId}" class="user-link">
+                                            ${y.senderName}
+                                        </a>
+                                        <span class="action-text">关注了你</span>
+                                        <c:if test="${y.status==0}">
+                                            <span class="unread-badge">
+                                                <i class="fa fa-bell-o" title="未读"></i>
+                                                <input type="hidden" name="unReadId" value="${y.id}">
+                                            </span>
+                                        </c:if>
+                                    </div>
+                                    <div class="notification-footer">
+                                        <small class="text-muted">
+                                            <i class="fa fa-clock-o"></i> ${y.createTime}
+                                        </small>
+                                    </div>
+                                </div>
+                            </c:if>
+
+                            <!-- 5类：站内消息 -->
+                            <c:if test="${y.remindId==5}">
+                                <div class="notification-content">
+                                    <div class="notification-header">
+                                        <div class="avatar-wrapper">
+                                            <span class="avatar-text text-${fn:toLowerCase(fn:substring(y.senderId,0,1))}">
+                                                ${fn:toUpperCase(fn:substring(y.senderName,0,1))}
+                                            </span>
+                                        </div>
+                                        <span class="user-link">${y.senderName}</span>
+                                        <c:if test="${y.status==0}">
+                                            <span class="unread-badge">
+                                                <i class="fa fa-bell-o" title="未读"></i>
+                                                <input type="hidden" name="unReadId" value="${y.id}">
+                                            </span>
+                                        </c:if>
+                                    </div>
+                                    <div class="notification-body">
+                                        <div class="system-message">
+                                            ${y.message}
+                                        </div>
+                                    </div>
+                                    <div class="notification-footer">
+                                        <small class="text-muted">
+                                            <i class="fa fa-clock-o"></i> ${y.createTime}
+                                        </small>
+                                    </div>
+                                </div>
+                            </c:if>
+
+                            <!-- 6类：资源动态 -->
+                            <c:if test="${y.remindId==6}">
+                                <div class="notification-content">
+                                    <div class="notification-header">
+                                        <div class="avatar-wrapper">
+                                            <span class="avatar-text text-${fn:toLowerCase(fn:substring(y.senderId,0,1))}">
+                                                ${fn:toUpperCase(fn:substring(y.senderName,0,1))}
+                                            </span>
+                                        </div>
+                                        <span class="user-link">${y.senderName}</span>
+                                        <c:if test="${y.status==0}">
+                                            <span class="unread-badge">
+                                                <i class="fa fa-bell-o" title="未读"></i>
+                                                <input type="hidden" name="unReadId" value="${y.id}">
+                                            </span>
+                                        </c:if>
+                                    </div>
+                                    <div class="notification-body">
+                                        <div class="resource-message">
+                                            ${y.message}
+                                        </div>
+                                        <a href="${y.objectLinks}" class="resource-link">
+                                            <i class="fa fa-external-link"></i> ${y.object}
+                                        </a>
+                                    </div>
+                                    <div class="notification-footer">
+                                        <small class="text-muted">
+                                            <i class="fa fa-clock-o"></i> ${y.createTime}
+                                        </small>
+                                    </div>
+                                </div>
+                            </c:if>
                         </div>
-                        <hr>
                     </c:forEach>
-                    <c:if test="${pagein!='no' and list.size()>0 }">
+
+                    <!-- 分页 -->
+                    <c:if test="${pagein!='no' and list.size()>0}">
                         <%@ include file="/WEB-INF/views/page/common/fenye.jsp" %>
                     </c:if>
-                    <c:if test="${ list.size()==0 }">
-                        <p class="center">
-                            <small class="label label-gray">空空如也</small>
-                        </p>
 
-                        <hr class="border-light-1">
-                    </c:if>
-                </div>
-                <div class="col-sm-offset-1 col-sm-4 ">
-
-                    <div class="row bg-lblue padding20 radius-5">
-                        <c:if test="${user.headPath!=null and user.headPath!=''}">
-                            <div class="col-xs-2 avatar padding10">
-                             <img src="/bruce/${user.headPath}"></img>
-                            </div>
-                        </c:if>
-                        <c:if test="${user.headPath==null or user.headPath==''}">
-                            <div class="col-xs-2 avatar padding10">
-                                <span class="text-1" >
-                                        ${user.username.substring(0,1) }
-                                </span>
-                            </div>
-
-                        </c:if>
-                        <div class="col-xs-10">
-                            <h4 style="color:#333">${user.username}</h4>
-                            <hr>
-                            <p class="gray-text"><i class="fa fa-envelope padding5"></i>${user.email}</p>
-                            <p class="gray-text"><i class="fa fa-link padding5"></i>
-                                <c:if test="${user.blogSite==null or user.blogSite==''}">
-                                    -
-                                </c:if>
-                                <c:if test="${user.blogSite!=null and user.blogSite!=''}">
-                                    ${user.blogSite}
-                                </c:if>
-                            </p>
-                            <p class="gray-text"><i class="fa fa-globe padding5"></i>
-                                <c:if test="${user.meta==null or user.meta==''}">
-                                -
-                                </c:if>
-                                <c:if test="${user.meta!=null and user.meta!=''}">
-                                    ${user.meta}
-                                </c:if>
-
-                            </p>
-                            <p class="gray-text"><i class="fa fa-calendar-times-o padding5"></i>${user.dateJoined}</p>
+                    <!-- 空状态 -->
+                    <c:if test="${list.size()==0}">
+                        <div class="empty-state text-center" style="padding:40px 0;">
+                            <i class="fa fa-bell-slash-o fa-3x text-muted"></i>
+                            <p class="text-muted" style="margin-top:10px;">暂无消息通知</p>
                         </div>
-
-                    </div>
-
+                    </c:if>
                 </div>
             </div>
 
-
+            <!-- 用户信息侧边栏 -->
+            <div class="col-sm-4">
+                <div class="user-profile bg-white" style="padding:20px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+                    <div class="profile-header">
+                        <div class="avatar-wrapper text-center">
+                            <span class="avatar-text text-${fn:toLowerCase(fn:substring(user.username,0,1))}" style="width:80px;height:80px;line-height:80px;font-size:32px;">
+                                ${fn:toUpperCase(fn:substring(user.username,0,1))}
+                            </span>
+                        </div>
+                        <h4 class="text-center" style="margin:15px 0;">${user.username}</h4>
+                    </div>
+                    <div class="profile-info">
+                        <p><i class="fa fa-envelope"></i> ${user.email}</p>
+                        <p><i class="fa fa-link"></i> ${user.blogSite==null?'-':user.blogSite}</p>
+                        <p><i class="fa fa-globe"></i> ${user.meta==null?'-':user.meta}</p>
+                        <p><i class="fa fa-calendar"></i> ${user.dateJoined}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -347,7 +407,7 @@
     //1、随机色的函数-rgb
     function getRandomColor() {
         const colors = [
-            '#3498db', '#2ecc71', '#e74c3c', '#f1c40f', 
+            '#3498db', '#2ecc71', '#e74c3c', '#f1c40f',
             '#9b59b6', '#1abc9c', '#e67e22', '#34495e'
         ];
         return colors[Math.floor(Math.random() * colors.length)];
@@ -355,3 +415,140 @@
 </script>
 </body>
 </html>
+
+<style>
+/* 通用样式 */
+.notification-item {
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: #fff;
+}
+
+.notification-header {
+    margin-bottom: 10px;
+}
+
+.avatar-text {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 5px;
+    font-weight: 500;
+}
+
+/* 消息类型特定颜色 */
+.text-purple {
+    color: #9b59b6;
+}
+
+.system-message, .resource-message {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.resource-link {
+    display: block;
+    margin-top: 10px;
+    color: #3498db;
+}
+
+/* 分页样式优化 */
+#pageForm {
+    margin-top: 20px;
+}
+
+#pageForm a {
+    color: #3498db;
+    background: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 0 2px;
+    border: 1px solid #e0e0e0;
+}
+
+#pageForm a:hover {
+    background: #3498db;
+    color: #fff;
+    text-decoration: none;
+}
+
+#pageForm .current {
+    background: #3498db;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin: 0 2px;
+}
+
+/* 标签按钮样式优化 */
+.tag-node {
+    transition: all 0.3s ease;
+    border: none;
+    opacity: 0.9;
+}
+
+.tag-node:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.tag-node.active {
+    opacity: 1;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 头像样式优化 */
+.avatar-text {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+    border-radius: 50%;
+    margin: 0 5px;
+    font-weight: 500;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase; /* 确保字母大写 */
+}
+
+/* 用户资料卡片中的大头像 */
+.profile-header .avatar-text {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    font-size: 32px;
+}
+
+/* 预设的头像背景色 */
+.text-0 { background-color: #3498db; }
+.text-1 { background-color: #2ecc71; }
+.text-2 { background-color: #e74c3c; }
+.text-3 { background-color: #f1c40f; }
+.text-4 { background-color: #9b59b6; }
+.text-5 { background-color: #1abc9c; }
+.text-6 { background-color: #e67e22; }
+.text-7 { background-color: #34495e; }
+.text-8 { background-color: #16a085; }
+.text-9 { background-color: #d35400; }
+.text-a { background-color: #8e44ad; }
+.text-b { background-color: #2980b9; }
+.text-c { background-color: #27ae60; }
+.text-d { background-color: #c0392b; }
+.text-e { background-color: #f39c12; }
+.text-f { background-color: #7f8c8d; }
+
+/* 头像容器样式 */
+.avatar-wrapper {
+    display: inline-block;
+    vertical-align: middle;
+}
+</style>
