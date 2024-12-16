@@ -79,7 +79,7 @@
 <body>
 <%@ include file="/WEB-INF/views/page/common/navigation.jsp" %>
 
-<div class="clearfix maincontent" id="J_maincontent">
+<div class="clearfix maincontent grayback" id="J_maincontent">
     <div class="container" id="J_container">
         <div class="mainbody padding-t20" style="margin-top:70px;">
             <div class="row">
