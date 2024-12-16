@@ -2,10 +2,12 @@ package cn.northpark.cron;
 
 import cn.northpark.constant.BC_Constant;
 import cn.northpark.model.Movies;
-import cn.northpark.result.Message;
 import cn.northpark.service.MoviesService;
 import cn.northpark.threadPool.MultiThread;
-import cn.northpark.utils.*;
+import cn.northpark.utils.HTMLParserUtil;
+import cn.northpark.utils.NPQueryRunner;
+import cn.northpark.utils.PinyinUtil;
+import cn.northpark.utils.TimeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -42,11 +43,11 @@ public class RetMovieAndSendMQTask {
      */
     @Async("taskExecutor")
 //    @Scheduled(cron = "0 */1 * * * ?")//每1分钟执行一次
-    @Scheduled(cron = "0 18 23 * * ?")//每天中午11:30执行一次
+    @Scheduled(cron = "0 23 23 * * ?")//每天中午11:30执行一次
     public void RetMovieAndSendMQTask() {
         log.info("#####开始获取["+ TimeUtils.nowDate() +"]电影信息#######");
 
-        for (int i = 3; i < 11; i++) {
+        for (int i = 1; i < 3; i++) {
             log.info("正在执行task " + i);
 
             //====================执行逻辑=====================
