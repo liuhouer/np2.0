@@ -183,6 +183,12 @@
                     </c:if>
 
 
+                    <%--NorthPark网盘搜索展示部分--%>
+                    <div id="search-results-container" style="margin: 20px; padding: 20px; ">
+
+                    </div>
+
+
 
 
                 </div>
@@ -279,7 +285,7 @@
                 }
 
                 if(val =='影视网盘'){
-                    window.location.href = "http://alist.northpark.cn/" ;
+                    window.location.href = "http://so.northpark.cn/" ;
                 }
             })
         });
@@ -309,20 +315,84 @@
         });
 
 
-        var JWpBtnObj = $("#J_wp_btn").text();
-        if(JWpBtnObj){
+        // 打开northpark网盘搜索 - 修改为调用API并在前端解析展示
+        $("#J_wp_btn").click(function (e) {
+            e.preventDefault(); // 阻止默认行为
             var keyword = $("#keyword").val();
             if (keyword) {
-                $("#J_wp_btn").attr("href","http://alist.northpark.cn/search?box=" + keyword+"&url=");
-                window.open("http://alist.northpark.cn/search?box=" + keyword+"&url=","_blank");
+                var apiUrl = "https://so.northpark.cn/api/search?kw=" + encodeURIComponent(keyword) + "&res=merge&src=all&ext=%7B%22referer%22:%22https:%2F%2Fdm.xueximeng.com%22%7D";
+                $.ajax({
+                    url: apiUrl,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.code === 0 && response.data) {
+                            displaySearchResults(response.data);
+                        } else {
+                            alert('搜索失败: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('请求失败，请稍后重试');
+                    }
+                });
             }
-        }
+        });
 
-        var JWpBtnObj2 = $("#J_wp_btn2").text();
-        if(JWpBtnObj2){
+        // 对于J_wp_btn2，类似处理，但不自动打开，可根据需求调整
+        $("#J_wp_btn2").click(function (e) {
+            e.preventDefault();
             var keyword = $("#keyword").val();
             if (keyword) {
-                $("#J_wp_btn2").attr("href","http://alist.northpark.cn/search?box=" + keyword+"&url=");
+                var apiUrl = "https://so.northpark.cn/api/search?kw=" + encodeURIComponent(keyword) + "&res=merge&src=all&ext=%7B%22referer%22:%22https:%2F%2Fdm.xueximeng.com%22%7D";
+                $.ajax({
+                    url: apiUrl,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.code === 0 && response.data) {
+                            displaySearchResults(response.data);
+                        } else {
+                            alert('搜索失败: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('请求失败，请稍后重试');
+                    }
+                });
+            }
+        });
+
+
+        // 函数：解析并分类展示搜索结果
+        function displaySearchResults(data) {
+            var container = $('#search-results-container'); // 假设页面有一个ID为search-results-container的div用于展示结果
+            if (container.length === 0) {
+                // 如果没有容器，动态创建
+                $('body').append('<div id="search-results-container" style="margin: 20px; padding: 20px; border: 1px solid #ccc; background: #fff;"></div>');
+                container = $('#search-results-container');
+            }
+            container.empty(); // 清空现有内容
+
+            container.append('<h2>搜索结果 (总数: ' + data.total + ')</h2>');
+
+            var mergedByType = data.merged_by_type;
+            for (var type in mergedByType) {
+                if (mergedByType.hasOwnProperty(type)) {
+                    var items = mergedByType[type];
+                    container.append('<h3>' + type.toUpperCase() + ' (' + items.length + ')</h3>');
+                    var ul = $('<ul></ul>');
+                    $.each(items, function (index, item) {
+                        var li = $('<li></li>');
+                        li.append('<a href="' + item.url + '" target="_blank">' + (item.note || '无描述') + '</a>');
+                        if (item.password) {
+                            li.append(' <span>(密码: ' + item.password + ')</span>');
+                        }
+                        li.append(' <span>(' + item.source + ', ' + item.datetime + ')</span>');
+                        ul.append(li);
+                    });
+                    container.append(ul);
+                }
             }
         }
     })
