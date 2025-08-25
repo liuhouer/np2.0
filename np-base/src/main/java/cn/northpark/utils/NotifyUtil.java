@@ -73,4 +73,13 @@ public class NotifyUtil {
         return "";
     }
 
+
+    public static String getUserEmailByID(String uid ) {
+        Map<String, Object> query = NPQueryRunner.query("select email from bc_user where id = ?", new MapHandler(), uid);
+        if (Objects.nonNull(query)) {
+            return query.get("email").toString();
+        }
+        return "";
+    }
+
 }

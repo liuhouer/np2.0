@@ -152,9 +152,9 @@
 												<div id="wechat"
 													style="display: inline-block; margin-right: 20px;">
 													<a
-														href="http://liuhouer.python-project.com/blog/donate/praise.jpg"
+														href="https://minioapi.northpark.cn/pic/wxpay.png"
 														class="fancybox" rel="group"><img id="wechat_qr"
-														src="http://liuhouer.python-project.com/blog/donate/praise.jpg"
+														src="https://minioapi.northpark.cn/pic/wxpay.png"
 														alt="Bruce WeChat Pay"
 														style="width: 200px; height: 200px; max-width: 100%; display: inline-block"></a>
 													<p>微信打赏</p>
@@ -164,9 +164,9 @@
 												<div id="alipay"
 													style="display: inline-block; margin-right: 20px;">
 													<a
-														href="http://liuhouer.python-project.com/blog/donate/alipay.png"
+														href="https://minioapi.northpark.cn/pic/alipay.png"
 														class="fancybox" rel="group"><img id="alipay_qr"
-														src="http://liuhouer.python-project.com/blog/donate/alipay.png"
+														src="https://minioapi.northpark.cn/pic/alipay.png"
 														alt="Bruce Alipay"
 														style="width: 200px; height: 200px; max-width: 100%; display: inline-block"></a>
 													<p>支付宝打赏</p>

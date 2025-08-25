@@ -19,6 +19,7 @@ import cn.northpark.threadPool.AsyncThreadPool;
 import cn.northpark.utils.*;
 import cn.northpark.utils.encrypt.MD5Utils;
 import cn.northpark.utils.safe.WAQ;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
@@ -40,11 +41,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.net.URLEncoder;
+import java.util.*;
+import java.util.concurrent.*;
 
 /*
  *@author bruce
@@ -67,108 +66,268 @@ public class MoviesController {
      */
     private static int MoviesCount = 15;
 
+    private static final String SEARCH_API = "https://so.northpark.cn/api/search?kw=%s&res=merge&src=all";
+    private static final List<String> PRIORITY_TYPES = Arrays.asList("baidu", "aliyun", "123", "xunlei", "magnet");
+
     /**
-     * @param request
-     * @param map
-     * @return
+     * 批量处理旧的资源失效
+     */
+    @RequestMapping(value = "/movies/handleHisFeedBack")
+    @Desc(value = "异步获取资源失效反馈")
+    @ResponseBody
+    public String handleHisFeedBack(HttpServletRequest request) {
+        try {
+            // 获取所有失效资源反馈
+            Set<String> feedbacks = RedisUtil.getInstance().sMembers(BC_Constant.REDIS_FEEDBACK);
+            if (feedbacks == null || feedbacks.isEmpty()) {
+                log.info("没有失效资源反馈需要处理");
+                return "没有失效资源反馈需要处理";
+            }
+
+            // 创建固定大小为4的线程池
+            ExecutorService executor = Executors.newFixedThreadPool(4);
+            ObjectMapper mapper = new ObjectMapper();
+
+            // 将反馈数据分片
+            List<List<String>> partitions = partitionList(new ArrayList<>(feedbacks), 4);
+
+            // 提交任务到线程池
+            List<Future<?>> futures = new ArrayList<>();
+            for (List<String> partition : partitions) {
+                futures.add(executor.submit(() -> processFeedbackPartition(partition, mapper)));
+            }
+
+            // 等待所有任务完成
+            for (Future<?> future : futures) {
+                try {
+                    future.get();
+                } catch (Exception e) {
+                    log.error("线程执行出错", e);
+                }
+            }
+
+            // 关闭线程池
+            executor.shutdown();
+            try {
+                if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                    executor.shutdownNow();
+                }
+            } catch (InterruptedException e) {
+                executor.shutdownNow();
+                Thread.currentThread().interrupt();
+            }
+
+            return "处理完成";
+
+        } catch (Exception e) {
+            log.error("定时任务处理失效资源出错", e);
+            return "处理失败";
+        }
+    }
+
+    /**
+     * 处理反馈分片
+     */
+    private void processFeedbackPartition(List<String> feedbacks, ObjectMapper mapper) {
+        for (String feedback : feedbacks) {
+            try {
+                // 解析反馈数据
+                Map<String, Object> feedMap = JsonUtil.json2map(feedback);
+                String spanID = feedMap.get("spanID").toString();
+                String title = feedMap.get("title").toString();
+                String href = feedMap.get("href").toString();
+                String uID = feedMap.get("uID").toString();
+
+                // 调用搜索接口
+                String encodedTitle = URLEncoder.encode(title, "UTF-8");
+                String apiUrl = String.format(SEARCH_API, encodedTitle);
+                String response = HttpGetUtils.getDataResult(apiUrl);
+                Map<String, Object> result = mapper.readValue(response, Map.class);
+
+                // 检查搜索结果
+                if (result.get("code").equals(0) && result.get("data") != null) {
+                    Map<String, Object> data = (Map<String, Object>) result.get("data");
+                    if ((Integer) data.get("total") > 0) {
+                        // 解析搜索结果
+                        Map<String, List<Map<String, String>>> mergedByType =
+                                (Map<String, List<Map<String, String>>>) data.get("merged_by_type");
+                        List<String> htmlLinks = new ArrayList<>();
+
+                        // 优先处理 baidu, aliyun, 123, xunlei, magnet
+                        for (String type : PRIORITY_TYPES) {
+                            if (mergedByType.containsKey(type)) {
+                                List<Map<String, String>> resources = mergedByType.get(type);
+                                int count = 0;
+                                for (Map<String, String> resource : resources) {
+                                    if (count >= 2) break;
+                                    String url = resource.get("url");
+                                    String password = resource.get("password");
+                                    String note = resource.get("note");
+                                    String linkHtml = String.format("<a href=\"%s\" target=\"_blank\">%s</a>%s",
+                                            url, note, StringUtils.isNotBlank(password) ? " 提取码: " + password : "");
+                                    htmlLinks.add(linkHtml);
+                                    count++;
+                                }
+                            }
+                        }
+
+                        // 构造 HTML
+                        String path = String.join("<br>", htmlLinks);
+
+                        // 根据 href 判断资源类型并更新数据库
+                        String tableName;
+                        if (href.contains("/movies")) {
+                            tableName = "bc_movies";
+                        } else if (href.contains("/soft")) {
+                            tableName = "bc_soft";
+                        } else if (href.contains("/learning")) {
+                            tableName = "bc_knowledge";
+                        } else {
+                            log.warn("未知资源类型: {}", href);
+                            continue;
+                        }
+
+                        String upSql = String.format("update %s set path = ? where id = ?", tableName);
+                        NPQueryRunner.update(upSql, path, spanID);
+
+                        // 获取反馈人邮箱
+                        String userEmail = NotifyUtil.getUserEmailByID(uID);
+                        if (StringUtils.isNotBlank(userEmail)) {
+                            // 发送邮件通知
+                            String subject = "资源失效反馈更新通知";
+                            String msg = String.format("您反馈的资源《%s》已更新，请访问 <a href=\"%s\">%s</a> 查看。",
+                                    title, href, href);
+                            EmailUtils.getInstance().sendEMAIL(userEmail, subject, msg);
+                        }
+
+                        // 删除 Redis 中的反馈记录
+                        RedisUtil.getInstance().sRem(BC_Constant.REDIS_FEEDBACK, feedback);
+                        RedisUtil.getInstance().del(BC_Constant.REDIS_FEEDBACK + ":" + spanID + ":count");
+                    }
+                }
+            } catch (Exception e) {
+                log.error("处理失效资源失败: {}", feedback, e);
+            }
+        }
+    }
+
+    /**
+     * 将列表分片
+     */
+    private <T> List<List<T>> partitionList(List<T> list, int partitionCount) {
+        List<List<T>> partitions = new ArrayList<>();
+        int size = list.size();
+        int partitionSize = (int) Math.ceil((double) size / partitionCount);
+
+        for (int i = 0; i < size; i += partitionSize) {
+            partitions.add(list.subList(i, Math.min(i + partitionSize, size)));
+        }
+        return partitions;
+    }
+
+
+    /**
+     * 异步获取资源失效反馈
      */
     @RequestMapping(value = "/movies/getFeedBack")
-    @Desc(value="异步获取资源失效反馈")
-	public String getFeedBack(HttpServletRequest request, ModelMap map) {
+    @Desc(value = "异步获取资源失效反馈")
+    public String getFeedBack(HttpServletRequest request, ModelMap map) {
+        String result = "feedback_list";
+        List<Map<String, Object>> rs = new ArrayList<>();
 
-		String result = "feedback_list";
+        try {
+            RedisUtil redisUtil = RedisUtil.getInstance();
+            // 获取所有反馈的 spanID
+            Set<String> keys = redisUtil.keys(BC_Constant.REDIS_FEEDBACK + ":*");
+            if (keys != null && !keys.isEmpty()) {
+                for (String key : keys) {
+                    if (!key.endsWith(":users") && !key.endsWith(":count")) {
+                        // 获取反馈信息
+                        String feedbackJson = redisUtil.hGet(key, "feedback");
+                        if (feedbackJson != null) {
+                            Map<String, Object> feedback = JsonUtil.json2map(feedbackJson);
+                            String spanID = key.split(":")[1];
+                            String count = redisUtil.get(key + ":count");
+                            Map<String, Object> feedbackData = new HashMap<>();
+                            feedbackData.put("spanID", spanID);
+                            feedbackData.put("title", feedback.get("title"));
+                            feedbackData.put("href", feedback.get("href"));
+                            feedbackData.put("count", count != null ? count : "1");
+                            rs.add(feedbackData);
+                        }
+                    }
+                }
+            }
+            map.put("feedback_list", rs);
+        } catch (Exception e) {
+            log.error("获取失效资源反馈失败", e);
+        }
 
-		List<Map<String, Object>> rs = new ArrayList<>();
-
-		RedisUtil.getInstance().sMembers(BC_Constant.REDIS_FEEDBACK).forEach(i -> {
-			rs.add(JsonUtil.json2map(i));
-		});
-
-		map.put("feedback_list", rs);
-
-		return "/page/common/" + result;
-	}
+        return "/page/common/" + result;
+    }
 
     /**
-     * @param map
-     * @return
-     * @author Bruce
      * 资源失效反馈，找站长
      */
     @RequestMapping("/movies/resFeedBack")
     @ResponseBody
     @Desc("资源失效反馈，找站长")
-	public Result<String> resFeedBack(HttpServletRequest request, @RequestBody Object map) {
-		String rs = "success";
-		try {
-			log.info("资源失效反馈,------{}",String.valueOf(map));
-			if (RedisUtil.getInstance().sIsMember(BC_Constant.REDIS_FEEDBACK, String.valueOf(map))) {
-				return ResultGenerator.genSuccessResult(rs);
-			} else {
+    public Result<String> resFeedBack(HttpServletRequest request, @RequestBody Object map) {
+        String rs = "success";
+        try {
+            log.info("资源失效反馈,------{}", String.valueOf(map));
+            String mapStr = String.valueOf(map);
+            Map<String, Object> feedMap = JsonUtil.json2map(mapStr);
+            String spanID = feedMap.get("spanID").toString();
+            String title = feedMap.get("title").toString();
+            String href = feedMap.get("href").toString();
+            String uID = feedMap.get("uID").toString();
+            String redisKey = BC_Constant.REDIS_FEEDBACK + ":" + spanID;
 
+            // 使用 Redis Hash 存储反馈信息
+            RedisUtil redisUtil = RedisUtil.getInstance();
+            String existingFeedback = redisUtil.hGet(redisKey, "feedback");
+            if (existingFeedback != null) {
+                // 已存在反馈，增加用户 ID 和计数器
+                redisUtil.sAdd(redisKey + ":users", uID);
+                redisUtil.incrAndGet(redisKey + ":count");
+            } else {
+                // 新反馈，存储 title 和 href
+                Map<String, String> feedbackData = new HashMap<>();
+                feedbackData.put("title", title);
+                feedbackData.put("href", href);
+                redisUtil.hSet(redisKey, "feedback", JsonUtil.object2json(feedbackData));
+                redisUtil.sAdd(redisKey + ":users", uID);
+                redisUtil.set(redisKey + ":count", "1");
 
-                //===================================异步操作=================================================
+                // 异步通知站长
                 ThreadPoolExecutor threadPoolExecutor = AsyncThreadPool.getInstance().getThreadPoolExecutor();
-                threadPoolExecutor.execute(new Runnable() {
-                    @Override
-                    public void run() {
+                threadPoolExecutor.execute(() -> {
+                    try {
+                        NotifyEnum match = NotifyEnum.FEED;
+                        NotifyRemindB nr = new NotifyRemindB();
+                        nr.setRecipientId("507723");
+                        nr.setSenderName(NotifyUtil.getUserNameByID(uID));
+                        nr.setObject(title);
+                        nr.setObjectId(spanID);
+                        nr.setObjectLinks(href);
+                        nr.setMessage("---" + TimeUtils.nowTime() + "---提醒资源失效---");
+                        nr.setStatus("0");
+                        match.notifyInstance.execute(nr);
 
-                        //发送异步站长通知消息
-                        try {
-                            //=================================消息提醒====================================================
-
-                            //判断主题类型
-                            NotifyEnum match = NotifyEnum.FEED;
-
-                            //提醒系统赋值
-                            NotifyRemindB nr = new NotifyRemindB();
-
-                            //common
-                            //{"spanID":"746358","uID":"519795","href":"https://northpark.cn/movies/post-746358.html",
-                            // "title":"《卡比利亚之夜》百度云网盘下载[MP4//mkv]蓝光"}
-                            Map<String, Object> feed_map = JsonUtil.json2map(String.valueOf(map));
-
-                            nr.setRecipientId("507723");
-                            nr.setSenderName(NotifyUtil.getUserNameByID(feed_map.get("uID").toString()));
-                            nr.setObject(feed_map.get("title").toString());
-                            nr.setObjectId(feed_map.get("spanID").toString());
-                            nr.setObjectLinks(feed_map.get("href").toString());
-                            nr.setMessage("---"+TimeUtils.nowTime()+"---提醒资源失效---");
-                            nr.setStatus("0");
-
-
-                            match.notifyInstance.execute(nr);
-
-                            // 给站长发邮件
-                            try {
-                                EmailUtils.getInstance().resFeedBack(String.valueOf(map));
-
-                            } catch (Exception ignore) {
-                                log.error(ignore.getMessage());
-                            }
-
-                            //=================================消息提醒====================================================
-                        }catch (Exception ig){
-                            log.error("feedBack-notice-has-ignored-------:",ig);
-                        }
+                        EmailUtils.getInstance().resFeedBack(mapStr);
+                    } catch (Exception e) {
+                        log.error("feedBack-notice-has-ignored-------:", e);
                     }
-
-
-
                 });
-                //===================================异步操作=================================================
-
-				// 添加到集合中
-				RedisUtil.getInstance().sAdd(BC_Constant.REDIS_FEEDBACK, String.valueOf(map));
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			log.error("resFeedBack------>", e);
-			rs = "ex";
-		}
-		return ResultGenerator.genSuccessResult(rs);
-	}
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("resFeedBack------>", e);
+            rs = "ex";
+        }
+        return ResultGenerator.genSuccessResult(rs);
+    }
 
 
     /**
