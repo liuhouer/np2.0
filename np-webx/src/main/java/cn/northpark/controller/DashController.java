@@ -49,7 +49,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Controller
 @Slf4j
 public class DashController {
-	
+
 	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
@@ -168,6 +168,22 @@ public class DashController {
 	public String about(HttpServletRequest request, HttpServletResponse response, ModelMap map) throws Exception {
 
 		return "/about";
+
+	}
+
+	@RequestMapping("/building")
+	@Desc(value = "404")
+	public String building() throws Exception {
+
+		return "/building";
+
+	}
+
+	@RequestMapping("/errors")
+	@Desc(value = "500")
+	public String error() throws Exception {
+
+		return "/error";
 
 	}
 

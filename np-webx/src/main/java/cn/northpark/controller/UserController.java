@@ -337,17 +337,6 @@ public class UserController {
     }
 
 
-    /**
-     * 404错误
-     *
-     * @return
-     */
-    @RequestMapping("/building")
-    public String building() {
-
-        return "/building";
-    }
-
 
     /**
      * 跳转到登陆后的个人中心-最爱【需要判断登录】
