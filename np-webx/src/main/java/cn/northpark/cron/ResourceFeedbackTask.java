@@ -82,6 +82,26 @@ public class ResourceFeedbackTask {
                                     }
                                 }
 
+                                // 如果优先类别未生成足够链接（少于2个），处理其他类别
+                                if (htmlLinks.size() < 2) {
+                                    for (String type : mergedByType.keySet()) {
+                                        if (!PRIORITY_TYPES.contains(type)) {
+                                            List<Map<String, String>> resources = mergedByType.get(type);
+                                            int count = 0;
+                                            for (Map<String, String> resource : resources) {
+                                                if (count >= 2 || htmlLinks.size() >= 2) break;
+                                                String url = resource.get("url");
+                                                String password = resource.get("password");
+                                                String note = resource.get("note");
+                                                String linkHtml = String.format("<a href=\"%s\" target=\"_blank\">%s</a>%s",
+                                                        url, note, StringUtils.isNotBlank(password) ? " 提取码: " + password : "");
+                                                htmlLinks.add(linkHtml);
+                                                count++;
+                                            }
+                                        }
+                                    }
+                                }
+
                                 // 构造 HTML
                                 String path = String.join("<br>", htmlLinks);
 
@@ -106,7 +126,7 @@ public class ResourceFeedbackTask {
                                     String userEmail = NotifyUtil.getUserEmailByID(uID);
                                     if (StringUtils.isNotBlank(userEmail)) {
                                         String subject = "资源失效反馈更新通知";
-                                        String msg = String.format("自动化处理: 您反馈的资源《%s》已更新，请访问 <a href=\"%s\">%s</a> 查看。",
+                                        String msg = String.format("您反馈的资源《%s》已更新，请访问 <a href=\"%s\">%s</a> 查看。",
                                                 title, href, href);
                                         EmailUtils.getInstance().sendEMAIL(userEmail, subject, msg);
                                     }
