@@ -661,14 +661,15 @@ public class UserController {
 
             //保存User明细表信息-------start
             UserProfile up = profileService.getModelByUserid(user.getId());
-            if (!StringUtils.isEmpty(courseware)) {
-                up.setCourseware(courseware);
+            if(Objects.nonNull(up)){
+                if (!StringUtils.isEmpty(courseware)) {
+                    up.setCourseware(courseware);
+                }
+                if (!StringUtils.isEmpty(year_of_birth)) {
+                    up.setYearOfBirth(year_of_birth);
+                }
+                profileService.updateUserProfile(up);
             }
-            if (!StringUtils.isEmpty(year_of_birth)) {
-                up.setYearOfBirth(year_of_birth);
-            }
-            profileService.updateUserProfile(up);
-
 
             //更新复制属性
             BeanUtils.copyProperties(user, userVO);
