@@ -784,7 +784,7 @@ public class UserController {
 
         // 发送验证邮件
         try {
-            String subject = "NorthPark 邮箱验证";
+            String subject = "NorthPark 邮箱验证-注册";
             String content = "您的验证码是：" + verifyCode + "，有效期5分钟。";
             EmailUtils.getInstance().sendEMAIL(email, subject, content);
             return ResultGenerator.genSuccessResult("验证邮件已发送");
