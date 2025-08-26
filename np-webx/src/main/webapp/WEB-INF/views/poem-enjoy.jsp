@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -14,11 +16,52 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
+    <meta name="theme-color" content="#45d0c6">
+    <meta name="format-detection" content="telephone=no">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    <title>${poem_enjoy.title }-${poem_enjoy.author }:诗词秀 | NorthPark</title>
-    <meta name="keywords" content="${poem_enjoy.title},${poem_enjoy.author},${poem_enjoy.years},诗词赏析,古诗文,NorthPark">
+
+    <!-- canonical链接 -->
+    <link rel="canonical" href="https://northpark.cn/poem/enjoy/${poem_enjoy.id}.html" />
+
+    <!-- Open Graph 标签 -->
+    <meta property="og:title" content="${poem_enjoy.title} - ${poem_enjoy.author} | 诗词赏析">
+    <meta property="og:description" content="${poem_enjoy.title} - ${poem_enjoy.author}(${poem_enjoy.years})：${fn:substring(poem_enjoy.content1,0,150)}">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://northpark.cn/poem/enjoy/${poem_enjoy.id}.html">
+    <meta property="og:image" content="https://northpark.cn/statics/img/poem-default.jpg">
+    <meta property="article:author" content="${poem_enjoy.author}">
+    <meta property="article:published_time" content="${poem_enjoy.years}">
+
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${poem_enjoy.title} - ${poem_enjoy.author}">
+    <meta name="twitter:description" content="${fn:substring(poem_enjoy.content1,0,150)}">
+    <meta name="twitter:image" content="https://northpark.cn/statics/img/poem-default.jpg">
+
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CreativeWork",
+      "name": "${poem_enjoy.title}",
+      "author": {
+        "@type": "Person",
+        "name": "${poem_enjoy.author}"
+      },
+      "dateCreated": "${poem_enjoy.years}",
+      "text": "${poem_enjoy.content1}",
+      "inLanguage": "zh-CN",
+      "genre": "诗词",
+      "publisher": {
+        "@type": "Organization",
+        "name": "NorthPark诗词秀"
+      }
+    }
+    </script>
+    <title>${poem_enjoy.title} - ${poem_enjoy.author} | 诗词赏析鉴赏 | NorthPark诗词秀</title>
+    <meta name="keywords" content="${poem_enjoy.title},${poem_enjoy.author},${poem_enjoy.years},${poem_enjoy.title}赏析,${poem_enjoy.author}诗词,诗词鉴赏,古诗文,${poem_enjoy.years}诗词,NorthPark诗词秀">
     <meta name="description"
-          content="${poem_enjoy.title} - ${poem_enjoy.author}：${poem_enjoy.content1}">
+          content="${poem_enjoy.title} - ${poem_enjoy.author}(${poem_enjoy.years})：${fn:substring(poem_enjoy.content1,0,100)}。NorthPark诗词秀为您提供详细的诗词赏析、作者介绍和创作背景，深度解读经典诗词之美。">
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <style>

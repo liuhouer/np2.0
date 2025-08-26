@@ -9,6 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimal-ui">
+<meta name="theme-color" content="#45d0c6">
+<meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <meta http-equiv="Content-Language" content="zh-CN">
@@ -19,8 +21,26 @@
 	href="https://northpark.cn/statics/img/favicon.ico">
 <title>${article.title} | Mac软件下载 | NorthPark</title>
 <meta name="keywords"
-	content="${article.title},${article.tags},Mac软件下载,NorthPark">
-<meta name="description" content="下载${article.title}。${soft_desc}">
+	content="${article.title},${article.title}下载,${article.title}破解版,${article.tags},Mac软件,macOS应用,${article.os}软件,免费下载,NorthPark">
+<meta name="description" content="${article.title} for Mac免费下载 - ${soft_desc}。支持${article.os}系统，提供安装教程和使用指南，NorthPark为您提供安全可靠的Mac软件下载服务。">
+
+<!-- 动态canonical链接 -->
+<link rel="canonical" href="https://northpark.cn/soft/${article.retCode}.html" />
+
+<!-- Open Graph 标签 -->
+<meta property="og:title" content="${article.title} | Mac软件下载">
+<meta property="og:description" content="下载${article.title}。${soft_desc}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://northpark.cn/soft/${article.retCode}.html">
+<meta property="og:image" content="https://northpark.cn/statics/img/software-default.jpg">
+<meta property="article:published_time" content="${article.postDate}">
+<meta property="article:tag" content="${article.tags}">
+
+<!-- Twitter Card 标签 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${article.title}">
+<meta name="twitter:description" content="Mac软件下载 - ${article.title}">
+<meta name="twitter:image" content="https://northpark.cn/statics/img/software-default.jpg">
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 <style>
 	.bold-line {
@@ -49,6 +69,28 @@
 							<li><a href="/soft/${article.os}">软件下载</a></li>
 							<li class="active">${article.title}</li>
 						</ol>
+
+						<!-- 结构化数据 -->
+						<script type="application/ld+json">
+						{
+							"@context": "https://schema.org",
+							"@type": "SoftwareApplication",
+							"name": "${article.title}",
+							"description": "${soft_desc}",
+							"operatingSystem": "${article.os}",
+							"applicationCategory": "${article.tags}",
+							"datePublished": "${article.postDate}",
+							"url": "https://northpark.cn/soft/${article.retCode}.html",
+							"publisher": {
+								"@type": "Organization",
+								"name": "NorthPark",
+								"logo": {
+									"@type": "ImageObject",
+									"url": "https://northpark.cn/statics/img/logo.png"
+								}
+							}
+						}
+						</script>
 
 						<div class="clearfix bg-white margin-t10 margin-b10 padding20 "
 							id="J_white_div" itemscope itemtype="http://schema.org/SoftwareApplication">

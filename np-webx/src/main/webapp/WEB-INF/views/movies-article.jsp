@@ -9,6 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimal-ui">
+<meta name="theme-color" content="#45d0c6">
+<meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <meta http-equiv="Content-Language" content="zh-CN">
@@ -19,8 +21,26 @@
 	href="https://northpark.cn/statics/img/favicon.ico">
 <title>${model.movieName} - NorthPark影视窝在线观看下载_${model.tag}</title>
 <meta name="keywords"
-	content="${model.movieName},${model.tag},在线观看,下载,NorthPark影视窝">
-<meta name="description" content="${model.movieName}在线观看下载,${fn:substring(movieDesc,0,100)}... 更多精彩内容尽在NorthPark影视窝">
+	content="${model.movieName},${model.tag},高清下载,在线观看,免费电影,蓝光资源,${model.movieName}下载,${model.movieName}在线看,NorthPark影视窝,影视资源">
+<meta name="description" content="${model.movieName}高清资源免费下载 - ${fn:substring(movieDesc,0,120)}。NorthPark影视窝提供${model.movieName}多种格式下载和在线观看，更有丰富的${model.tag}类型影视资源等你发现！">
+
+<!-- 动态canonical链接 -->
+<link rel="canonical" href="https://northpark.cn/movies/post-${model.id}.html" />
+
+<!-- Open Graph 标签 -->
+<meta property="og:title" content="${model.movieName} - NorthPark影视窝">
+<meta property="og:description" content="${fn:substring(movieDesc,0,150)}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://northpark.cn/movies/post-${model.id}.html">
+<meta property="og:image" content="https://northpark.cn/statics/img/movie-default.jpg">
+<meta property="article:published_time" content="${model.addTime}">
+<meta property="article:tag" content="${model.tag}">
+
+<!-- Twitter Card 标签 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${model.movieName}">
+<meta name="twitter:description" content="${fn:substring(movieDesc,0,150)}">
+<meta name="twitter:image" content="https://northpark.cn/statics/img/movie-default.jpg">
 
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 </head>
@@ -36,11 +56,22 @@
 					<div class="col-sm-10 col-md-offset-1">
 						<script type="application/ld+json">
 						{
-							"@context": "http://schema.org",
+							"@context": "https://schema.org",
 							"@type": "Movie",
 							"name": "${model.movieName}",
 							"description": "${movieDesc}",
-							"keywords": "${model.tag}"
+							"keywords": "${model.tag}",
+							"datePublished": "${model.addTime}",
+							"genre": "${model.tag}",
+							"url": "https://northpark.cn/movies/post-${model.id}.html",
+							"publisher": {
+								"@type": "Organization",
+								"name": "NorthPark影视窝",
+								"logo": {
+									"@type": "ImageObject",
+									"url": "https://northpark.cn/statics/img/logo.png"
+								}
+							}
 						}
 						</script>
 

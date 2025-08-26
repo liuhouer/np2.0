@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta name="theme-color" content="#45d0c6">
+    <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <meta http-equiv="Content-Language" content="zh-CN">
@@ -24,8 +26,37 @@
         <title>NorthPark学习频道第${page}页 - 优质课程、电子书籍、知识分享平台</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark学习,在线课程,电子书籍,知识分享,技术教程,编程学习">
-    <meta name="description" content="NorthPark学习频道,提供优质的在线课程、电子书籍和知识分享,包含编程技术、个人成长、职场技能等多个领域的学习资源。">
+    <meta name="keywords" content="NorthPark学习,在线教程,编程学习,技术文档,电子书下载,视频教程,知识分享,职场技能,个人成长,免费课程,学习资源,IT教程">
+    <meta name="description" content="NorthPark学习频道 - 免费的在线学习平台，提供编程技术、职场技能、个人成长等优质教程和电子书资源。汇聚行业专家经验分享，助力您的技能提升和职业发展，打造专属学习路径。">
+
+    <!-- 动态canonical链接 -->
+    <c:if test="${page==null || page==''}">
+        <link rel="canonical" href="https://northpark.cn/learning/" />
+    </c:if>
+    <c:if test="${page!=null && page!=''}">
+        <link rel="canonical" href="https://northpark.cn/learning/page/${page}" />
+        <!-- 分页SEO标签 -->
+        <c:if test="${page > 1}">
+            <link rel="prev" href="https://northpark.cn/learning/page/${page-1}" />
+        </c:if>
+        <c:if test="${page == 1}">
+            <link rel="prev" href="https://northpark.cn/learning/" />
+        </c:if>
+        <link rel="next" href="https://northpark.cn/learning/page/${page+1}" />
+    </c:if>
+
+    <!-- Open Graph 标签 -->
+    <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>NorthPark学习频道 - 优质课程、电子书籍、知识分享平台</c:if><c:if test='${page!=null && page!=\'\'}'>NorthPark学习频道第${page}页 - 优质课程、电子书籍、知识分享平台</c:if>">
+    <meta property="og:description" content="免费的在线学习平台，提供编程技术、职场技能、个人成长等优质教程和电子书资源。汇聚行业专家经验分享，助力您的技能提升">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://northpark.cn/learning/">
+    <meta property="og:image" content="https://northpark.cn/statics/img/learning-banner.jpg">
+
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NorthPark学习频道">
+    <meta name="twitter:description" content="优质课程、电子书籍、知识分享平台">
+    <meta name="twitter:image" content="https://northpark.cn/statics/img/learning-banner.jpg">
 
     <script type="application/ld+json">
     {
@@ -50,9 +81,21 @@
 
 <!-- 页面标题 -->
 <h1 class="font-elegant">学习</h1>
+
 <div class="clearfix maincontent grayback">
     <div class="container">
         <div class="mainbody" style="margin-top:80px; ">
+
+            <!-- 面包屑导航 -->
+            <nav aria-label="breadcrumb" class="container" >
+                <ol class="breadcrumb" style="background-color: transparent;">
+                    <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">学习频道</li>
+                    <c:if test="${page!=null && page!=''}">
+                        <li class="breadcrumb-item active" aria-current="page">第${page}页</li>
+                    </c:if>
+                </ol>
+            </nav>
 
 
             <div class="row">
@@ -80,13 +123,13 @@
                     <c:forEach items="${list }" var="s" varStatus="ss">
 
                         <div class="col-sm-12">
-                            <div class="clearfix bg-white margin-b10 padding20 ">
+                            <div class="clearfix bg-white margin-b10 padding20" itemscope itemtype="https://schema.org/Article">
                                 <div class="row margin5  word-return">
                                     <div class="border-0 center">
                                         <p>
-                                            <a href="/learning/post-${s.id }.html" oid="${s.id }">
+                                            <a href="/learning/post-${s.id }.html" oid="${s.id }" itemprop="url">
                                                 <small class="green-text">
-                                                    <font size="5"><strong>
+                                                    <font size="5"><strong itemprop="headline">
                                                         <c:if test="${s.hotIndex>0}">
                                                             <i class="fa fa-thumb-tack" title="已置顶"></i>
                                                         </c:if>
@@ -94,6 +137,8 @@
                                                 </small>
                                             </a>
                                         </p>
+                                        <meta itemprop="datePublished" content="${s.postDate}">
+                                        <meta itemprop="author" content="NorthPark">
 
 
                                         <div class="clearfix visible-xs">
@@ -127,7 +172,7 @@
                                     </p>
                                     <p id="brief_${ss.index}">
                                         <c:if test="${s.briefImg!='' && s.briefImg!=null}">
-                                            <img src="${s.briefImg }"></img>
+                                            <img src="${s.briefImg }" alt="${s.title} - NorthPark学习资源" loading="lazy"></img>
                                         </c:if>
 
 

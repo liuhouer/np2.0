@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta name="theme-color" content="#45d0c6">
+    <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <meta http-equiv="Content-Language" content="zh-CN">
@@ -24,8 +26,45 @@
         <title>NorthPark影视窝第${page}页 - 最新电影、电视剧、动漫资源分享下载</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark影视窝,最新电影,电视剧,动漫,电影下载,在线观看,${keyword}">
-    <meta name="description" content="NorthPark影视窝提供最新电影、电视剧、动漫资源,支持在线观看和下载,每天实时更新热门影视资源。${keyword}相关影视资源尽在NorthPark影视窝。">
+    <c:choose>
+        <c:when test="${not empty keyword}">
+            <meta name="keywords" content="${keyword},电影下载,在线观看,高清资源,免费电影,NorthPark影视窝,最新电影,电视剧,动漫资源,蓝光下载,4K电影">
+            <meta name="description" content="搜索${keyword}相关影视资源 - NorthPark影视窝提供${keyword}高清下载和在线观看，包含最新电影、热门电视剧、经典动漫等优质影视资源，每日更新，免费获取。">
+        </c:when>
+        <c:otherwise>
+            <meta name="keywords" content="NorthPark影视窝,最新电影下载,热门电视剧,动漫资源,高清影视,免费电影,在线观看,蓝光下载,4K电影,影视分享,电影资源网">
+            <meta name="description" content="NorthPark影视窝 - 专业的影视资源分享平台，提供最新电影、热门电视剧、精彩动漫的高清下载和在线观看服务。每日更新热门影视资源，支持多种格式下载，打造您的专属影院。">
+        </c:otherwise>
+    </c:choose>
+
+    <!-- 动态canonical链接 -->
+    <c:if test="${page==null || page==''}">
+        <link rel="canonical" href="https://northpark.cn/movies/" />
+    </c:if>
+    <c:if test="${page!=null && page!=''}">
+        <link rel="canonical" href="https://northpark.cn/movies/page/${page}" />
+        <!-- 分页SEO标签 -->
+        <c:if test="${page > 1}">
+            <link rel="prev" href="https://northpark.cn/movies/page/${page-1}" />
+        </c:if>
+        <c:if test="${page == 1}">
+            <link rel="prev" href="https://northpark.cn/movies/" />
+        </c:if>
+        <link rel="next" href="https://northpark.cn/movies/page/${page+1}" />
+    </c:if>
+
+    <!-- Open Graph 标签 -->
+    <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>NorthPark影视窝 - 最新电影、电视剧、动漫资源分享下载</c:if><c:if test='${page!=null && page!=\'\'}'>NorthPark影视窝第${page}页 - 最新电影、电视剧、动漫资源分享下载</c:if>">
+    <meta property="og:description" content="专业的影视资源分享平台，提供最新电影、热门电视剧、精彩动漫的高清下载和在线观看服务。每日更新热门影视资源，支持多种格式下载">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://northpark.cn/movies/">
+    <meta property="og:image" content="https://northpark.cn/statics/img/movies-banner.jpg">
+
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NorthPark影视窝 - 最新影视资源">
+    <meta name="twitter:description" content="最新电影、电视剧、动漫资源分享下载">
+    <meta name="twitter:image" content="https://northpark.cn/statics/img/movies-banner.jpg">
 
     <style>
         hr{
@@ -44,9 +83,37 @@
 
 <!-- 页面标题 -->
 <h1 class="font-elegant">影视窝</h1>
+
+<!-- 结构化数据 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "NorthPark影视窝",
+  "description": "最新电影、电视剧、动漫资源分享下载",
+  "url": "https://northpark.cn/movies/",
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "影视资源列表",
+    "numberOfItems": "${fn:length(list)}"
+  }
+}
+</script>
+
 <main class="clearfix maincontent grayback">
     <div class="container">
         <article class="mainbody" style="margin-top:80px; ">
+
+            <!-- 面包屑导航 -->
+            <nav aria-label="breadcrumb" class="container" style="margin-top: 50px;">
+                <ol class="breadcrumb" style="background-color: transparent;">
+                    <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">影视窝</li>
+                    <c:if test="${page!=null && page!=''}">
+                        <li class="breadcrumb-item active" aria-current="page">第${page}页</li>
+                    </c:if>
+                </ol>
+            </nav>
 
 
             <div class="row">
@@ -78,13 +145,13 @@
                         <c:forEach items="${list }" var="s" varStatus="ss">
 
                         <div class="col-sm-12">
-                            <div class="clearfix bg-white margin-b10 padding20 ">
+                            <div class="clearfix bg-white margin-b10 padding20" itemscope itemtype="https://schema.org/Movie">
                                 <div class="row margin5  word-return">
                                     <div class="border-0 center">
                                         <p>
-                                            <a href="/movies/post-${s.id }.html" oid="${s.id }">
+                                            <a href="/movies/post-${s.id }.html" oid="${s.id }" itemprop="url">
                                                 <small class="green-text">
-                                                    <font size="5"><strong>
+                                                    <font size="5"><strong itemprop="name">
                                                         <c:if test="${s.hotIndex>0}">
                                                             <i class="fa fa-thumb-tack" title="已置顶"></i>
                                                         </c:if>
@@ -92,6 +159,8 @@
                                                 </small>
                                             </a>
                                         </p>
+                                        <meta itemprop="datePublished" content="${s.addTime}">
+                                        <meta itemprop="genre" content="${s.tag}">
 
 
                                         <div class="clearfix visible-xs">
@@ -123,7 +192,7 @@
                                         </c:if>
 
                                     </p>
-                                    <p id="brief_${ss.index}">
+                                    <p id="brief_${ss.index}" itemprop="description">
 
                                             ${s.movieDesc }
                                     </p>

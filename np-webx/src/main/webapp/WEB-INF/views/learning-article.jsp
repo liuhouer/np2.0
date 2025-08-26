@@ -9,6 +9,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimal-ui">
+<meta name="theme-color" content="#45d0c6">
+<meta name="format-detection" content="telephone=no">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <meta http-equiv="Content-Language" content="zh-CN">
@@ -19,8 +21,26 @@
 	href="https://northpark.cn/statics/img/favicon.ico">
 <title>${model.title} - NorthPark学习频道 | 在线课程与知识分享</title>
 <meta name="keywords"
-	content="${model.title},${model.tags},NorthPark学习,在线课程,知识分享">
-<meta name="description" content="${fn:substring(model.brief, 0, 150)}">
+	content="${model.title},${model.tags},在线学习,免费教程,技术分享,学习笔记,${model.tags}教程,NorthPark学习,知识分享,技能提升">
+<meta name="description" content="${model.title} - ${fn:substring(model.brief, 0, 120)}。NorthPark学习频道为您提供详细的${model.tags}相关教程和学习资源，助力您快速掌握新技能，提升职场竞争力。">
+
+<!-- 动态canonical链接 -->
+<link rel="canonical" href="https://northpark.cn/learning/post-${model.id}.html" />
+
+<!-- Open Graph 标签 -->
+<meta property="og:title" content="${model.title} - NorthPark学习频道">
+<meta property="og:description" content="${fn:substring(model.brief, 0, 150)}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://northpark.cn/learning/post-${model.id}.html">
+<meta property="og:image" content="${model.briefImg != null && model.briefImg != '' ? model.briefImg : 'https://northpark.cn/statics/img/learning-default.jpg'}">
+<meta property="article:published_time" content="${model.postDate}">
+<meta property="article:tag" content="${model.tags}">
+
+<!-- Twitter Card 标签 -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${model.title}">
+<meta name="twitter:description" content="${fn:substring(model.brief, 0, 150)}">
+<meta name="twitter:image" content="${model.briefImg != null && model.briefImg != '' ? model.briefImg : 'https://northpark.cn/statics/img/learning-default.jpg'}">
 
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 

@@ -14,24 +14,65 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
+    <meta name="theme-color" content="#45d0c6">
+    <meta name="format-detection" content="telephone=no">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
+
+    <!-- 动态canonical链接 -->
     <c:if test="${page==null || page==''}">
-        <title>树洞-心灵驿站 | NorthPark</title>
+        <link rel="canonical" href="https://northpark.cn/note/story" />
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>树洞-心灵驿站::第${page}页 | NorthPark</title>
+        <link rel="canonical" href="https://northpark.cn/note/story/page/${page}" />
+    </c:if>
+    <c:if test="${page==null || page==''}">
+        <title>树洞心灵驿站 - 情感倾诉与心情分享社区 | NorthPark</title>
+    </c:if>
+    <c:if test="${page!=null && page!=''}">
+        <title>树洞心灵驿站第${page}页 - 情感倾诉与心情分享社区 | NorthPark</title>
     </c:if>
 
+    <meta name="keywords" content="树洞,心灵驿站,情感倾诉,心情分享,情感交流,心理疏导,倾诉空间,匿名分享,心情日记,情感支持,NorthPark树洞">
+    <meta name="description" content="NorthPark树洞心灵驿站 - 温暖的情感倾诉社区，为您提供安全的心情分享空间。在这里可以匿名倾诉心声、记录生活感悟、获得情感支持，与理解你的朋友交流互动。一个充满人文关怀的心灵港湾。">
 
-    <meta name="keywords" content="NorthPark,树洞,心情分享,情感交流,心灵驿站,倾诉空间">
-    <meta name="description" content="NorthPark树洞是一个让人倾诉心声的温暖空间。在这里,你可以分享生活点滴、记录心情感悟,与志同道合的朋友交流互动。一个充满人文关怀、富有交互性和趣味性的心灵驿站。">
-
-    <meta property="og:title" content="树洞-心灵驿站 | NorthPark">
-    <meta property="og:description" content="NorthPark树洞是一个让人倾诉心声的温暖空间。在这里,你可以分享生活点滴、记录心情感悟。">
-    <meta property="og:image" content="https://northpark.cn/statics/img/tree-hole-banner.jpg">
+    <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>树洞心灵驿站 - 情感倾诉与心情分享社区</c:if><c:if test='${page!=null && page!=\'\'}'>树洞心灵驿站第${page}页 - 情感倾诉与心情分享社区</c:if>">
+    <meta property="og:description" content="温暖的情感倾诉社区，为您提供安全的心情分享空间。匿名倾诉心声、记录生活感悟、获得情感支持">
+    <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/note/story">
+    <meta property="og:image" content="https://northpark.cn/statics/img/tree-hole-banner.jpg">
+
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NorthPark树洞心灵驿站">
+    <meta name="twitter:description" content="温暖的情感倾诉社区，安全的心情分享空间，匿名倾诉获得情感支持">
+    <meta name="twitter:image" content="https://northpark.cn/statics/img/tree-hole-banner.jpg">
     <link rel="stylesheet" href="/static/css/story.css">
+
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "NorthPark树洞心灵驿站",
+      "description": "温暖的情感倾诉社区，为您提供安全的心情分享空间",
+      "url": "https://northpark.cn/note/story",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "心情分享列表",
+        "description": "匿名倾诉心声、记录生活感悟、获得情感支持"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "NorthPark",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://northpark.cn/statics/img/logo.png"
+        }
+      }
+    }
+    </script>
 </head>
 
 <body>

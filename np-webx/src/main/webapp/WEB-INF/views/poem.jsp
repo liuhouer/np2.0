@@ -14,17 +14,73 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
+    <meta name="theme-color" content="#45d0c6">
+    <meta name="format-detection" content="telephone=no">
     <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
+
+    <!-- 动态canonical链接 -->
     <c:if test="${page==null || page==''}">
-        <title>诗词秀 | NorthPark</title>
+        <link rel="canonical" href="https://northpark.cn/poem/" />
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>诗词秀::第${page}页 | NorthPark</title>
+        <link rel="canonical" href="https://northpark.cn/poem/page/${page}" />
     </c:if>
 
-    <meta name="keywords" content="诗词,古诗文,${keyword},诗词赏析,诗词名句,NorthPark">
-    <meta name="description" content="NorthPark诗词频道，收录历代诗词名句、诗词赏析。包含唐诗宋词元曲等，按朝代、作者、题材分类展示。">
+    <!-- Open Graph 标签 -->
+    <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>诗词秀 - 古诗词大全、诗词赏析、名句摘录</c:if><c:if test='${page!=null && page!=\'\'}'>诗词秀第${page}页 - 古诗词大全、诗词赏析、名句摘录</c:if>">
+    <meta property="og:description" content="专业的古诗词分享平台，收录历代经典诗词名句、提供详细诗词赏析。涵盖唐诗、宋词、元曲等中华文学瑰宝">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://northpark.cn/poem/">
+    <meta property="og:image" content="https://northpark.cn/statics/img/poem-banner.jpg">
+
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NorthPark诗词秀 - 古诗词大全">
+    <meta name="twitter:description" content="收录历代经典诗词名句，唐诗宋词元曲，诗词赏析鉴赏">
+    <meta name="twitter:image" content="https://northpark.cn/statics/img/poem-banner.jpg">
+
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "NorthPark诗词秀",
+      "description": "专业的古诗词分享平台，收录历代经典诗词名句、提供详细诗词赏析",
+      "url": "https://northpark.cn/poem/",
+      "mainEntity": {
+        "@type": "ItemList",
+        "name": "古诗词列表",
+        "description": "涵盖唐诗、宋词、元曲等中华文学瑰宝"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "NorthPark",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://northpark.cn/statics/img/logo.png"
+        }
+      }
+    }
+    </script>
+    <c:if test="${page==null || page==''}">
+        <title>诗词秀 - 古诗词大全、诗词赏析、名句摘录 | NorthPark</title>
+    </c:if>
+    <c:if test="${page!=null && page!=''}">
+        <title>诗词秀第${page}页 - 古诗词大全、诗词赏析、名句摘录 | NorthPark</title>
+    </c:if>
+
+    <c:choose>
+        <c:when test="${not empty keyword}">
+            <meta name="keywords" content="${keyword},${keyword}诗词,${keyword}古诗,诗词搜索,古诗文,诗词赏析,诗词名句,唐诗宋词,NorthPark诗词">
+            <meta name="description" content="搜索${keyword}相关诗词 - NorthPark诗词秀收录历代经典诗词，提供${keyword}相关的古诗文、诗词赏析和名句摘录。包含唐诗、宋词、元曲等，按朝代、作者、题材精心分类。">
+        </c:when>
+        <c:otherwise>
+            <meta name="keywords" content="诗词大全,古诗文,诗词赏析,诗词名句,唐诗宋词,元曲,古典诗词,中国诗词,诗词鉴赏,文学经典,NorthPark诗词秀">
+            <meta name="description" content="NorthPark诗词秀 - 专业的古诗词分享平台，收录历代经典诗词名句、提供详细诗词赏析。涵盖唐诗、宋词、元曲等中华文学瑰宝，按朝代、作者、题材精心分类，让您轻松品味古典诗词之美。">
+        </c:otherwise>
+    </c:choose>
 
     <style>
         .poem-list-item {

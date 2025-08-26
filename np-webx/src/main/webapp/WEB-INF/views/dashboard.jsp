@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta name="theme-color" content="#45d0c6">
+    <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Content-Language" content="zh-CN">
     <meta name="author" content="NorthPark">
@@ -19,8 +21,22 @@
 
     <title>NorthPark - Mac软件下载|最新影视资源|学习资源|最爱主题 - 文艺清新的互动社区</title>
 
-    <meta name="keywords" content="NorthPark,Mac软件下载,最新影视资源,学习资源,情商提升,最爱主题,互动社区,文艺范,小清新,树洞">
-    <meta name="description" content="NorthPark是一个集Mac软件下载、最新影视资源分享、学习资源、情商提升技巧、最爱主题于一体的文艺清新互动社区。这里有丰富的Mac软件资源、最新影视剧资源、专业的情商提升指导、精选最爱主题,以及树洞等互动版块。加入我们,发现更多精彩！">
+    <meta name="keywords" content="NorthPark,Mac软件下载,破解软件,最新电影,电视剧下载,在线学习,编程教程,情商提升,生活分享,文艺社区,资源分享,免费下载,macOS应用,影视资源,知识分享">
+    <meta name="description" content="NorthPark - 专业的资源分享社区，提供最新Mac软件破解版下载、热门影视资源、优质学习教程、情商提升指导。汇聚文艺青年，分享生活美好，打造温馨的知识交流平台。免费注册即可获取海量资源！">
+    
+    <!-- Open Graph 标签 -->
+    <meta property="og:title" content="NorthPark - Mac软件下载|最新影视资源|学习资源|最爱主题 - 文艺清新的互动社区">
+    <meta property="og:description" content="专业的资源分享社区，提供最新Mac软件破解版下载、热门影视资源、优质学习教程、情商提升指导。汇聚文艺青年，分享生活美好">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://northpark.cn/">
+    <meta property="og:image" content="https://northpark.cn/statics/img/logo.png">
+    <meta property="og:site_name" content="NorthPark">
+    
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NorthPark - 专业资源分享社区">
+    <meta name="twitter:description" content="Mac软件破解版、热门影视资源、优质学习教程、情商提升指导 - 免费注册获取海量资源">
+    <meta name="twitter:image" content="https://northpark.cn/statics/img/logo.png">
 
     <!-- Schema.org 结构化数据标记 -->
     <script type="application/ld+json">
@@ -34,7 +50,19 @@
         "@type": "SearchAction",
         "target": "https://northpark.cn/search?q={search_term_string}",
         "query-input": "required name=search_term_string"
-      }
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "NorthPark",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://northpark.cn/statics/img/logo.png"
+        }
+      },
+      "sameAs": [
+        "https://github.com/liuhouer",
+        "https://weibo.com/northpark"
+      ]
     }
     </script>
 
@@ -87,7 +115,7 @@
 <%--    </div>--%>
     <div class="container">
         <div class="clearfix center logbox gray-text">
-            <h2>
+            <h2 id="love-section">
                 最爱
             </h2>
         </div>
@@ -116,7 +144,7 @@
 
     <div class="container">
         <div class="clearfix center logbox gray-text">
-            <h2>
+            <h2 id="note-section">
                 树洞
             </h2>
         </div>
@@ -141,7 +169,7 @@
 
     <div class="container">
         <div class="clearfix center logbox gray-text">
-            <h2>
+            <h2 id="romeo-section">
                 情圣时刻
             </h2>
         </div>
@@ -169,7 +197,7 @@
 
     <div class="container">
         <div class="clearfix center logbox gray-text">
-            <h2>
+            <h2 id="movies-section">
                 热映电影
             </h2>
         </div>

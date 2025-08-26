@@ -8,6 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta name="theme-color" content="#45d0c6">
+    <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
     <meta http-equiv="Content-Language" content="zh-CN">
@@ -23,9 +25,38 @@
         <title>Mac软件下载第${page}页 | 精品Mac破解软件资源 | NorthPark</title>
     </c:if>
 
-    <meta name="keywords" content="NorthPark,Mac软件下载,Mac破解软件,精品Mac资源,macOS软件">
+    <meta name="keywords" content="Mac软件下载,Mac破解软件,macOS应用,苹果软件,免费Mac软件,办公软件,图像处理,视频剪辑,开发工具,设计软件,NorthPark软件站">
     <meta name="description"
-          content="NorthPark提供海量精品Mac软件下载,包括办公软件、图像处理、视频剪辑等各类Mac破解软件资源,同时提供macOS使用技巧和教程">
+          content="NorthPark Mac软件站 - 专业的Mac软件下载平台，提供最新macOS应用、破解软件、办公工具、设计软件、开发工具等精品Mac软件资源。所有软件经过安全检测，支持最新macOS系统，让您的Mac发挥最大潜能！">
+
+    <!-- 动态canonical链接 -->
+    <c:if test="${page==null || page==''}">
+        <link rel="canonical" href="https://northpark.cn/soft/" />
+    </c:if>
+    <c:if test="${page!=null && page!=''}">
+        <link rel="canonical" href="https://northpark.cn/soft/page/${page}" />
+        <!-- 分页SEO标签 -->
+        <c:if test="${page > 1}">
+            <link rel="prev" href="https://northpark.cn/soft/page/${page-1}" />
+        </c:if>
+        <c:if test="${page == 1}">
+            <link rel="prev" href="https://northpark.cn/soft/" />
+        </c:if>
+        <link rel="next" href="https://northpark.cn/soft/page/${page+1}" />
+    </c:if>
+
+    <!-- Open Graph 标签 -->
+    <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>Mac软件下载 | 精品Mac破解软件资源 | NorthPark</c:if><c:if test='${page!=null && page!=\'\'}'>Mac软件下载第${page}页 | 精品Mac破解软件资源 | NorthPark</c:if>">
+    <meta property="og:description" content="专业的Mac软件下载平台，提供最新macOS应用、破解软件、办公工具、设计软件、开发工具等精品Mac软件资源。所有软件经过安全检测">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://northpark.cn/soft/">
+    <meta property="og:image" content="https://northpark.cn/statics/img/mac-software.jpg">
+
+    <!-- Twitter Card 标签 -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mac软件下载 - NorthPark">
+    <meta name="twitter:description" content="精品Mac破解软件资源下载">
+    <meta name="twitter:image" content="https://northpark.cn/statics/img/mac-software.jpg">
 </head>
 
 <body>
@@ -34,9 +65,38 @@
 
 <!-- 页面标题 -->
 <h1 class="font-elegant center">Mac软件</h1>
+
+
+<!-- 结构化数据 -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Mac软件下载",
+  "description": "精品Mac破解软件资源下载",
+  "url": "https://northpark.cn/soft/",
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "Mac软件列表",
+    "numberOfItems": "${fn:length(list)}"
+  }
+}
+</script>
+
 <div class="clearfix maincontent grayback">
     <div class="container">
-        <div class="mainbody" style="margin-top:100px; ">
+        <div class="mainbody" style="margin-top:80px; ">
+
+            <!-- 面包屑导航 -->
+            <nav aria-label="breadcrumb" class="container">
+                <ol class="breadcrumb" style="background-color: transparent;">
+                    <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Mac软件</li>
+                    <c:if test="${page!=null && page!=''}">
+                        <li class="breadcrumb-item active" aria-current="page">第${page}页</li>
+                    </c:if>
+                </ol>
+            </nav>
 
 
             <div class="row">
@@ -95,7 +155,7 @@
 
                                             <%--  <a href="/soft/${s.retCode }.html#comment" class=" reply-count count-text common-a" data-thread-key="${s.retCode }" data-count-type="comments"></a> --%>
                                     </p>
-                                    <p id="brief_${ss.index}">
+                                    <p id="brief_${ss.index}" itemprop="description">
 
                                             ${s.brief }
                                     </p>
