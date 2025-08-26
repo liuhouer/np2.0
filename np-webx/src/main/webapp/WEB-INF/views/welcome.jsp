@@ -14,7 +14,7 @@
     <meta name="robots" content="index,follow,archive">
     <meta name="theme-color" content="#45d0c6">
     <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <%@ include file="page/common/common.jsp" %>
     <!-- 动态canonical链接 -->
     <c:if test="${page==null || page==''}">
@@ -29,13 +29,13 @@
     <meta property="og:description" content="专注生活美学的分享社区，记录并分享生活中的美好瞬间。发现有趣的主题图片，与文艺青年互动交流">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/love/">
-    <meta property="og:image" content="https://northpark.cn/statics/img/love-banner.jpg">
+    <meta property="og:image" content="https://minioapi.northpark.cn/pic/love-banner.jpg">
 
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NorthPark最爱主题 - 生活美学分享">
     <meta name="twitter:description" content="记录美好瞬间，分享生活美学，与文艺青年互动交流">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/love-banner.jpg">
+    <meta name="twitter:image" content="https://minioapi.northpark.cn/pic/love-banner.jpg">
 
     <c:if test="${page==null || page==''}">
         <title>最爱主题 - 生活美学分享社区 | 记录美好瞬间 | NorthPark</title>
@@ -63,7 +63,7 @@
         "name": "NorthPark",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://northpark.cn/statics/img/logo.png"
+          "url": "/static/img/logo.png"
         }
       }
     }

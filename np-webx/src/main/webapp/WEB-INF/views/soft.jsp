@@ -16,7 +16,7 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <%@ include file="page/common/common.jsp" %>
     <c:if test="${page==null || page==''}">
         <title>Mac软件下载 | 精品Mac破解软件资源 | NorthPark</title>
@@ -50,13 +50,13 @@
     <meta property="og:description" content="专业的Mac软件下载平台，提供最新macOS应用、破解软件、办公工具、设计软件、开发工具等精品Mac软件资源。所有软件经过安全检测">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/soft/">
-    <meta property="og:image" content="https://northpark.cn/statics/img/mac-software.jpg">
+    <meta property="og:image" content="https://minioapi.northpark.cn/pic/mac-banner.jpg">
 
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Mac软件下载 - NorthPark">
     <meta name="twitter:description" content="精品Mac破解软件资源下载">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/mac-software.jpg">
+    <meta name="twitter:image" content="https://minioapi.northpark.cn/pic/mac-banner.jpg">
 </head>
 
 <body>

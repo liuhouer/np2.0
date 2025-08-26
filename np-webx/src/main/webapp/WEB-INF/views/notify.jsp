@@ -14,7 +14,7 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
     <c:if test="${page==null || page==''}">
         <title>个人消息通知中心 - 评论回复/点赞/关注动态 | NorthPark</title>

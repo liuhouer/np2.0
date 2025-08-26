@@ -18,7 +18,7 @@
 <meta name="author" content="NorthPark">
 <meta name="robots" content="index,follow,archive">
 <link rel="shortcut icon"
-	href="https://northpark.cn/statics/img/favicon.ico">
+	href="/static/img/favicon.ico">
 <title>${model.movieName} - NorthPark影视窝在线观看下载_${model.tag}</title>
 <meta name="keywords"
 	content="${model.movieName},${model.tag},高清下载,在线观看,免费电影,蓝光资源,${model.movieName}下载,${model.movieName}在线看,NorthPark影视窝,影视资源">
@@ -32,7 +32,7 @@
 <meta property="og:description" content="${fn:substring(movieDesc,0,150)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://northpark.cn/movies/post-${model.id}.html">
-<meta property="og:image" content="https://northpark.cn/statics/img/movie-default.jpg">
+<meta property="og:image" content="https://minioapi.northpark.cn/pic/movies-banner.jpg">
 <meta property="article:published_time" content="${model.addTime}">
 <meta property="article:tag" content="${model.tag}">
 
@@ -40,7 +40,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${model.movieName}">
 <meta name="twitter:description" content="${fn:substring(movieDesc,0,150)}">
-<meta name="twitter:image" content="https://northpark.cn/statics/img/movie-default.jpg">
+<meta name="twitter:image" content="https://minioapi.northpark.cn/pic/movies-banner.jpg">
 
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 </head>
@@ -69,7 +69,7 @@
 								"name": "NorthPark影视窝",
 								"logo": {
 									"@type": "ImageObject",
-									"url": "https://northpark.cn/statics/img/logo.png"
+									"url": "/static/img/logo.png"
 								}
 							}
 						}
@@ -363,7 +363,7 @@
 		}
 
 		function beforeSend(XMLHttpRequest) {
-			$("#J_progress").append("<div><img src='https://northpark.cn/statics/img/loading.gif' style='width:48px;height:48px;' /></div>");
+			$("#J_progress").append("<div><img src='/static/img/loading.gif' style='width:48px;height:48px;' /></div>");
 		}
 
 		function complete(XMLHttpRequest, textStatus) {

@@ -16,7 +16,7 @@
     <meta name="robots" content="index,follow,archive">
     <meta name="theme-color" content="#45d0c6">
     <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
@@ -41,13 +41,13 @@
     <meta property="og:description" content="温暖的情感倾诉社区，为您提供安全的心情分享空间。匿名倾诉心声、记录生活感悟、获得情感支持">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/note/story">
-    <meta property="og:image" content="https://northpark.cn/statics/img/tree-hole-banner.jpg">
+    <meta property="og:image" content="https://minioapi.northpark.cn/pic/treehole-banner.jpg">
 
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NorthPark树洞心灵驿站">
     <meta name="twitter:description" content="温暖的情感倾诉社区，安全的心情分享空间，匿名倾诉获得情感支持">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/tree-hole-banner.jpg">
+    <meta name="twitter:image" content="https://minioapi.northpark.cn/pic/treehole-banner.jpg">
     <link rel="stylesheet" href="/static/css/story.css">
 
     <!-- 结构化数据 -->
@@ -68,7 +68,7 @@
         "name": "NorthPark",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://northpark.cn/statics/img/logo.png"
+          "url": "/static/img/logo.png"
         }
       }
     }

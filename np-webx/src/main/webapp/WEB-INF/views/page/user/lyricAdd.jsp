@@ -15,7 +15,7 @@
     <meta name="author" content="bruce">
     <meta name="robots" content="index,follow,archive">
     <title>添加我的最爱 | NorthPark / </title>
-    <link href="https://northpark.cn/statics/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <%@ include file="../common/common.jsp" %>
     <style type="text/css">
         #preview {
@@ -71,7 +71,7 @@
                     <div class="clearfix hidden" id="searchResult"></div>
 
                     <div id="preview" class="form-group ">
-                        <img id="imghead" border=0 src="https://northpark.cn/statics/img/head_180.jpg" width="200" height="200" alt="avatar"/>
+                        <img id="imghead" border=0 src="/static/img/head_180.jpg" width="200" height="200" alt="avatar"/>
                     </div>
                     <div class="form-group">
                         <input disabled="disabled" id="formSubmit" data-activetext="添加 ››"
@@ -94,9 +94,9 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script src="https://northpark.cn/statics/js/page/lrc/lyricadd.js"></script>
-<script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.js"></script>
-<script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/static/js/page/lrc/lyricadd.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.zh-CN.js"></script>
 
 <script>
     $(function () {

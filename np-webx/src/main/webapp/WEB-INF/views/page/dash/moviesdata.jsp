@@ -11,7 +11,7 @@
             <c:forEach items="${movies_list}" var="s" varStatus="ss">
                 <li>
                     <a class="no-decoration" href="/movies/post-${s.id}.html" target="_blank">
-                        <img src="https://northpark.cn/statics/img/index/movie${ss.index%11 +1}.png" alt="${s.movie_name}"/>
+                        <img src="/static/img/index/movie${ss.index%11 +1}.png" alt="${s.movie_name}"/>
                         <span class="movie-title">${s.movie_name}</span>
                     </a>
                 </li>

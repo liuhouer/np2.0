@@ -16,7 +16,7 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <%@ include file="page/common/common.jsp" %>
 
     <c:if test="${page==null || page==''}">
@@ -57,14 +57,14 @@
     <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>NorthPark影视窝 - 最新电影、电视剧、动漫资源分享下载</c:if><c:if test='${page!=null && page!=\'\'}'>NorthPark影视窝第${page}页 - 最新电影、电视剧、动漫资源分享下载</c:if>">
     <meta property="og:description" content="专业的影视资源分享平台，提供最新电影、热门电视剧、精彩动漫的高清下载和在线观看服务。每日更新热门影视资源，支持多种格式下载">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://northpark.cn/movies/">
-    <meta property="og:image" content="https://northpark.cn/statics/img/movies-banner.jpg">
+    <meta property="og:url" content="https://minioapi.northpark.cn/pic/movies-banner.jpg">
+    <meta property="og:image" content="/static/img/movies-banner.jpg">
 
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NorthPark影视窝 - 最新影视资源">
     <meta name="twitter:description" content="最新电影、电视剧、动漫资源分享下载">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/movies-banner.jpg">
+    <meta name="twitter:image" content="https://minioapi.northpark.cn/pic/movies-banner.jpg">
 
     <style>
         hr{
@@ -503,7 +503,7 @@
 
 
 </script>
-<script src="https://northpark.cn/statics/js/page/movies.js"></script>
+<script src="/static/js/page/movies.js"></script>
 
 <script>
 

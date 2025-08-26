@@ -12,7 +12,7 @@
 			<meta http-equiv="Content-Language" content="zh-CN">
 			<meta name="author" content="NorthPark">
 			<meta name="robots" content="index,follow,archive">
-			<link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+			<link rel="shortcut icon" href="/static/img/favicon.ico">
 			<title>
 				赞助本站 | NorthPark
 			</title>
@@ -173,7 +173,7 @@
 										<i class="fa fa-info-circle"></i> 在手机上使用【支付宝钱包】，使用【扫一扫】功能扫描下方二维码进行赞助
 									</p>
 									<div class="payment-qrcode">
-										<img src="https://northpark.cn/statics/img/pay/alipay-merchant.jpg" alt="支付宝支付">
+										<img src="https://minioapi.northpark.cn/pic/alipay.png" alt="支付宝支付">
 									</div>
 								</div>
 								<div class="payment-section">
@@ -182,7 +182,7 @@
 										<i class="fa fa-info-circle"></i> 打开微信，使用【扫一扫】功能扫描下方二维码进行赞助
 									</p>
 									<div class="payment-qrcode">
-										<img src="https://northpark.cn/statics/img/pay/wxpay.jpg" alt="微信支付">
+										<img src="https://minioapi.northpark.cn/pic/wxpay.png" alt="微信支付">
 									</div>
 								</div>
 								<div class="payment-section">
@@ -202,7 +202,7 @@
 										如果您有任何问题或建议，欢迎通过以下方式联系我们:
 									</p>
 									<p>
-										<i class="fa fa-envelope-o"></i> Email: 
+										<i class="fa fa-envelope-o"></i> Email:
 										<a href="mailto:zhangyang.z@icloud.com">zhangyang.z@icloud.com</a>
 									</p>
 								</div>
@@ -279,7 +279,7 @@
 					</div>
 				</div>
 				<%@ include file="/WEB-INF/views/page/common/container.jsp" %>
-					<script src="https://northpark.cn/statics/js/page/forget.js">
+					<script src="/static/js/page/forget.js">
 					</script>
 					<script  >
 						loadDonates(1);
@@ -287,7 +287,7 @@
 						loadComment(999999, 7);
 
 						function beforeSend(XMLHttpRequest) {
-							$("#J_progress").append("<div><img src='https://northpark.cn/statics/img/loading.gif' style='width:48px;height:48px;' /></div>");
+							$("#J_progress").append("<div><img src='/static/img/loading.gif' style='width:48px;height:48px;' /></div>");
 						}
 
 

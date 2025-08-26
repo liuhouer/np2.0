@@ -18,7 +18,7 @@
     <meta name="robots" content="index,follow,archive">
     <meta name="theme-color" content="#45d0c6">
     <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
 
     <!-- canonical链接 -->
     <link rel="canonical" href="https://northpark.cn/poem/enjoy/${poem_enjoy.id}.html" />
@@ -28,7 +28,7 @@
     <meta property="og:description" content="${poem_enjoy.title} - ${poem_enjoy.author}(${poem_enjoy.years})：${fn:substring(poem_enjoy.content1,0,150)}">
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://northpark.cn/poem/enjoy/${poem_enjoy.id}.html">
-    <meta property="og:image" content="https://northpark.cn/statics/img/poem-default.jpg">
+    <meta property="og:image" content="https://minioapi.northpark.cn/pic/poem-banner.jpg">
     <meta property="article:author" content="${poem_enjoy.author}">
     <meta property="article:published_time" content="${poem_enjoy.years}">
 
@@ -36,7 +36,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${poem_enjoy.title} - ${poem_enjoy.author}">
     <meta name="twitter:description" content="${fn:substring(poem_enjoy.content1,0,150)}">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/poem-default.jpg">
+    <meta name="twitter:image" content="https://minioapi.northpark.cn/pic/poem-banner.jpg">
 
     <!-- 结构化数据 -->
     <script type="application/ld+json">

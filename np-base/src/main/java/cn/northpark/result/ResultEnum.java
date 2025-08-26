@@ -27,6 +27,11 @@ public enum  ResultEnum {
 	REG_Fail_Repeat(4,"该账户已经注册"),
 	REG_SUCCESS(5,"success"),
 	AUTO_LOGIN_FAIL(6,"自动登陆失败"),
+	PARAM_ERROR(7,"参数错误"),
+	EMAIL_SEND_FAIL(8,"邮件发送失败"),
+	VERIFY_CODE_EXPIRED(9,"验证码已过期"),
+	VERIFY_CODE_ERROR(10,"验证码错误"),
+	EMAIL_NOT_VERIFIED(11,"邮箱未验证"),
 
 	;
 

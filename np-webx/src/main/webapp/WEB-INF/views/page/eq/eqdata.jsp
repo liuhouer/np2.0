@@ -11,13 +11,13 @@
                     <div class="col-sm-4">
                         <div class="thumbnail border-0 center">
                             <a href="/romeo/${s.id}.html" title="${s.title}" itemprop="url">
-                                <img itemprop="image" src="${s.img == null ? 'https://northpark.cn/statics/img/davatar.jpg' : s.img}" 
+                                <img itemprop="image" src="${s.img == null ? '/static/img/davatar.jpg' : s.img}"
                                      class="imgbreath" alt="${s.title}">
                             </a>
                             <p><label class="bold-text cutline" itemprop="headline" title="${s.title}">${s.title}</label></p>
                         </div>
                     </div>
-                    
+
                     <div class="col-sm-8">
                         <p>
                             <time itemprop="datePublished" datetime="${s.date}" class="label label-gray">${s.date}</time>

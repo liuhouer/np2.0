@@ -15,20 +15,20 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <title>${MyInfo.username}的个人空间 - 分享生活，记录精彩 | NorthPark</title>
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
     <!-- SEO优化 -->
     <meta name="description" content="${MyInfo.username}的个人主页 - 分享Ta的最爱、兴趣爱好以及生活点滴 | NorthPark">
     <meta name="keywords" content="${MyInfo.username},个人主页,兴趣爱好,生活分享,NorthPark">
-    
+
     <!-- Open Graph tags -->
     <meta property="og:title" content="${MyInfo.username}的个人空间 | NorthPark">
     <meta property="og:description" content="欢迎来到${MyInfo.username}的个人空间,这里展示着Ta的兴趣爱好与生活分享">
     <meta property="og:type" content="profile">
     <meta property="og:url" content="https://northpark.cn/people/${MyInfo.tailSlug}">
-    
+
     <!-- 结构化数据 -->
     <script type="application/ld+json">
     {
@@ -113,7 +113,7 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script src="https://northpark.cn/statics/js/page/space.js"></script>
+<script src="/static/js/page/space.js"></script>
 
 
 </body>

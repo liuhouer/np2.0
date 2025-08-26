@@ -757,6 +757,79 @@ public class UserController {
 
 
     /**
+     * 发送注册验证邮件
+     */
+    @RequestMapping("/cm/sendRegisterEmail")
+    @ResponseBody
+    @RateLimit
+    public Result<String> sendRegisterEmail(String email) {
+        if (StringUtils.isEmpty(email)) {
+            return ResultGenerator.genErrorResult(ResultEnum.PARAM_ERROR);
+        }
+
+        email = WAQ.forSQL().escapeSql(email);
+
+        // 检查邮箱是否已存在
+        List<Map<String, Object>> list = NPQueryRunner.findByCondition("bc_user", "  email = '" + email + "' ");
+        if (CollectionUtils.isNotEmpty(list)) {
+            return ResultGenerator.genErrorResult(ResultEnum.REG_Fail_Repeat);
+        }
+
+        // 生成验证码
+        String verifyCode = IDUtils.getInstance().geneInt();
+
+        // 将验证码存储到Redis，设置5分钟过期
+        String redisKey = "email_verify:" + email;
+        RedisUtil.getInstance().set(redisKey, verifyCode, 300);
+
+        // 发送验证邮件
+        try {
+            String subject = "NorthPark 邮箱验证";
+            String content = "您的验证码是：" + verifyCode + "，有效期5分钟。";
+            EmailUtils.getInstance().sendEMAIL(email, subject, content);
+            return ResultGenerator.genSuccessResult("验证邮件已发送");
+        } catch (Exception e) {
+            log.error("发送验证邮件失败", e);
+            return ResultGenerator.genErrorResult(ResultEnum.EMAIL_SEND_FAIL);
+        }
+    }
+
+    /**
+     * 验证邮箱验证码
+     */
+    @RequestMapping("/cm/verifyEmailCode")
+    @ResponseBody
+    @RateLimit
+    public Result<String> verifyEmailCode(String email, String code) {
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(code)) {
+            return ResultGenerator.genErrorResult(ResultEnum.PARAM_ERROR);
+        }
+
+        email = WAQ.forSQL().escapeSql(email);
+        String redisKey = "email_verify:" + email;
+        String storedCode = RedisUtil.getInstance().get(redisKey);
+
+        if (StringUtils.isEmpty(storedCode)) {
+            return ResultGenerator.genErrorResult(ResultEnum.VERIFY_CODE_EXPIRED);
+        }
+
+        if (!code.equals(storedCode)) {
+            return ResultGenerator.genErrorResult(ResultEnum.VERIFY_CODE_ERROR);
+        }
+
+        // 验证成功，设置已验证标记，延长有效期到10分钟
+        String verifiedKey = "email_verified:" + email;
+        RedisUtil.getInstance().set(verifiedKey, "1", 600);
+
+        // 删除验证码
+        RedisUtil.getInstance().del(redisKey);
+
+        return ResultGenerator.genSuccessResult("验证成功");
+    }
+
+
+
+    /**
      * 注册用户方法
      *
      * @param map
@@ -769,14 +842,32 @@ public class UserController {
     @RateLimit
     public Result<?> signup(ModelMap map, HttpSession session, HttpServletRequest request) {
 
-
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(password)) {
+            return ResultGenerator.genErrorResult(ResultEnum.PARAM_ERROR);
+        }
+
+        email = WAQ.forSQL().escapeSql(email);
+        password = WAQ.forSQL().escapeSql(password);
+
+        // 检查邮箱是否已通过验证
+        String verifiedKey = "email_verified:" + email;
+        String verified = RedisUtil.getInstance().get(verifiedKey);
+        if (StringUtils.isEmpty(verified)) {
+            return ResultGenerator.genErrorResult(ResultEnum.EMAIL_NOT_VERIFIED);
+        }
+
+        // 检查邮箱是否已存在
+        List<Map<String, Object>> list = NPQueryRunner.findByCondition("bc_user", "  email = '" + email + "' ");
+        if(CollectionUtils.isNotEmpty(list)){
+            return ResultGenerator.genErrorResult(ResultEnum.REG_Fail_Repeat);
+        }
 
         //获取ip信息
         String ipAndDetail = "";
         try {
-
             // 获取当前日期
             LocalDate currentDate = LocalDate.now();
 
@@ -790,95 +881,74 @@ public class UserController {
             } else {
                 ipAndDetail = AddressUtils.getInstance().getIpAndDetail(request);
             }
-
         } catch (Exception ignore) {
             log.error(ignore.getMessage());
         }
 
-        email = WAQ.forSQL().escapeSql(email);
-        password = WAQ.forSQL().escapeSql(password);
-
-        List<Map<String, Object>> list = NPQueryRunner.findByCondition("bc_user", "  email = '" + email + "' ");
-        if(CollectionUtils.isNotEmpty(list)){
-            return ResultGenerator.genErrorResult(ResultEnum.REG_Fail_Repeat);
-        }else{
-            //注册
-            User user = new User();
-            user.setEmail(email);
-            user.setDateJoined(TimeUtils.nowTime());//日期
-            //用户名=======================================================
-            String username = "";
-            if (email.contains("@")) {
-                String[] strs = email.split("@");
-                username = strs[0];
-            } else {
-                username = email;
-            }
-            user.setUsername(username);
-            //用户名=======================================================
-            //默认字符头像===================================================
-            String abc = PinyinUtil.paraseStringToPinyin(username);
-            if (StringUtils.isNotEmpty(abc)) {
-                String head_span = abc.substring(0, 1).toUpperCase();
-                String head_span_class = "text-" + head_span.toLowerCase();
-                user.setHeadSpan(head_span);
-                user.setHeadSpanClass(head_span_class);
-            }
-            //默认字符头像===================================================
-            //设置注册者的详细信息
-            user.setLastLogin(JsonUtil.object2json(user.getDateJoined() + ipAndDetail));
-            user.setTailSlug(username + TimeUtils.getRandomDay());
-            user.setPassword(NorthParkCryptUtils.northparkEncrypt(password));
-            user.setEmailFlag("1");//暂时设置为1， 邮件发送失败再禁用账户
-            session.setAttribute("user", user);
-            map.put("user", user);
-
-            userService.addUser(user);
-
-            //===================================异步操作=================================================
-            ThreadPoolExecutor threadPoolExecutor = AsyncThreadPool.getInstance().getThreadPoolExecutor();
-            String finalEmail = email;
-            threadPoolExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    //发送消息通知发邮件
-                    try {
-                        EmailUtils.getInstance().ThanksReg(finalEmail);
-                    } catch (Exception e) {
-                        log.error("发送注册邮件错误========>{}", e);
-                    }
-
-                    //发送异步站长通知消息
-                    try {
-                        //=================================消息提醒====================================================
-
-                        //判断主题类型
-                        NotifyEnum match = NotifyEnum.WEBMASTER;
-
-                        //提醒系统赋值
-                        NotifyRemindB nr = new NotifyRemindB();
-
-                        //common
-                        nr.setMessage(user.toString() + "---" + TimeUtils.nowTime() + "---注册了---");
-                        nr.setStatus("0");
-
-
-                        match.notifyInstance.execute(nr);
-
-                        //=================================消息提醒====================================================
-                    } catch (Exception ig) {
-                        log.error("signup-notice-has-ignored-------:", ig);
-                    }
-                }
-
-
-            });
-            //===================================异步操作=================================================
-
-            return ResultGenerator.genSuccessResult("ok");
+        //注册
+        User user = new User();
+        user.setEmail(email);
+        user.setDateJoined(TimeUtils.nowTime());//日期
+        //用户名=======================================================
+        String username = "";
+        if (email.contains("@")) {
+            String[] strs = email.split("@");
+            username = strs[0];
+        } else {
+            username = email;
         }
+        user.setUsername(username);
+        //用户名=======================================================
+        //默认字符头像===================================================
+        String abc = PinyinUtil.paraseStringToPinyin(username);
+        if (StringUtils.isNotEmpty(abc)) {
+            String head_span = abc.substring(0, 1).toUpperCase();
+            String head_span_class = "text-" + head_span.toLowerCase();
+            user.setHeadSpan(head_span);
+            user.setHeadSpanClass(head_span_class);
+        }
+        //默认字符头像===================================================
+        //设置注册者的详细信息
+        user.setLastLogin(JsonUtil.object2json(user.getDateJoined() + ipAndDetail));
+        user.setTailSlug(username + TimeUtils.getRandomDay());
+        user.setPassword(NorthParkCryptUtils.northparkEncrypt(password));
+        user.setEmailFlag("1");
+        session.setAttribute("user", user);
+        map.put("user", user);
 
+        userService.addUser(user);
 
+        // 删除验证标记
+        RedisUtil.getInstance().del(verifiedKey);
+
+        //===================================异步操作=================================================
+        ThreadPoolExecutor threadPoolExecutor = AsyncThreadPool.getInstance().getThreadPoolExecutor();
+        threadPoolExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                //发送异步站长通知消息
+                try {
+                    //=================================消息提醒====================================================
+                    //判断主题类型
+                    NotifyEnum match = NotifyEnum.WEBMASTER;
+
+                    //提醒系统赋值
+                    NotifyRemindB nr = new NotifyRemindB();
+
+                    //common
+                    nr.setMessage(user.toString() + "---" + TimeUtils.nowTime() + "---注册了---");
+                    nr.setStatus("0");
+
+                    match.notifyInstance.execute(nr);
+                    //=================================消息提醒====================================================
+                } catch (Exception ig) {
+                    log.error("signup-notice-has-ignored-------:", ig);
+                }
+            }
+        });
+        //===================================异步操作=================================================
+
+        return ResultGenerator.genSuccessResult("注册成功");
     }
 
 
@@ -1061,5 +1131,170 @@ public class UserController {
         }
         return null;
     }
+
+
+    //==============================================重置密码=====================================================
+    /**
+     * 发送忘记密码验证码
+     */
+    @RequestMapping("/cm/sendForgetCode")
+    @ResponseBody
+    @RateLimit
+    public Result<String> sendForgetCode(String email) {
+        if (StringUtils.isEmpty(email)) {
+            return ResultGenerator.genErrorResult(ResultEnum.PARAM_ERROR);
+        }
+
+        email = WAQ.forSQL().escapeSql(email);
+
+        // 检查邮箱是否存在
+        List<Map<String, Object>> list = NPQueryRunner.findByCondition("bc_user", "  email = '" + email + "' ");
+        if (CollectionUtils.isEmpty(list)) {
+            return ResultGenerator.genErrorResult(ResultEnum.REG_Fail_Repeat.getCode(), "邮箱不存在");
+        }
+
+        // 生成6位数字验证码
+        String verifyCode = String.format("%06d", (int)(Math.random() * 1000000));
+
+        // 将验证码存储到Redis，设置5分钟过期
+        String redisKey = "forget_code:" + email;
+        RedisUtil.getInstance().set(redisKey, verifyCode, 300);
+
+        // 发送验证邮件
+        try {
+            String subject = "NorthPark 密码重置";
+            String content = "您正在重置密码，验证码是：<b>" + verifyCode + "</b><br/>有效期5分钟，请勿泄露给他人。";
+            EmailUtils.getInstance().sendEMAIL(email, subject, content);
+            return ResultGenerator.genSuccessResult("ok");
+        } catch (Exception e) {
+            log.error("发送忘记密码验证码失败", e);
+            return ResultGenerator.genErrorResult(ResultEnum.EMAIL_SEND_FAIL);
+        }
+    }
+
+    /**
+     * 验证忘记密码验证码
+     */
+    @RequestMapping("/cm/verifyForgetCode")
+    @ResponseBody
+    @RateLimit
+    public Result<String> verifyForgetCode(String email, String code) {
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(code)) {
+            return ResultGenerator.genErrorResult(ResultEnum.PARAM_ERROR);
+        }
+
+        email = WAQ.forSQL().escapeSql(email);
+        String redisKey = "forget_code:" + email;
+        String storedCode = RedisUtil.getInstance().get(redisKey);
+
+        if (StringUtils.isEmpty(storedCode)) {
+            return ResultGenerator.genErrorResult(ResultEnum.VERIFY_CODE_EXPIRED);
+        }
+
+        if (!code.equals(storedCode)) {
+            return ResultGenerator.genErrorResult(ResultEnum.VERIFY_CODE_ERROR);
+        }
+
+        // 验证成功，设置已验证标记，延长有效期到10分钟
+        String verifiedKey = "forget_verified:" + email;
+        RedisUtil.getInstance().set(verifiedKey, "1", 600);
+
+        // 删除验证码
+        RedisUtil.getInstance().del(redisKey);
+
+        return ResultGenerator.genSuccessResult("ok");
+    }
+
+    /**
+     * 重置密码
+     */
+    @RequestMapping("/cm/resetPassword")
+    @ResponseBody
+    @RateLimit
+    public Result<String> resetPassword(String email, String newPassword) {
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(newPassword)) {
+            return ResultGenerator.genErrorResult(ResultEnum.PARAM_ERROR);
+        }
+
+        if (newPassword.length() < 6) {
+            return ResultGenerator.genErrorResult(ResultEnum.PARAM_ERROR.getCode(), "密码长度至少6位");
+        }
+
+        email = WAQ.forSQL().escapeSql(email);
+
+        // 检查是否已验证
+        String verifiedKey = "forget_verified:" + email;
+        String verified = RedisUtil.getInstance().get(verifiedKey);
+        if (StringUtils.isEmpty(verified)) {
+            return ResultGenerator.genErrorResult(ResultEnum.EMAIL_NOT_VERIFIED.getCode(), "请先验证邮箱");
+        }
+
+        try {
+            // 查找用户
+            List<Map<String, Object>> list = NPQueryRunner.findByCondition("bc_user", "  email = '" + email + "' ");
+            if (CollectionUtils.isEmpty(list)) {
+                return ResultGenerator.genErrorResult(ResultEnum.REG_Fail_Repeat.getCode(), "用户不存在");
+            }
+
+            String userid = String.valueOf(list.get(0).get("id"));
+            User user = userService.findUser(Integer.parseInt(userid));
+
+            if (user != null) {
+                // 更新密码
+                user.setPassword(NorthParkCryptUtils.northparkEncrypt(newPassword));
+                userService.updateUser(user);
+
+                // 删除验证标记
+                RedisUtil.getInstance().del(verifiedKey);
+
+
+
+                if (!PASS_ID.contains(user.getId().toString())) {
+                    //===================================异步操作=================================================
+                    ThreadPoolExecutor threadPoolExecutor = AsyncThreadPool.getInstance().getThreadPoolExecutor();
+                    threadPoolExecutor.execute(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            //发送异步站长通知消息
+                            try {
+                                //=================================消息提醒====================================================
+
+                                //判断主题类型
+                                NotifyEnum match = NotifyEnum.WEBMASTER;
+
+                                //提醒系统赋值
+                                NotifyRemindB nr = new NotifyRemindB();
+
+                                //common
+                                nr.setMessage(user.toString() + "---" + TimeUtils.nowTime() + "---重置了密码---");
+                                nr.setStatus("0");
+
+
+                                match.notifyInstance.execute(nr);
+
+                                //=================================消息提醒====================================================
+                            } catch (Exception ig) {
+                                log.error("reset-notice-has-ignored-------:", ig);
+                            }
+                        }
+
+
+                    });
+                    //===================================异步操作=================================================
+                }
+
+
+                return ResultGenerator.genSuccessResult("ok");
+            } else {
+                return ResultGenerator.genErrorResult(ResultEnum.REG_Fail_Repeat.getCode(), "用户不存在");
+            }
+        } catch (Exception e) {
+            log.error("重置密码失败", e);
+            return ResultGenerator.genErrorResult(ResultEnum.SERVER_ERROR);
+        }
+    }
+
+    //==============================================重置密码=====================================================
 
 }

@@ -14,12 +14,12 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <title>编辑我的档案 | NorthPark</title>
     <meta name="keywords" content="NorthPark,NorthPark中文网,编辑档案">
     <meta name="description"
           content="NorthPark-编辑我的档案">
-    <link href="https://northpark.cn/statics/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 </head>
 
@@ -83,7 +83,7 @@
                                 <div class="col-xs-3" id="preview">
                                     <img id="imghead" alt="avatar"
                                     <c:if test="${MyInfo.headPath==null }">
-                                         src="https://northpark.cn/statics/img/davatar.jpg"
+                                         src="/static/img/davatar.jpg"
                                     </c:if>
                                     <c:if test="${MyInfo.headPath!=null }">
                                     <c:choose>
@@ -222,9 +222,9 @@
 
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
-<script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.js"></script>
-<script src="https://northpark.cn/statics/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="https://northpark.cn/statics/js/page/editinfo.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="/static/js/page/editinfo.js"></script>
 
 <script>
     $(function () {

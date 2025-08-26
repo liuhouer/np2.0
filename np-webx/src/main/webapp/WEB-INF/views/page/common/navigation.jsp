@@ -15,12 +15,12 @@
                 <span class="icon-bar"></span>
             </button>
 
-            <a class="navbar-brand" href="/"><img src="https://northpark.cn/statics/img/logo.png" width="96" height="16"></img></a>
+            <a class="navbar-brand" href="/"><img src="/static/img/logo.png" width="96" height="16"></img></a>
 <%--            <div class="navbar-brand">--%>
 
 <%--                <c:if test="${user==null }">--%>
 <%--                    <a href="/login" title="登陆" class="mainhead-avatar avatar centre" height="40" width="40">--%>
-<%--                        <img src="https://northpark.cn/statics/img/davatar.jpg" alt="davatar"--%>
+<%--                        <img src="/static/img/davatar.jpg" alt="davatar"--%>
 <%--                             class="img-circle max-width-50" height="40" width="40">--%>
 <%--                    </a>--%>
 <%--                </c:if>--%>

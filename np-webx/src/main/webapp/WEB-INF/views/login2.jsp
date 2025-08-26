@@ -13,13 +13,13 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <title>Login | NorthPark</title>
     <meta name="keywords" content="NorthPark,登录,Login">
     <meta name="description"
           content="NorthPark-登录">
 
-    <link media="all" type="text/css" rel="stylesheet" href="https://northpark.cn/statics/css/login/owl-login.css">
+    <link media="all" type="text/css" rel="stylesheet" href="/static/css/login/owl-login.css">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
     <style>
@@ -56,7 +56,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="https://northpark.cn/statics/img/logo.png" width="96" height="16"></img></a>
+            <a class="navbar-brand" href="/"><img src="/static/img/logo.png" width="96" height="16"></img></a>
         </div>
         <div class="navbar-collapse collapse mainhead-collapse">
             <ul class="nav mainhead-nav">
@@ -145,7 +145,7 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-<%--<script src="https://northpark.cn/statics/js/page/login2.js"></script>--%>
+<%--<script src="/static/js/page/login2.js"></script>--%>
 <script src="/static/js/page/login2.js"></script>
 
 <script src="/static/js/code.js"></script>

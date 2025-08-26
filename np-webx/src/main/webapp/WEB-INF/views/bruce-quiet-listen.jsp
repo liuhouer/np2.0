@@ -7,18 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    
+
     <!-- SEO优化 -->
     <title>小布静听 - 轻量级音乐播放器 | NorthPark</title>
     <meta name="keywords" content="小布静听,音乐播放器,MP3播放器,桌面歌词,NorthPark中文网,开源音乐播放器">
     <meta name="description" content="小布静听是一款轻量级的音乐播放器,支持桌面歌词、均衡器调节、ID3标签编辑等功能,界面简洁美观,操作简单易用。">
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow">
-    
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
-    
+
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
-    
+
     <!-- 自定义样式 -->
     <style>
     .version-title {
@@ -29,24 +29,24 @@
         font-weight: bold;
         color: #333;
     }
-    
+
     .version-info {
         margin-bottom: 15px;
         color: #666;
         font-size: 14px;
     }
-    
+
     .version-features {
         margin: 0 0 30px;
         padding-left: 20px;
     }
-    
+
     .version-features li {
         margin: 8px 0;
         color: #555;
         line-height: 1.6;
     }
-    
+
     .download-btn {
         display: inline-block;
         margin: 10px 0;
@@ -56,7 +56,7 @@
         color: #fff;
         text-decoration: none;
     }
-    
+
     .download-btn:hover {
         background: #286090;
     }
@@ -75,16 +75,16 @@
                     <h1>小布静听</h1>
                     <p class="lead">一款轻量级的音乐播放器,让音乐播放更简单</p>
                 </div>
-                
+
                 <!-- 最新版本 -->
                 <div class="version-title">
                     最新版本 v1.9.4.1 (2016-5-2)
                 </div>
-                
+
                 <div class="version-info">
                     <p>作者: Bruce</p>
                 </div>
-                
+
                 <ul class="version-features">
                     <li>全新牛奶皮肤界面设计</li>
                     <li>用listview重写歌词显示,支持居中显示和自动滚屏</li>
@@ -96,7 +96,7 @@
 
                 <div class="text-center">
                     <a href="http://pan.baidu.com/s/1c01Vp5I" class="download-btn" target="_blank">
-                        <i class="fa fa-download"></i> 
+                        <i class="fa fa-download"></i>
                         下载最新版
                     </a>
                 </div>

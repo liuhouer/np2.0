@@ -18,7 +18,7 @@
 <meta name="author" content="NorthPark">
 <meta name="robots" content="index,follow,archive">
 <link rel="shortcut icon"
-	href="https://northpark.cn/statics/img/favicon.ico">
+	href="/static/img/favicon.ico">
 <title>${article.title} | Mac软件下载 | NorthPark</title>
 <meta name="keywords"
 	content="${article.title},${article.title}下载,${article.title}破解版,${article.tags},Mac软件,macOS应用,${article.os}软件,免费下载,NorthPark">
@@ -32,7 +32,7 @@
 <meta property="og:description" content="下载${article.title}。${soft_desc}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://northpark.cn/soft/${article.retCode}.html">
-<meta property="og:image" content="https://northpark.cn/statics/img/software-default.jpg">
+<meta property="og:image" content="https://minioapi.northpark.cn/pic/mac-banner.jpg">
 <meta property="article:published_time" content="${article.postDate}">
 <meta property="article:tag" content="${article.tags}">
 
@@ -40,7 +40,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${article.title}">
 <meta name="twitter:description" content="Mac软件下载 - ${article.title}">
-<meta name="twitter:image" content="https://northpark.cn/statics/img/software-default.jpg">
+<meta name="twitter:image" content="https://minioapi.northpark.cn/pic/mac-banner.jpg">
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 <style>
 	.bold-line {
@@ -86,7 +86,7 @@
 								"name": "NorthPark",
 								"logo": {
 									"@type": "ImageObject",
-									"url": "https://northpark.cn/statics/img/logo.png"
+									"url": "/static/img/logo.png"
 								}
 							}
 						}
@@ -417,7 +417,7 @@
 
 
 		function beforeSend(XMLHttpRequest) {
-			$("#J_progress").append("<div><img src='https://northpark.cn/statics/img/loading.gif' style='width:48px;height:48px;' /></div>");
+			$("#J_progress").append("<div><img src='/static/img/loading.gif' style='width:48px;height:48px;' /></div>");
 		}
 
 		function complete(XMLHttpRequest, textStatus) {

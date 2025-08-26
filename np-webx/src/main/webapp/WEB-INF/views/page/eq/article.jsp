@@ -15,7 +15,7 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <title>${model.title} - 情商提升 | NorthPark</title>
     <meta name="keywords" content="${model.title},情商提升,NorthPark,${fn:substring(model.brief,0,30)}">
     <meta name="description" content="${model.title}">
@@ -156,7 +156,7 @@
     })
 
     function beforeSend(XMLHttpRequest) {
-        $("#J_progress").append("<div><img src='https://northpark.cn/statics/img/loading.gif' style='width:48px;height:48px;' /></div>");
+        $("#J_progress").append("<div><img src='/static/img/loading.gif' style='width:48px;height:48px;' /></div>");
     }
 
 

@@ -25,88 +25,153 @@ $(document).ready(function () {
     code_draw();
 
     // 点击后刷新验证码
-    $("#canvas").on('click', function() {
+    $("#canvas").on('click', function () {
         code_draw();
-    })
+    });
 
+    var emailVerified = false;
+    var countdown = 0;
 
-    if ($('#formSubmit').val().length < 6) {
+    // 发送邮箱验证码
+    $("#sendEmailCode").click(function () {
+        var email = $("#newAccount").val();
+        if (!em(email)) {
+            art.dialog.tips('请输入正确的邮箱地址', 3);
+            return;
+        }
 
-        $('#formSubmit').attr('disabled', true);
+        if (countdown > 0) {
+            return;
+        }
+
+        $.ajax({
+            url: "/cm/sendRegisterEmail",
+            type: "post",
+            dataType: "json",
+            data: { email: email },
+            success: function (msg) {
+                if (msg.result) {
+                    art.dialog.tips('验证码已发送到您的邮箱', 3);
+                    startCountdown();
+                } else {
+                    art.dialog.tips('发送失败：' + msg.message, 3);
+                }
+            },
+            error: function () {
+                art.dialog.tips('发送失败，请稍后重试', 3);
+            }
+        });
+    });
+
+    // 验证邮箱验证码
+    $("#emailCode").blur(function () {
+        var email = $("#newAccount").val();
+        var code = $(this).val();
+
+        if (!em(email) || !code) {
+            return;
+        }
+
+        $.ajax({
+            url: "/cm/verifyEmailCode",
+            type: "post",
+            dataType: "json",
+            data: { email: email, code: code },
+            success: function (msg) {
+                if (msg.result) {
+                    emailVerified = true;
+                    $("#emailCode").css('border-color', '#5cb85c');
+                    art.dialog.tips('邮箱验证成功', 2);
+                    checkFormValid();
+                } else {
+                    emailVerified = false;
+                    $("#emailCode").css('border-color', '#d9534f');
+                    art.dialog.tips('验证失败：' + msg.message, 3);
+                    checkFormValid();
+                }
+            }
+        });
+    });
+
+    // 检查表单有效性
+    function checkFormValid() {
+        if (emailVerified && $('#newPassword').val().length >= 6 && em($('#newAccount').val())) {
+            $('#formSubmit').removeAttr('disabled');
+        } else {
+            $('#formSubmit').attr('disabled', true);
+        }
     }
 
+    // 倒计时功能
+    function startCountdown() {
+        countdown = 60;
+        var btn = $("#sendEmailCode");
+        btn.attr('disabled', true);
+
+        var timer = setInterval(function () {
+            btn.text('重新发送(' + countdown + ')');
+            countdown--;
+
+            if (countdown < 0) {
+                clearInterval(timer);
+                btn.text('发送验证码').removeAttr('disabled');
+                countdown = 0;
+            }
+        }, 1000);
+    }
 
     $('#signupForm').on('keyup', '#newPassword', function (event) {
-        if ($('#newPassword').val().length >= 6 && em($('#newAccount').val()))
-            $('#formSubmit').removeAttr('disabled').val($('#formSubmit').data('activetext'));
-        else
-            $('#formSubmit').attr('disabled', true);
+        checkFormValid();
     });
 
     $("#newAccount").change(function () {
-        if ($('#newPassword').val().length >= 6 && em($('#newAccount').val()))
-            $('#formSubmit').removeAttr('disabled').val($('#formSubmit').data('activetext'));
-        else
-            $('#formSubmit').attr('disabled', true);
+        emailVerified = false;
+        $("#emailCode").val('').css('border-color', '#ccc');
+        checkFormValid();
     });
 
-
-    //signup em....
+    //signup
     $("#formSubmit").click(function () {
+        if (!emailVerified) {
+            art.dialog.tips('请先完成邮箱验证', 3);
+            return;
+        }
 
         //校验验证码
-        // 将输入的内容转为大写，可通过这步进行大小写验证
         var val = $("#code").val().toLowerCase();
-        // 获取生成验证码值
         var num = $('#canvas').attr('data-code');
         if (val == '') {
             art.dialog.tips('请输入验证码...', 3);
-            return ;
+            return;
         } else if (val == num) {
-
             $.ajax({
                 url: "/cm/signup",
                 type: "post",
-                beforeSend: beforeSend, //发送请求
+                beforeSend: beforeSend,
                 complete: complete,
-                dataType:"json",
+                dataType: "json",
                 data: $("#signupForm").serialize(),
                 success: function (msg) {
-                    //请求成功200
-                    if(msg.result){
-
-                        //注册成功
-                        //禁用提交按钮。防止点击起来没完
+                    if (msg.result) {
                         $('#formSubmit').attr('disabled', true);
                         art.dialog.tips(msg.data + ' | 正在跳转..', 3);
                         var uri = $("#redirectURI").val();
                         if (uri.trim()) {
                             window.location.href = uri;
                         } else {
-
                             window.location.href = "/";
                         }
-                    }else{//注册失败
-                        art.dialog.tips('注册异常：'+msg.message);
+                    } else {
+                        art.dialog.tips('注册异常：' + msg.message);
                     }
-
                 }
-
             });
-
-
         } else {
-
             art.dialog.tips('验证码错误！请重新输入！', 3);
-            return ;
+            return;
         }
+    });
 
-
-
-
-    })
-    
-    
     function beforeSend(XMLHttpRequest) {
         $("#showResult").append("<div><img src='/static/img/loading.gif' style='width:32px;height:32px;' /><div>");
     }

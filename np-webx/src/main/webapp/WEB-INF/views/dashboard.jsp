@@ -17,26 +17,26 @@
     <meta name="google-site-verification" content="Av5O436-yp3doL_sBZPluCUvSVYJywMpFGjVDi8Qu7k"/>
     <meta name="msvalidate.01" content="B11539DE5DB069595F60D57A3EDCDBE9"/>
     <link rel="canonical" href="https://northpark.cn/" />
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
 
     <title>NorthPark - Mac软件下载|最新影视资源|学习资源|最爱主题 - 文艺清新的互动社区</title>
 
     <meta name="keywords" content="NorthPark,Mac软件下载,破解软件,最新电影,电视剧下载,在线学习,编程教程,情商提升,生活分享,文艺社区,资源分享,免费下载,macOS应用,影视资源,知识分享">
     <meta name="description" content="NorthPark - 专业的资源分享社区，提供最新Mac软件破解版下载、热门影视资源、优质学习教程、情商提升指导。汇聚文艺青年，分享生活美好，打造温馨的知识交流平台。免费注册即可获取海量资源！">
-    
+
     <!-- Open Graph 标签 -->
     <meta property="og:title" content="NorthPark - Mac软件下载|最新影视资源|学习资源|最爱主题 - 文艺清新的互动社区">
     <meta property="og:description" content="专业的资源分享社区，提供最新Mac软件破解版下载、热门影视资源、优质学习教程、情商提升指导。汇聚文艺青年，分享生活美好">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/">
-    <meta property="og:image" content="https://northpark.cn/statics/img/logo.png">
+    <meta property="og:image" content="/static/img/logo.png">
     <meta property="og:site_name" content="NorthPark">
-    
+
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NorthPark - 专业资源分享社区">
     <meta name="twitter:description" content="Mac软件破解版、热门影视资源、优质学习教程、情商提升指导 - 免费注册获取海量资源">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/logo.png">
+    <meta name="twitter:image" content="/static/img/logo.png">
 
     <!-- Schema.org 结构化数据标记 -->
     <script type="application/ld+json">
@@ -56,7 +56,7 @@
         "name": "NorthPark",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://northpark.cn/statics/img/logo.png"
+          "url": "/static/img/logo.png"
         }
       },
       "sameAs": [

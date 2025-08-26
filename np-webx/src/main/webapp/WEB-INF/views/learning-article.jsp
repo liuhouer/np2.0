@@ -18,7 +18,7 @@
 <meta name="author" content="NorthPark">
 <meta name="robots" content="index,follow,archive">
 <link rel="shortcut icon"
-	href="https://northpark.cn/statics/img/favicon.ico">
+	href="/static/img/favicon.ico">
 <title>${model.title} - NorthPark学习频道 | 在线课程与知识分享</title>
 <meta name="keywords"
 	content="${model.title},${model.tags},在线学习,免费教程,技术分享,学习笔记,${model.tags}教程,NorthPark学习,知识分享,技能提升">
@@ -32,7 +32,7 @@
 <meta property="og:description" content="${fn:substring(model.brief, 0, 150)}">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://northpark.cn/learning/post-${model.id}.html">
-<meta property="og:image" content="${model.briefImg != null && model.briefImg != '' ? model.briefImg : 'https://northpark.cn/statics/img/learning-default.jpg'}">
+<meta property="og:image" content="${model.briefImg != null && model.briefImg != '' ? model.briefImg : '/static/img/learning-default.jpg'}">
 <meta property="article:published_time" content="${model.postDate}">
 <meta property="article:tag" content="${model.tags}">
 
@@ -40,7 +40,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="${model.title}">
 <meta name="twitter:description" content="${fn:substring(model.brief, 0, 150)}">
-<meta name="twitter:image" content="${model.briefImg != null && model.briefImg != '' ? model.briefImg : 'https://northpark.cn/statics/img/learning-default.jpg'}">
+<meta name="twitter:image" content="${model.briefImg != null && model.briefImg != '' ? model.briefImg : '/static/img/learning-default.jpg'}">
 
 <%@ include file="/WEB-INF/views/page/common/common.jsp"%>
 
@@ -61,7 +61,7 @@
     "name": "NorthPark",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://northpark.cn/statics/img/favicon.ico"
+      "url": "/static/img/favicon.ico"
     }
   }
 }
@@ -382,7 +382,7 @@
 		}
 
 		function beforeSend(XMLHttpRequest) {
-			$("#J_progress").append("<div><img src='https://northpark.cn/statics/img/loading.gif' style='width:48px;height:48px;' /></div>");
+			$("#J_progress").append("<div><img src='/static/img/loading.gif' style='width:48px;height:48px;' /></div>");
 		}
 
 		function complete(XMLHttpRequest, textStatus) {

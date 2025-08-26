@@ -16,7 +16,7 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
     <c:if test="${page==null || page==''}">
@@ -50,13 +50,13 @@
     <meta property="og:description" content="免费的在线学习平台，提供编程技术、职场技能、个人成长等优质教程和电子书资源。汇聚行业专家经验分享，助力您的技能提升">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/learning/">
-    <meta property="og:image" content="https://northpark.cn/statics/img/learning-banner.jpg">
+    <meta property="og:image" content="/static/img/learning-banner.jpg">
 
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NorthPark学习频道">
     <meta name="twitter:description" content="优质课程、电子书籍、知识分享平台">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/learning-banner.jpg">
+    <meta name="twitter:image" content="/static/img/learning-banner.jpg">
 
     <script type="application/ld+json">
     {

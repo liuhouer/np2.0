@@ -10,7 +10,7 @@
 
                     <li>
                         <div class="slider-caption">
-                            <img src="https://northpark.cn/statics/img/index/slide05.jpg" alt="影视窝-最新热映电影、BT、云盘、火热资源"/>
+                            <img src="/static/img/index/slide05.jpg" alt="影视窝-最新热映电影、BT、云盘、火热资源"/>
 
                             <span>
 
@@ -30,7 +30,7 @@
 
                     <li>
                         <div class="slider-caption">
-                            <img src="https://northpark.cn/statics/img/index/slide-mac.jpg" alt="Mac软件-丰富的Mac软件资源、破解资源、Mac使用技巧、Mac私人教程"/>
+                            <img src="/static/img/index/slide-mac.jpg" alt="Mac软件-丰富的Mac软件资源、破解资源、Mac使用技巧、Mac私人教程"/>
 
 							<span>
 
@@ -50,7 +50,7 @@
 
                     <li>
                         <div class="slider-caption">
-                            <img src="https://northpark.cn/statics/img/index/slide4.jpg" alt="最爱主题"/>
+                            <img src="/static/img/index/slide4.jpg" alt="最爱主题"/>
 
 
                             <span>
@@ -70,7 +70,7 @@
                     </li>
                     <li>
                         <div class="slider-caption">
-                            <img src="https://northpark.cn/statics/img/index/slide2.jpg" alt="树洞的精神角落"/>
+                            <img src="/static/img/index/slide2.jpg" alt="树洞的精神角落"/>
 
                             <span style="">
 
@@ -85,7 +85,7 @@
                         </div>
                     <li>
                         <div class="slider-caption">
-                            <img src="https://northpark.cn/statics/img/index/slide3.jpg" alt="情圣时刻"/>
+                            <img src="/static/img/index/slide3.jpg" alt="情圣时刻"/>
 
                             <span>
 

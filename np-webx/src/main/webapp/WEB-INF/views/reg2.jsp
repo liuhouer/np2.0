@@ -13,13 +13,13 @@
 
     <meta name="author" content="NorthPark">
     <meta name="robots" content="index,follow,archive">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <title>Signup | NorthPark</title>
     <meta name="keywords" content="NorthPark,注册">
     <meta name="description"
           content="加入NorthPark">
 
-    <link media="all" type="text/css" rel="stylesheet" href="https://northpark.cn/statics/css/login/owl-login.css">
+    <link media="all" type="text/css" rel="stylesheet" href="/static/css/login/owl-login.css">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
     <style>
@@ -55,7 +55,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="https://northpark.cn/statics/img/logo.png" width="96" height="16"></img></a>
+            <a class="navbar-brand" href="/"><img src="/static/img/logo.png" width="96" height="16"></img></a>
         </div>
         <div class="navbar-collapse collapse mainhead-collapse">
             <ul class="nav mainhead-nav">
@@ -98,11 +98,22 @@
                                            autofocus="autofocus" class="form-control input-medium">
                                 </div>
                             </div>
+
+                            <div class="control-group">
+                                <div class="controls">
+                                    <label for="emailCode" class="control-label fa fa-key"></label>
+                                    <input id="emailCode" type="text" name="emailCode" placeholder="邮箱验证码"
+                                           tabindex="2" class="vcode" style="width: 120px; display: inline-block;">
+                                    <button id="sendEmailCode" type="button" class="btn btn-sm btn-info"
+                                            style="margin-left: 10px;" tabindex="3">发送验证码</button>
+                                </div>
+                            </div>
+
                             <div class="control-group">
                                 <div class="controls">
                                     <label for="newPassword" class="control-label fa fa-asterisk"></label>
                                     <input id="newPassword" type="password" name="password" placeholder="密码"
-                                           tabindex="2" class="form-control input-medium">
+                                           tabindex="4" class="form-control input-medium">
                                 </div>
                             </div>
 
@@ -110,7 +121,7 @@
                                 <div class="controls">
                                     <label for="code" class="control-label fa fa-check-square"></label>
                                     <input id="code" type="text" name="code" placeholder="机器人？"
-                                           tabindex="3" class="vcode">
+                                           tabindex="5" class="vcode">
                                     <canvas id="canvas" width="100" height="37" style="float: right;
 				                                                                                   display: inline-block;
                                                                                                     border: 1px solid #ccc;
@@ -125,8 +136,8 @@
                             </div>
                         </div>
                         <div class="form-actions">
-                            <a href="/login" tabindex="6" class="btn btn-link text-muted">登录</a>
-                            <button id="formSubmit" type="button" tabindex="4" class="btn btn-primary">加入</button>
+                            <a href="/login" tabindex="7" class="btn btn-link text-muted">登录</a>
+                            <button id="formSubmit" type="button" tabindex="6" class="btn btn-primary" disabled>加入</button>
                         </div>
                     </form>
                 </div>
@@ -140,7 +151,7 @@
 </div>
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
-<%--<script  src="https://northpark.cn/statics/js/page/reg2.js"></script>--%>
+<%--<script  src="/static/js/page/reg2.js"></script>--%>
 <script  src="/static/js/page/reg2.js"></script>
 <script src="/static/js/code.js"></script>
 </body>

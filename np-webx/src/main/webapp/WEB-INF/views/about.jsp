@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta http-equiv="Content-Language" content="zh-CN">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
     <title>关于NorthPark - 发现生活中的美好 | 免费资源分享社区</title>
     <meta name="keywords" content="NorthPark,北方公园,免费资源,影视资源,Mac资源,学习资源,情商提升,社区互动">
     <meta name="description" content="NorthPark是一个充满温度的网络社区,这里有免费的影视资源、Mac资源、学习资源,在这里你可以分享生活点滴、提升情商,与志同道合的朋友一起进步。">
@@ -25,13 +25,13 @@
             display: flex;
             flex-direction: column;
         }
-        
+
         #J_maincontent {
             flex: 1;
             min-height: calc(100vh - 200px); /* 减去header和footer的高度 */
             padding-bottom: 50px; /* 确保内容和footer之间有足够间距 */
         }
-        
+
         .about-section {
             background: #fff;
             border-radius: 8px;
@@ -39,36 +39,36 @@
             padding: 30px;
             margin-bottom: 30px;
         }
-        
+
         .about-section h4 {
             color: #212529;
             font-weight: 600;
             margin-bottom: 20px;
         }
-        
+
         .about-content p {
             text-indent: 2em;
             margin-bottom: 15px;
         }
-        
+
         .contact-box {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 25px;
             margin-bottom: 20px;
         }
-        
+
         .contact-box h4 {
             border-bottom: 2px solid #dee2e6;
             padding-bottom: 10px;
         }
-        
+
         .feature-link {
             color: #007bff;
             text-decoration: none;
             transition: color 0.3s;
         }
-        
+
         .feature-link:hover {
             color: #0056b3;
             text-decoration: underline;
@@ -120,19 +120,19 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-sm-offset-1 col-sm-4">
                     <div class="contact-box">
                         <h4>联系合作</h4>
                         <p><i class="fa fa-envelope"></i> 邮箱：<a href="mailto:zhangyang.z@iCloud.com" class="feature-link">zhangyang.z@iCloud.com</a></p>
                         <p><i class="fa fa-qq"></i> QQ：654714226</p>
                     </div>
-                    
+
                     <div class="contact-box">
                         <h4>文章投稿</h4>
                         <p><i class="fa fa-edit"></i> QQ：654714226</p>
                     </div>
-                    
+
                     <div class="contact-box">
                         <h4>版权声明</h4>
                         <p>本站资源均来自互联网，仅供学习交流使用。如有侵权请联系我们删除。</p>

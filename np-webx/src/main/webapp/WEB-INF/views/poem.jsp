@@ -16,7 +16,7 @@
     <meta name="robots" content="index,follow,archive">
     <meta name="theme-color" content="#45d0c6">
     <meta name="format-detection" content="telephone=no">
-    <link rel="shortcut icon" href="https://northpark.cn/statics/img/favicon.ico">
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
@@ -33,13 +33,13 @@
     <meta property="og:description" content="专业的古诗词分享平台，收录历代经典诗词名句、提供详细诗词赏析。涵盖唐诗、宋词、元曲等中华文学瑰宝">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/poem/">
-    <meta property="og:image" content="https://northpark.cn/statics/img/poem-banner.jpg">
+    <meta property="og:image" content="https://minioapi.northpark.cn/pic/poem-banner.jpg">
 
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="NorthPark诗词秀 - 古诗词大全">
     <meta name="twitter:description" content="收录历代经典诗词名句，唐诗宋词元曲，诗词赏析鉴赏">
-    <meta name="twitter:image" content="https://northpark.cn/statics/img/poem-banner.jpg">
+    <meta name="twitter:image" content="https://minioapi.northpark.cn/pic/poem-banner.jpg">
 
     <!-- 结构化数据 -->
     <script type="application/ld+json">
@@ -59,7 +59,7 @@
         "name": "NorthPark",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://northpark.cn/statics/img/logo.png"
+          "url": "/static/img/logo.png"
         }
       }
     }
@@ -336,11 +336,11 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script src="https://northpark.cn/statics/js/poem/easing.js" type="text/javascript"></script>
+<script src="/static/js/poem/easing.js" type="text/javascript"></script>
 
-<script src="https://northpark.cn/statics/js/poem/timers.js" type="text/javascript"></script>
+<script src="/static/js/poem/timers.js" type="text/javascript"></script>
 
-<script src="https://northpark.cn/statics/js/poem/dualSlider.js" type="text/javascript"></script>
+<script src="/static/js/poem/dualSlider.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 
@@ -366,8 +366,8 @@
 
 
 </script>
-<link media="all" type="text/css" rel="stylesheet" href="https://northpark.cn/statics/css/flexslider.css"><!-- 轮播css -->
-<script type="text/javascript" src="https://northpark.cn/statics/js/jquery.flexslider.js"></script><!-- 轮播js -->
+<link media="all" type="text/css" rel="stylesheet" href="/static/css/flexslider.css"><!-- 轮播css -->
+<script type="text/javascript" src="/static/js/jquery.flexslider.js"></script><!-- 轮播js -->
 <script type="text/javascript">
 
     $(document).ready(function () {
