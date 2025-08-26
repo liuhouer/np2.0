@@ -136,7 +136,7 @@ public class ResourceFeedbackTask {
                                     String userEmail = NotifyUtil.getUserEmailByID(uID);
                                     if (StringUtils.isNotBlank(userEmail)) {
                                         String subject = "资源失效反馈更新通知";
-                                        String msg = String.format("您反馈的资源《%s》已更新，请访问 <a href=\"%s\">%s</a> 查看。",
+                                        String msg = String.format("自动化任务：您反馈的资源《%s》已更新，请访问 <a href=\"%s\">%s</a> 查看。",
                                                 title, href, href);
                                         EmailUtils.getInstance().sendEMAIL(userEmail, subject, msg);
                                     }
