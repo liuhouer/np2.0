@@ -104,7 +104,7 @@
                                 <div class="controls" style="display: flex; align-items: center; gap: 10px;">
                                     <label for="emailCode" class="control-label fa fa-key"></label>
                                     <input id="emailCode" type="text" name="emailCode" placeholder="邮箱验证码"
-                                           tabindex="2" class="vcode" style="flex: 1;">
+                                           tabindex="2" class="vcode" style="flex: 5;">
                                     <button id="sendEmailCode" type="button" class="btn btn-sm btn-info"
                                             tabindex="3">发送验证码</button>
                                 </div>
@@ -123,8 +123,8 @@
                                 <div class="controls">
                                     <label for="code" class="control-label fa fa-check-square"></label>
                                     <input id="code" type="text" name="code" placeholder="机器人？"
-                                           tabindex="5" class="vcode" style="flex: 1;">
-                                    <canvas id="canvas" width="100" height="37" style="float: right;
+                                           tabindex="5" class="vcode" style="flex: 5;">
+                                    <canvas id="canvas" width="90" height="37" style="float: right;
 				                                                                                   display: inline-block;
                                                                                                     border: 1px solid #ccc;
                                                                                                     border-radius: 5px;
