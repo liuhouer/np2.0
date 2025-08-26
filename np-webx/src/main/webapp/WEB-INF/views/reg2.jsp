@@ -39,6 +39,87 @@
             -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         }
+
+        /* 邮箱验证码行样式 */
+        .email-code-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .email-code-input {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .email-code-btn {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        /* 图形验证码行样式 */
+        .captcha-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .captcha-input {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .captcha-canvas {
+            flex-shrink: 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 480px) {
+            .email-code-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .email-code-input {
+                width: 100%;
+            }
+            
+            .email-code-btn {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .captcha-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .captcha-input {
+                width: 100%;
+            }
+            
+            .captcha-canvas {
+                align-self: center;
+            }
+        }
+
+        /* 平板端适配 */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .email-code-input {
+                min-width: 150px;
+            }
+            
+            .captcha-input {
+                min-width: 120px;
+            }
+        }
     </style>
 </head>
 
@@ -101,14 +182,13 @@
 
 
                             <div class="control-group">
-                                <div class="controls" style="display: flex; align-items: center; gap: 10px;">
+                                <div class="controls email-code-row">
                                     <label for="emailCode" class="control-label fa fa-key"></label>
                                     <input id="emailCode" type="text" name="emailCode" placeholder="邮箱验证码"
-                                           tabindex="2" class="vcode" style="flex: 5;">
-                                    <button id="sendEmailCode" type="button" class="btn btn-sm btn-info"
+                                           tabindex="2" class="vcode email-code-input">
+                                    <button id="sendEmailCode" type="button" class="btn btn-sm btn-info email-code-btn"
                                             tabindex="3">发送验证码</button>
                                 </div>
-
                             </div>
 
                             <div class="control-group">
@@ -120,15 +200,11 @@
                             </div>
 
                             <div class="control-group">
-                                <div class="controls">
+                                <div class="controls captcha-row">
                                     <label for="code" class="control-label fa fa-check-square"></label>
                                     <input id="code" type="text" name="code" placeholder="机器人？"
-                                           tabindex="5" class="vcode" style="flex: 5;">
-                                    <canvas id="canvas" width="90" height="37" style="float: right;
-				                                                                                   display: inline-block;
-                                                                                                    border: 1px solid #ccc;
-                                                                                                    border-radius: 5px;
-				                                                                                cursor: pointer;"></canvas>
+                                           tabindex="5" class="vcode captcha-input">
+                                    <canvas id="canvas" width="90" height="37" class="captcha-canvas"></canvas>
                                 </div>
                             </div>
 
