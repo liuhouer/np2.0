@@ -204,7 +204,7 @@
                                     <label for="code" class="control-label fa fa-check-square"></label>
                                     <input id="code" type="text" name="code" placeholder="机器人？"
                                            tabindex="5" class="vcode captcha-input">
-                                    <canvas id="canvas" width="90" height="37" class="captcha-canvas"></canvas>
+                                    <canvas id="canvas" width="100" height="37" class="captcha-canvas"></canvas>
                                 </div>
                             </div>
 

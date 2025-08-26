@@ -39,6 +39,50 @@
             -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
             transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
         }
+
+        /* 图形验证码行样式 */
+        .captcha-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .captcha-input {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .captcha-canvas {
+            flex-shrink: 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 480px) {
+            .captcha-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            
+            .captcha-input {
+                width: 100%;
+            }
+            
+            .captcha-canvas {
+                align-self: center;
+            }
+        }
+
+        /* 平板端适配 */
+        @media (min-width: 481px) and (max-width: 768px) {
+            .captcha-input {
+                min-width: 120px;
+            }
+        }
     </style>
 
 </head>
@@ -110,15 +154,11 @@
                             </div>
 
                             <div class="control-group">
-                                <div class="controls">
+                                <div class="controls captcha-row">
                                     <label for="code" class="control-label fa fa-check-square"></label>
                                     <input id="code" type="text" name="code" placeholder="机器人？"
-                                           tabindex="3" class="vcode">
-                                    <canvas id="canvas" width="100" height="37" style="float: right;
-				                                                                                   display: inline-block;
-                                                                                                    border: 1px solid #ccc;
-                                                                                                    border-radius: 5px;
-				                                                                                cursor: pointer;"></canvas>
+                                           tabindex="3" class="vcode captcha-input">
+                                    <canvas id="canvas" width="100" height="37" class="captcha-canvas"></canvas>
                                 </div>
                             </div>
 
