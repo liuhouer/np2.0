@@ -51,8 +51,18 @@ public class ResourceFeedbackTask {
                         String spanID = key.split(":")[1];
                         Set<String> userIds = redisUtil.sMembers(key + ":users");
 
+                        // 提取搜索词
+                        String searchTerm = title;
+                        if (title.contains("《") && title.contains("》")) {
+                            int start = title.indexOf("《") + 1;
+                            int end = title.indexOf("》");
+                            if (end > start) {
+                                searchTerm = title.substring(start, end);
+                            }
+                        }
+
                         // 调用搜索接口
-                        String encodedTitle = URLEncoder.encode(title, "UTF-8");
+                        String encodedTitle = URLEncoder.encode(searchTerm, "UTF-8");
                         String apiUrl = String.format(SEARCH_API, encodedTitle);
                         String response = httpGet(apiUrl);
                         Map<String, Object> result = mapper.readValue(response, Map.class);
