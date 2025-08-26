@@ -99,14 +99,16 @@
                                 </div>
                             </div>
 
+
                             <div class="control-group">
-                                <div class="controls">
+                                <div class="controls" style="display: flex; align-items: center; gap: 10px;">
                                     <label for="emailCode" class="control-label fa fa-key"></label>
                                     <input id="emailCode" type="text" name="emailCode" placeholder="邮箱验证码"
-                                           tabindex="2" class="vcode" style="width: 120px; display: inline-block;">
+                                           tabindex="2" class="vcode" style="flex: 1;">
                                     <button id="sendEmailCode" type="button" class="btn btn-sm btn-info"
-                                            style="margin-left: 10px;" tabindex="3">发送验证码</button>
+                                            tabindex="3">发送验证码</button>
                                 </div>
+
                             </div>
 
                             <div class="control-group">
@@ -121,7 +123,7 @@
                                 <div class="controls">
                                     <label for="code" class="control-label fa fa-check-square"></label>
                                     <input id="code" type="text" name="code" placeholder="机器人？"
-                                           tabindex="5" class="vcode">
+                                           tabindex="5" class="vcode" style="flex: 1;">
                                     <canvas id="canvas" width="100" height="37" style="float: right;
 				                                                                                   display: inline-block;
                                                                                                     border: 1px solid #ccc;
