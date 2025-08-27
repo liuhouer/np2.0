@@ -17,6 +17,16 @@
     <result column="last_login" property="lastLogin" jdbcType="VARCHAR" />
     <result column="qq_openid" property="qqOpenid" jdbcType="VARCHAR" />
     <result column="qq_info" property="qqInfo" jdbcType="VARCHAR" />
+    <result column="google_id" property="googleId" jdbcType="VARCHAR" />
+    <result column="google_info" property="googleInfo" jdbcType="LONGVARCHAR" />
+    <result column="github_id" property="githubId" jdbcType="VARCHAR" />
+    <result column="github_info" property="githubInfo" jdbcType="LONGVARCHAR" />
+    <result column="login_type" property="loginType" jdbcType="VARCHAR" />
+    <result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="company" property="company" jdbcType="VARCHAR" />
+    <result column="bio" property="bio" jdbcType="LONGVARCHAR" />
     <result column="is_del" property="isDel" jdbcType="INTEGER" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
@@ -27,17 +37,23 @@
     <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into bc_user (username, email, email_flag, 
-      tail_slug, password, head_span_class, 
-      head_span, head_path, meta, 
-      blog_site, date_joined, last_login, 
-      qq_openid, qq_info, is_del
+    insert into bc_user (username, email, email_flag,
+      tail_slug, password, head_span_class,
+      head_span, head_path, meta,
+      blog_site, date_joined, last_login,
+      qq_openid, qq_info, google_id,
+      google_info, github_id, github_info,
+      login_type, avatar_url, real_name,
+      location, company, bio, is_del
       )
-    values (#{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{emailFlag,jdbcType=VARCHAR}, 
-      #{tailSlug,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{headSpanClass,jdbcType=VARCHAR}, 
-      #{headSpan,jdbcType=VARCHAR}, #{headPath,jdbcType=VARCHAR}, #{meta,jdbcType=VARCHAR}, 
-      #{blogSite,jdbcType=VARCHAR}, #{dateJoined,jdbcType=VARCHAR}, #{lastLogin,jdbcType=VARCHAR}, 
-      #{qqOpenid,jdbcType=VARCHAR}, #{qqInfo,jdbcType=VARCHAR}, #{isDel,jdbcType=INTEGER}
+    values (#{username,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{emailFlag,jdbcType=VARCHAR},
+      #{tailSlug,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{headSpanClass,jdbcType=VARCHAR},
+      #{headSpan,jdbcType=VARCHAR}, #{headPath,jdbcType=VARCHAR}, #{meta,jdbcType=VARCHAR},
+      #{blogSite,jdbcType=VARCHAR}, #{dateJoined,jdbcType=VARCHAR}, #{lastLogin,jdbcType=VARCHAR},
+      #{qqOpenid,jdbcType=VARCHAR}, #{qqInfo,jdbcType=VARCHAR}, #{googleId,jdbcType=VARCHAR},
+      #{googleInfo,jdbcType=LONGVARCHAR}, #{githubId,jdbcType=VARCHAR}, #{githubInfo,jdbcType=LONGVARCHAR},
+      #{loginType,jdbcType=VARCHAR}, #{avatarUrl,jdbcType=VARCHAR}, #{realName,jdbcType=VARCHAR},
+      #{location,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, #{bio,jdbcType=LONGVARCHAR}, #{isDel,jdbcType=INTEGER}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="cn.northpark.model.User" >
@@ -56,18 +72,32 @@
       last_login = #{lastLogin,jdbcType=VARCHAR},
       qq_openid = #{qqOpenid,jdbcType=VARCHAR},
       qq_info = #{qqInfo,jdbcType=VARCHAR},
+      google_id = #{googleId,jdbcType=VARCHAR},
+      google_info = #{googleInfo,jdbcType=LONGVARCHAR},
+      github_id = #{githubId,jdbcType=VARCHAR},
+      github_info = #{githubInfo,jdbcType=LONGVARCHAR},
+      login_type = #{loginType,jdbcType=VARCHAR},
+      avatar_url = #{avatarUrl,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      bio = #{bio,jdbcType=LONGVARCHAR},
       is_del = #{isDel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select id, username, email, email_flag, tail_slug, password, head_span_class, head_span, 
-    head_path, meta, blog_site, date_joined, last_login, qq_openid, qq_info, is_del
+    select id, username, email, email_flag, tail_slug, password, head_span_class, head_span,
+    head_path, meta, blog_site, date_joined, last_login, qq_openid, qq_info,
+    google_id, google_info, github_id, github_info, login_type, avatar_url,
+    real_name, location, company, bio, is_del
     from bc_user
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, username, email, email_flag, tail_slug, password, head_span_class, head_span, 
-    head_path, meta, blog_site, date_joined, last_login, qq_openid, qq_info, is_del
+    select id, username, email, email_flag, tail_slug, password, head_span_class, head_span,
+    head_path, meta, blog_site, date_joined, last_login, qq_openid, qq_info,
+    google_id, google_info, github_id, github_info, login_type, avatar_url,
+    real_name, location, company, bio, is_del
     from bc_user
   </select>
     <select id="login" resultMap="BaseResultMap">
@@ -84,7 +114,25 @@
           and email =  #{email}
         </if>
 
+        and (is_del = 0 or is_del is null)
+
       </trim>
 
     </select>
+
+  <select id="findUserByGoogleId" resultMap="BaseResultMap">
+    SELECT * FROM bc_user WHERE google_id = #{googleId} limit 1
+  </select>
+
+  <select id="findUserByGithubId" resultMap="BaseResultMap">
+    SELECT * FROM bc_user WHERE github_id = #{githubId} limit 1
+  </select>
+
+  <select id="isSlugExists" resultType="java.lang.Object">
+    SELECT COUNT(*) FROM bc_user WHERE tail_slug = #{tailSlug}
+  </select>
+
+  <select id="findUserByEmail" resultMap="BaseResultMap">
+    SELECT * FROM bc_user WHERE email = #{email} limit 1
+  </select>
 </mapper>

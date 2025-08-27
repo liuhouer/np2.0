@@ -17,10 +17,10 @@ public class UserVO implements Serializable {
     private String username;
 
     private String email;
-    
+
     /**
      * 上次登录详细信息 时间+IP+地址
-     */ 
+     */
     private String tailSlug;//自己的域名空间【字母代号】
 
     private String meta;// 个性签名
@@ -36,6 +36,32 @@ public class UserVO implements Serializable {
     private String dateJoined;
 
     private String lastLogin;
+
+    private String qqOpenid;
+
+    private String qqInfo;
+
+    private String googleId;
+
+    private String googleInfo;
+
+    private String githubId;
+
+    private String githubInfo;
+
+    private String loginType;
+
+    private String avatarUrl;
+
+    private String realName;
+
+    private String location;
+
+    private String company;
+
+    private String bio;
+
+    private Integer isDel;
 
 
 

@@ -10,10 +10,7 @@ import cn.northpark.notify.NotifyEnum;
 import cn.northpark.result.Result;
 import cn.northpark.result.ResultEnum;
 import cn.northpark.result.ResultGenerator;
-import cn.northpark.service.ResetService;
-import cn.northpark.service.UserFollowService;
-import cn.northpark.service.UserProfileService;
-import cn.northpark.service.UserService;
+import cn.northpark.service.*;
 import cn.northpark.threadLocal.RequestHolder;
 import cn.northpark.threadPool.AsyncThreadPool;
 import cn.northpark.utils.*;
@@ -62,6 +59,9 @@ public class UserController {
     UserFollowService ufService;
     @Autowired
     ResetService resetService;
+
+    @Autowired
+    OAuthService oAuthService;
 
 
     public static ImmutableList<String> PASS_ID =
@@ -910,7 +910,7 @@ public class UserController {
         //默认字符头像===================================================
         //设置注册者的详细信息
         user.setLastLogin(JsonUtil.object2json(user.getDateJoined() + ipAndDetail));
-        user.setTailSlug(username + TimeUtils.getRandomDay());
+        user.setTailSlug(oAuthService.generateTailSlug(username));
         user.setPassword(NorthParkCryptUtils.northparkEncrypt(password));
         user.setEmailFlag("1");
         session.setAttribute("user", user);

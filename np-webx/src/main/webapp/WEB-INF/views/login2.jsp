@@ -1,4 +1,5 @@
 <%@page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -83,6 +84,60 @@
                 min-width: 120px;
             }
         }
+
+        /* OAuth按钮样式 */
+        .btn-danger {
+            background-color: #dd4b39;
+            border-color: #dd4b39;
+            color: #fff;
+        }
+        
+        .btn-danger:hover {
+            background-color: #c23321;
+            border-color: #c23321;
+            color: #fff;
+        }
+        
+        .btn-dark {
+            background-color: #333;
+            border-color: #333;
+            color: #fff;
+        }
+        
+        .btn-dark:hover {
+            background-color: #222;
+            border-color: #222;
+            color: #fff;
+        }
+        
+        .oauth-buttons .btn {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .oauth-buttons .btn:focus,
+        .oauth-buttons .btn:active {
+            outline: none;
+            box-shadow: none;
+        }
+        
+        /* 错误提示样式 */
+        .alert {
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
     </style>
 
 </head>
@@ -164,6 +219,15 @@
 
                             <input id="redirectURI" name="redirectURI" type="hidden"
                                    value="${redirectURI} ">
+                            
+                            <!-- 错误信息显示 -->
+                            <c:if test="${not empty error}">
+                                <div class="alert alert-danger" style="margin: 10px 0; padding: 10px; background-color: #f2dede; border: 1px solid #ebccd1; color: #a94442; border-radius: 4px;">
+                                    <i class="fa fa-exclamation-triangle" style="margin-right: 5px;"></i>
+                                    ${error}
+                                </div>
+                            </c:if>
+                            
                             <div id="showResult" class="control-group center margen-b10">
                             </div>
                         </div>
@@ -171,6 +235,22 @@
                             <a href="/cm/forget" target="_blank" tabindex="5" class="btn pull-left btn-link text-muted">忘记密码</a>
                             <a href="/signup?redirectURI=${redirectURI}" tabindex="6" class="btn btn-link text-muted">注册</a>
                             <button id="formSubmit" type="button" tabindex="4" class="btn btn-primary">登录</button>
+                        </div>
+                        
+                        <!-- 第三方登录 -->
+                        <div class="oauth-login" style="margin-top: 20px; text-align: center;">
+                            <div style="margin-bottom: 15px; color: #999; font-size: 14px;">
+                                <span style="background: #fff; padding: 0 10px;">或使用第三方账号登录</span>
+                                <hr style="margin: -10px 0 0 0; border-color: #eee;">
+                            </div>
+                            <div class="oauth-buttons" style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                                <button type="button" id="googleLogin" class="btn btn-danger" style="background: #dd4b39; border-color: #dd4b39; min-width: 120px;">
+                                    <i class="fa fa-google" style="margin-right: 5px;"></i>Google
+                                </button>
+                                <button type="button" id="githubLogin" class="btn btn-dark" style="background: #333; border-color: #333; min-width: 120px;">
+                                    <i class="fa fa-github" style="margin-right: 5px;"></i>GitHub
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>

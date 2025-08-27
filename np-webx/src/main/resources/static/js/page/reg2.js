@@ -180,4 +180,16 @@ $(document).ready(function () {
         $("#showResult").empty();
     }
 
+    // Google注册
+    $('#googleSignup').click(function() {
+        var redirectURI = $("#redirectURI").val() || '/';
+        window.location.href = '/auth/google?redirectURI=' + encodeURIComponent(redirectURI);
+    });
+
+    // GitHub注册
+    $('#githubSignup').click(function() {
+        var redirectURI = $("#redirectURI").val() || '/';
+        window.location.href = '/auth/github?redirectURI=' + encodeURIComponent(redirectURI);
+    });
+
 });

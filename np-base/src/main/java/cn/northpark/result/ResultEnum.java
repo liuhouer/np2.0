@@ -32,6 +32,7 @@ public enum  ResultEnum {
 	VERIFY_CODE_EXPIRED(9,"验证码已过期"),
 	VERIFY_CODE_ERROR(10,"验证码错误"),
 	EMAIL_NOT_VERIFIED(11,"邮箱未验证"),
+	AUTH_URL_NOT_VERIFIED(12,"获取授权URL失败"),
 
 	;
 

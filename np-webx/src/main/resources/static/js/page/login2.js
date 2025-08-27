@@ -96,6 +96,18 @@ $(document).ready(function () {
         $("#showResult").empty();
     }
 
+    // Google登录
+    $('#googleLogin').click(function() {
+        var redirectURI = $("#redirectURI").val() || '/';
+        window.location.href = '/auth/google?redirectURI=' + encodeURIComponent(redirectURI);
+    });
+
+    // GitHub登录
+    $('#githubLogin').click(function() {
+        var redirectURI = $("#redirectURI").val() || '/';
+        window.location.href = '/auth/github?redirectURI=' + encodeURIComponent(redirectURI);
+    });
+
 
 });
 

@@ -17,4 +17,12 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     List<User> login(@Param(value = "email") String email, @Param(value = "password") String password);
+
+    User findUserByGoogleId(String googleId);
+
+    User findUserByGithubId(String githubId);
+
+    List<Object> isSlugExists(String tailSlug);
+
+    User findUserByEmail(String email);
 }

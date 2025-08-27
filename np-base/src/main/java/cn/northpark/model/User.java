@@ -31,6 +31,26 @@ public class User {
 
     private String qqInfo;
 
+    private String googleId;
+
+    private String googleInfo;
+
+    private String githubId;
+
+    private String githubInfo;
+
+    private String loginType;
+
+    private String avatarUrl;
+
+    private String realName;
+
+    private String location;
+
+    private String company;
+
+    private String bio;
+
     private Integer isDel;
 
     public Integer getId() {
@@ -159,6 +179,86 @@ public class User {
 
     public void setIsDel(Integer isDel) {
         this.isDel = isDel;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId == null ? null : googleId.trim();
+    }
+
+    public String getGoogleInfo() {
+        return googleInfo;
+    }
+
+    public void setGoogleInfo(String googleInfo) {
+        this.googleInfo = googleInfo == null ? null : googleInfo.trim();
+    }
+
+    public String getGithubId() {
+        return githubId;
+    }
+
+    public void setGithubId(String githubId) {
+        this.githubId = githubId == null ? null : githubId.trim();
+    }
+
+    public String getGithubInfo() {
+        return githubInfo;
+    }
+
+    public void setGithubInfo(String githubInfo) {
+        this.githubInfo = githubInfo == null ? null : githubInfo.trim();
+    }
+
+    public String getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+        this.loginType = loginType == null ? null : loginType.trim();
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl == null ? null : avatarUrl.trim();
+    }
+
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName == null ? null : realName.trim();
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location == null ? null : location.trim();
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company == null ? null : company.trim();
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio == null ? null : bio.trim();
     }
 
     @Override
