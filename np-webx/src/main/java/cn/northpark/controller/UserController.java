@@ -804,10 +804,11 @@ public class UserController {
         user.setTailSlug(oAuthService.generateTailSlug(username));
         user.setPassword(NorthParkCryptUtils.northparkEncrypt(password));
         user.setEmailFlag("1");
-        session.setAttribute("user", user);
-        map.put("user", user);
 
         userService.addUser(user);
+
+        session.setAttribute("user", user);
+        map.put("user", user);
 
         // 删除验证标记
         RedisUtil.getInstance().del(verifiedKey);

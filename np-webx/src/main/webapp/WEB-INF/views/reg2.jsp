@@ -175,6 +175,21 @@
             background-color: #f2dede;
             border-color: #ebccd1;
         }
+        
+        /* 加载动画样式 */
+        #showResult {
+            text-align: center;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* 按钮禁用状态样式 */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 

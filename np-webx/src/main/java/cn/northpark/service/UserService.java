@@ -12,7 +12,7 @@ public interface UserService {
 
     List<User> findAll();
 
-    void addUser(User user);
+    int addUser(User user);
 
     boolean delUser(Integer id);
 

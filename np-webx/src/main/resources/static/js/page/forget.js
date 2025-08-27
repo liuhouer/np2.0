@@ -50,6 +50,14 @@ $(function () {
             type: "post",
             dataType: "json",
             data: { "email": em },
+            beforeSend: function(XMLHttpRequest) {
+                // 在按钮旁边显示加载动画
+                $("#sendCodeBtn").after("<span id='sendCodeLoading' class='loading-container'><img src='/static/img/loading.gif' style='width:20px;height:20px;' /></span>");
+            },
+            complete: function(XMLHttpRequest, textStatus) {
+                // 移除加载动画
+                $("#sendCodeLoading").remove();
+            },
             success: function (msg) {
                 if (msg.result) {
                     if (msg.data == "ok") {
@@ -125,14 +133,22 @@ $(function () {
             type: "post",
             dataType: "json",
             data: { "email": currentEmail },
+            beforeSend: function(XMLHttpRequest) {
+                // 在按钮旁边显示加载动画
+                $("#resendCodeBtn").after("<span id='resendCodeLoading' class='loading-container'><img src='/static/img/loading.gif' style='width:20px;height:20px;' /></span>");
+            },
+            complete: function(XMLHttpRequest, textStatus) {
+                // 移除加载动画
+                $("#resendCodeLoading").remove();
+            },
             success: function (msg) {
                 if (msg.result && msg.data == "ok") {
                     $("#J_tip").text("验证码已重新发送").css("color", "green");
                     startCountdown();
                 } else {
                     $("#J_tip").text("重新发送失败").css("color", "red");
+                    $('#resendCodeBtn').removeAttr('disabled').val('重新发送验证码');
                 }
-                $('#resendCodeBtn').removeAttr('disabled').val('重新发送验证码');
             },
             error: function () {
                 $("#J_tip").text("网络错误，请重试").css("color", "red");

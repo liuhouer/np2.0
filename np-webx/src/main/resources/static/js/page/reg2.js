@@ -49,16 +49,25 @@ $(document).ready(function () {
             type: "post",
             dataType: "json",
             data: { email: email },
+            beforeSend: function(XMLHttpRequest) {
+                $("#showResult").append("<div><img src='/static/img/loading.gif' style='width:32px;height:32px;' /></div>");
+                $("#sendEmailCode").attr('disabled', true).text('发送中...');
+            },
+            complete: function(XMLHttpRequest, textStatus) {
+                $("#showResult").empty();
+            },
             success: function (msg) {
                 if (msg.result) {
                     art.dialog.tips('验证码已发送到您的邮箱', 3);
                     startCountdown();
                 } else {
                     art.dialog.tips('发送失败：' + msg.message, 3);
+                    $("#sendEmailCode").removeAttr('disabled').text('发送验证码');
                 }
             },
             error: function () {
                 art.dialog.tips('发送失败，请稍后重试', 3);
+                $("#sendEmailCode").removeAttr('disabled').text('发送验证码');
             }
         });
     });

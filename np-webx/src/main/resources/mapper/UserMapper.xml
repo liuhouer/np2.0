@@ -33,10 +33,7 @@
     delete from bc_user
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="cn.northpark.model.User" >
-    <selectKey resultType="java.lang.Integer" keyProperty="id" order="AFTER" >
-      SELECT LAST_INSERT_ID()
-    </selectKey>
+  <insert id="insert" parameterType="cn.northpark.model.User" keyProperty="id"  useGeneratedKeys="true">
     insert into bc_user (username, email, email_flag,
       tail_slug, password, head_span_class,
       head_span, head_path, meta,

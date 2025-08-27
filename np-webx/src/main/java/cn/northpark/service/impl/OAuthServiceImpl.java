@@ -532,7 +532,7 @@ public class OAuthServiceImpl implements OAuthService {
         }
 
         // 如果有邮箱且邮箱验证标志为空或未验证，设置为已验证
-        if (StringUtils.isNotEmpty(userInfo.getString("email")) && 
+        if (StringUtils.isNotEmpty(userInfo.getString("email")) &&
             (StringUtils.isEmpty(existingUser.getEmailFlag()) || "0".equals(existingUser.getEmailFlag()))) {
             existingUser.setEmailFlag("1");
         }

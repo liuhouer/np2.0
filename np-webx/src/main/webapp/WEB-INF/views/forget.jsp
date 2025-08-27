@@ -21,6 +21,27 @@
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 
+    <style>
+        /* 加载动画样式 */
+        .loading-container {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 10px;
+        }
+        
+        /* 按钮禁用状态样式 */
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* 提示信息样式 */
+        .iteminfo {
+            display: block;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+    </style>
 
 </head>
 
