@@ -5,12 +5,18 @@ import cn.northpark.annotation.CheckLogin;
 import cn.northpark.annotation.RateLimit;
 import cn.northpark.constant.CookieConstant;
 import cn.northpark.constant.RedisConstant;
-import cn.northpark.model.*;
+import cn.northpark.model.NotifyRemindB;
+import cn.northpark.model.User;
+import cn.northpark.model.UserFollow;
+import cn.northpark.model.UserProfile;
 import cn.northpark.notify.NotifyEnum;
 import cn.northpark.result.Result;
 import cn.northpark.result.ResultEnum;
 import cn.northpark.result.ResultGenerator;
-import cn.northpark.service.*;
+import cn.northpark.service.OAuthService;
+import cn.northpark.service.UserFollowService;
+import cn.northpark.service.UserProfileService;
+import cn.northpark.service.UserService;
 import cn.northpark.threadLocal.RequestHolder;
 import cn.northpark.threadPool.AsyncThreadPool;
 import cn.northpark.utils.*;
@@ -42,7 +48,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -57,9 +62,6 @@ public class UserController {
     UserProfileService profileService;
     @Autowired
     UserFollowService ufService;
-    @Autowired
-    ResetService resetService;
-
     @Autowired
     OAuthService oAuthService;
 
@@ -127,105 +129,6 @@ public class UserController {
         }
 
     }
-
-    /**
-     * 发送”修改密码“邮件
-     */
-    @RequestMapping("/cm/resetEmail")
-    @ResponseBody
-    @RateLimit
-    public Result<String> resetEmail(String email) throws ParseException {
-        String userid = "";
-        List<Map<String, Object>> list = NPQueryRunner.findByCondition("bc_user", "  email = '" + email + "' ");
-        if (!CollectionUtils.isEmpty(list)) {
-            userid = String.valueOf(list.get(0).get("id"));
-        }
-        //添加重置的信息============================================
-        Reset reset = new Reset();
-        reset.setCreatedTime(TimeUtils.nowTime());
-        String code = IDUtils.getInstance().geneInt();
-        reset.setAuthCode(code);
-        reset.setInvalidTime(TimeUtils.getDayAfter(TimeUtils.nowTime()));
-        reset.setIsEmailAuthed(0);
-
-        reset.setUserId(Integer.parseInt(userid));
-        resetService.addReset(reset);
-        //添加重置的信息============================================
-
-
-        //发送消息通知发邮件
-        try {
-            EmailUtils.getInstance().changePwd(email, userid, code);
-        } catch (Exception e) {
-            log.error("重置密码邮件错误========>{}", e);
-        }
-        return ResultGenerator.genSuccessResult("ok");
-    }
-
-    /**
-     * 重置密码,从邮箱点击进来
-     */
-    @RequestMapping("/cm/reset")
-    public String reset(HttpServletRequest request,
-                        ModelMap map,
-                        String userid,
-                        String auth_code) throws ParseException {
-
-        List<Reset> gtList = resetService.findByCondition(" where user_id='" + userid + "' and auth_code='" + auth_code + "' order by created_time desc ", "");
-        try {
-            if (!CollectionUtils.isEmpty(gtList)) {
-                Reset gt_model = gtList.get(0);
-                if (gt_model.getAuthCode().equals(auth_code)) {// Email认证通过
-                    if (StringUtils.isNotEmpty(gt_model.getInvalidTime())) {// 设置了失效时间
-                        if (TimeUtils.isInvalid(TimeUtils.nowTime(),
-                                gt_model.getInvalidTime()) && (0 == gt_model.getIsEmailAuthed())) {// 时间未过期
-                            User user = userService.findUser(Integer.parseInt(userid));
-                            if (user != null) {
-                                user.setPassword(NorthParkCryptUtils.northparkEncrypt(auth_code));
-                                userService.updateUser(user);
-
-                                request.getSession().setAttribute("user", user);
-                                //更新数据
-                                gt_model.setIsEmailAuthed(1);
-                                resetService.updateReset(gt_model);
-                                map.addAttribute("msg", "success");
-                                return "/forget";
-                            }
-                        } else {
-                            map.addAttribute("msg", "is_old");
-                            return "/forget";
-                        }
-                    } else {// 没有设置失效时间
-                        if (0 == gt_model.getIsEmailAuthed()) {
-                            User user = userService.findUser(Integer.parseInt(userid));
-                            if (user != null) {
-                                user.setPassword(NorthParkCryptUtils.northparkEncrypt(auth_code));
-                                userService.updateUser(user);
-                                request.getSession().setAttribute("user", user);
-                                //更新数据
-                                gt_model.setIsEmailAuthed(1);
-                                resetService.updateReset(gt_model);
-                                map.addAttribute("msg", "success");
-                                return "/forget";
-                            }
-                        } else {
-                            map.addAttribute("msg", "is_old");
-                            return "/forget";
-                        }
-                    }
-                }
-            } else {// 已失效，重新获取验证码
-                map.addAttribute("msg", "invalid");
-                return "/forget";
-            }
-        } catch (Exception e) {
-            log.error("reset from email link ------>", e);
-        }
-
-        map.addAttribute("msg", "fku");
-        return "/forget";
-    }
-
 
     //成为粉丝
     @RequestMapping("/cm/follow")
@@ -727,18 +630,6 @@ public class UserController {
         }
 
         return "reg2";
-    }
-
-    /**
-     * @param map
-     * @param request
-     * @return
-     * @function 忘记密码
-     */
-    @RequestMapping("/cm/forget")
-    @RateLimit
-    public String forget(ModelMap map, HttpServletRequest request) {
-        return "forget";
     }
 
 
@@ -1293,6 +1184,19 @@ public class UserController {
             log.error("重置密码失败", e);
             return ResultGenerator.genErrorResult(ResultEnum.SERVER_ERROR);
         }
+    }
+
+
+    /**
+     * @param map
+     * @param request
+     * @return
+     * @function 跳转-忘记密码
+     */
+    @RequestMapping("/cm/forget")
+    @RateLimit
+    public String forget(ModelMap map, HttpServletRequest request) {
+        return "forget";
     }
 
     //==============================================重置密码=====================================================
