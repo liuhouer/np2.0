@@ -24,7 +24,6 @@ import java.util.*;
 public class ResourceFeedbackTask {
 
     private static final String SEARCH_API = "https://so.northpark.cn/api/search?kw=%s&res=merge&src=all";
-    private static final List<String> PRIORITY_TYPES = Arrays.asList("baidu", "aliyun", "123", "xunlei", "magnet");
 
     @Scheduled(fixedRate = 5 * 60 * 60 * 1000) // 每5小时执行一次
     public void processInvalidResources() {
@@ -44,7 +43,8 @@ public class ResourceFeedbackTask {
                     try {
                         // 获取反馈信息和用户列表
                         String feedbackJson = redisUtil.hGet(key, "feedback");
-                        if (feedbackJson == null) continue;
+                        if (feedbackJson == null)
+                            continue;
 
                         Map<String, Object> feedback = JsonUtil.json2map(feedbackJson);
                         String title = feedback.get("title").toString();
@@ -72,44 +72,39 @@ public class ResourceFeedbackTask {
                         if (result.get("code").equals(0) && result.get("data") != null) {
                             Map<String, Object> data = (Map<String, Object>) result.get("data");
                             if ((Integer) data.get("total") > 0) {
-                                Map<String, List<Map<String, String>>> mergedByType = (Map<String, List<Map<String, String>>>) data.get("merged_by_type");
+                                Map<String, List<Map<String, String>>> mergedByType = (Map<String, List<Map<String, String>>>) data
+                                        .get("merged_by_type");
                                 List<String> htmlLinks = new ArrayList<>();
 
-                                // 优先处理 baidu, aliyun, 123, xunlei, magnet
-                                for (String type : PRIORITY_TYPES) {
-                                    if (mergedByType.containsKey(type)) {
-                                        List<Map<String, String>> resources = mergedByType.get(type);
-                                        int count = 0;
-                                        for (Map<String, String> resource : resources) {
-                                            if (count >= 2) break;
-                                            String url = resource.get("url");
-                                            String password = resource.get("password");
-                                            String note = resource.get("note");
-                                            String linkHtml = String.format("<a href=\"%s\" target=\"_blank\">%s</a>%s",
-                                                    url, note, StringUtils.isNotBlank(password) ? " 提取码: " + password : "");
-                                            htmlLinks.add(linkHtml);
-                                            count++;
-                                        }
-                                    }
-                                }
+                                // 处理所有类型的资源，不区分优先级
+                                for (String type : mergedByType.keySet()) {
+                                    List<Map<String, String>> resources = mergedByType.get(type);
+                                    for (Map<String, String> resource : resources) {
+                                        String url = resource.get("url");
+                                        String password = resource.get("password");
+                                        String note = resource.get("note");
+                                        String datetime = resource.get("datetime");
+                                        String source = resource.get("source");
 
-                                // 如果优先类别未生成足够链接（少于2个），处理其他类别
-                                if (htmlLinks.size() < 2) {
-                                    for (String type : mergedByType.keySet()) {
-                                        if (!PRIORITY_TYPES.contains(type)) {
-                                            List<Map<String, String>> resources = mergedByType.get(type);
-                                            int count = 0;
-                                            for (Map<String, String> resource : resources) {
-                                                if (count >= 2 || htmlLinks.size() >= 2) break;
-                                                String url = resource.get("url");
-                                                String password = resource.get("password");
-                                                String note = resource.get("note");
-                                                String linkHtml = String.format("<a href=\"%s\" target=\"_blank\">%s</a>%s",
-                                                        url, note, StringUtils.isNotBlank(password) ? " 提取码: " + password : "");
-                                                htmlLinks.add(linkHtml);
-                                                count++;
-                                            }
+                                        // 构建完整的链接信息，包含所有可用字段
+                                        StringBuilder linkBuilder = new StringBuilder();
+                                        linkBuilder.append(
+                                                String.format("<a href=\"%s\" target=\"_blank\">%s</a>", url, note));
+
+                                        if (StringUtils.isNotBlank(password)) {
+                                            linkBuilder.append(" 提取码: ").append(password);
                                         }
+
+                                        if (StringUtils.isNotBlank(source)) {
+                                            linkBuilder.append(" [来源: ").append(source).append("]");
+                                        }
+
+                                        if (StringUtils.isNotBlank(datetime)
+                                                && !"0001-01-01T00:00:00Z".equals(datetime)) {
+                                            linkBuilder.append(" [时间: ").append(datetime).append("]");
+                                        }
+
+                                        htmlLinks.add(linkBuilder.toString());
                                     }
                                 }
 
@@ -158,8 +153,6 @@ public class ResourceFeedbackTask {
             log.error("定时任务处理失效资源出错", e);
         }
     }
-
-
 
     public static String httpGet(String url) throws Exception {
         CloseableHttpClient client = HttpClients.createDefault();
