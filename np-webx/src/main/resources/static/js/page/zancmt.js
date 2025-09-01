@@ -26,24 +26,7 @@ $(document).ready(function () {
         });
     })
 
-    $("#J_commentBtn").click(function () {
-        var comment = $("#J_comment").val();
-        if (comment) {
-            $.ajax({
-                url: "/zanAction/addComment",
-                type: "post",
-                dataType: "json",
-                data: {"lyricsid": lrcid, "userid": uid, "comment": comment},
-                success: function (msg) {
-                    if (msg.data == "success") {
-                        art.dialog.tips('评论成功');
-                        window.location.href = window.location.href;
-                    }
-                }
-            });
-        }
-
-    });
+    // 评论提交功能已移至 JSP 文件中的 Quill.js 初始化代码
 
 
     //添加到最爱
@@ -110,21 +93,7 @@ $(document).ready(function () {
 });
 
 
-$(function () {
-    if (uid) {
-
-        var editor = $('#J_comment').wangEditor({
-            'menuConfig': [
-                ['viewSourceCode'],
-                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                ['list', 'justify', 'blockquote'],
-                ['createLink', 'insertHr', 'undo', 'redo'],
-                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-
-            ]
-        });
-    }
-});
+// wangEditor 已替换为 Quill.js，相关初始化代码已移至 JSP 文件中
 
 
 //load data...

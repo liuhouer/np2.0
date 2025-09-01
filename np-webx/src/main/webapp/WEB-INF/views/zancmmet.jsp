@@ -20,7 +20,17 @@
     <meta name="description" content="查看${dataMap.by_username}分享的${dataMap.lrc_title}。NorthPark最爱主题让你记录生活点滴,分享美好回忆。">
     <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
-    <link href="/static/wangEditor/css/wangEditor-1.3.12.css" rel="stylesheet"/>
+    <!-- Quill.js 富文本编辑器 -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    
+    <style>
+        #comment-editor {
+            height: 150px;
+        }
+        .ql-editor {
+            min-height: 120px;
+        }
+    </style>
 
 
 </head>
@@ -171,8 +181,8 @@
                                 </div>
                                 <div class="col-xs-9 col-sm-10">
                                     <div class="form-group">
-                                        <textarea class="form-control" style="height:200px; max-height:400px;"
-                                                  id="J_comment" name="comment" rows="3"></textarea>
+                                        <div id="comment-editor"></div>
+                                        <textarea id="J_comment" name="comment" style="display:none;"></textarea>
                                     </div>
                                     <div class="form-group text-right">
                                         <input class="btn btn-info btn-md" type="button" id="J_commentBtn" value="+ 发布">
@@ -269,11 +279,170 @@
 
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-<script src="/static/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="/static/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/jquery.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script src="/static/js/bootstrap-datetimepicker.js"></script>
 <script src="/static/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<script src="/static/js/page/zancmt.js"></script>
+
+<script>
+// 初始化 Quill 编辑器
+var commentQuill = new Quill('#comment-editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['link', 'blockquote'],
+            ['clean']
+        ]
+    },
+    placeholder: '分享你的回忆...'
+});
+
+// 评论提交功能
+$("#J_commentBtn").click(function () {
+    var content = commentQuill.root.innerHTML;
+    var comment = commentQuill.getText().trim();
+    
+    if (comment) {
+        // 同步内容到隐藏的textarea
+        $('#J_comment').val(content);
+        
+        var lrcid = $("#J_lrcid").val();
+        var uid = $("#J_uid").val();
+        
+        $.ajax({
+            url: "/zanAction/addComment",
+            type: "post",
+            dataType: "json",
+            data: {"lyricsid": lrcid, "userid": uid, "comment": content},
+            success: function (msg) {
+                if (msg.data == "success") {
+                    // 清空编辑器
+                    commentQuill.setContents([]);
+                    alert('评论成功');
+                    window.location.href = window.location.href;
+                } else {
+                    alert(msg.result || '评论失败');
+                }
+            }
+        });
+    } else {
+        alert("请输入评论内容");
+    }
+});
+
+// 原 zancmt.js 中的其他功能
+var lrcid = $("#J_lrcid").val();
+var uid = $("#J_uid").val();
+var yizan = $("#J_yizan").val();
+
+//获取所有点赞人填充
+$("#J_lovers_box").click(function () {
+    // 隐藏按钮
+    $(this).hide();
+
+    $.ajax({
+        url: "/lyrics/getMoreZan",
+        type: "post",
+        data: {"lyricsid": lrcid},
+        success: function (data) {
+            //填充结果
+            $("#J_zan_div").empty().prepend(data.replace(/(^")|("$)/g, ''));
+        }
+    });
+});
+
+//添加到最爱
+$("#J_gz_btn").click(function () {
+    //把userid的判断转为后台判断
+    let uri = window.location.href;
+    if (yizan == 'yizan') {
+        return ;
+    }
+
+    let loveDate = $("#loveDate").val();
+    if(!loveDate){
+        alert("完善爱上时间");
+        return ;
+    }
+    $.ajax({
+        url: "/cm/loginFlag",
+        type: "get",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.data == "1") {//已登录
+                var userid = uid;
+                $.ajax({
+                    url: "/zanAction/zan",
+                    type: "post",
+                    dataType: "json",
+                    data: {"lyricsid": lrcid, "userid": userid,"loveDate": loveDate},
+                    beforeSend: beforeSendZAN, //发送请求
+                    complete: completeZAN,
+                    success: function (data) {
+                        if (data.data == "success") {
+                            alert("已爱上~");
+                            window.location.href = window.location.href;
+                        }
+                    }
+                });
+            } else if (msg.data == "0") {//没有登录
+                window.location.href = "/login?redirectURI=" + uri;
+            }
+        }
+    });
+});
+
+//load comment
+loadcmt();
+
+//加载更多
+$("#loadStuffCommentBtn").click(function () {
+    var pagenow = $("#comment_id_from").val();
+    $("#comment_id_from").val(parseInt(pagenow) + 1);
+    loadcmt();
+});
+
+//load data...
+function loadcmt() {
+    var pagenow = $("#comment_id_from").val();
+    var lrcid = $("#J_lrc_id").val();
+    $.ajax({
+        url: "/lyrics/commentQuery",
+        type: "post",
+        data: {"currentPage": pagenow, "lrcid": lrcid},
+        beforeSend: beforeSend, //发送请求
+        complete: complete,
+        success: function (data) {
+            if (data) {
+                $("#stuffCommentBox").append(data);
+                var tail = $("#J_tail").val();
+                if (tail == 'tail') {
+                    $("#loadStuffCommentBtn").remove();
+                }
+            }
+        }
+    });
+}
+
+function beforeSend(XMLHttpRequest) {
+    $("#loadingAnimation").show();
+}
+
+function complete(XMLHttpRequest, textStatus) {
+    $("#loadingAnimation").hide();
+}
+
+function beforeSendZAN(XMLHttpRequest) {
+    $("#showResult").append("<div><img src='/static/img/loading.gif' style='width:32px;height:32px;' /></div>");
+}
+
+function completeZAN(XMLHttpRequest, textStatus) {
+    $("#showResult").empty();
+}
+</script>
 
 <script>
     $(function () {

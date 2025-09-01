@@ -17,7 +17,9 @@
         <title>NorthPark / 添加课程|书籍</title>
 
         <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
-        <link href="/static/wangEditor/css/wangEditor-1.3.12.css" rel="stylesheet"/>
+        <!-- Quill.js 富文本编辑器 -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
 </head>
 
@@ -45,12 +47,9 @@
                                                        name="title" type="text" value="${model.title }">
                                         </div>
                                         <div class="form-group ">
-
                                                 <span class="glyphicon glyphicon-star"></span>下载地址
-                                                <textarea id="J_path" style="height: 200px; max-height: 400px;"
-                                                          name="path" rows="5">
-                                                        ${model.path }
-                                                </textarea>
+                                                <div id="J_path_editor" style="height: 200px;"></div>
+                                                <textarea id="J_path" name="path" style="display: none;">${model.path }</textarea>
                                         </div>
                                         <div class="form-group ">
                                                 <span class="glyphicon glyphicon-star"></span>学习颜色
@@ -80,45 +79,26 @@
 
                                         <div class="form-group">
                                                 <span class="glyphicon glyphicon-star"></span>学习预览
-                                                <textarea id="J_md_brief" style="height: 200px; max-height: 400px;"
-                                                          name="brief" rows="5" >
-
-                                                        <c:out value="${model.brief }" escapeXml="true"></c:out>
-
-                                                 <c:if test="${model.brief ==null}">
-                                                         <pre style="box-sizing: inherit; overflow-y: scroll; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 14px; line-height: 20px; font-family: 'courier new'; padding: 30px; margin-top: 20px; margin-bottom: 10px; color: rgb(111, 187, 114); background: rgb(43, 48, 59); border-width: 0px; border-style: initial; border-color: initial; border-radius: 3px;">—/马哥/0000000000000马哥Linux高端运维云计算就业班-教学总监老王主讲/
-                                                        ├──1-01-课程架构介绍和计算机基础.mp4 147.51M
-                                                        ├──1-02-计算机硬件组成.mp4 341.69M
-                                                        ├──1-03-操作系统基础.mp4 205.91M
-                                                        ├──1-04-Linux介绍.mp4 361.36M
-                                                        ├──10-1文本处理三剑客之sed.mp4 620.57M
-                                                        ├──11-01-软件管理基础.mp4 216.81M</pre>
-
-
-
-                                                 </c:if>
-                                                  </textarea>
-
+                                                <div id="J_md_brief_editor" style="height: 200px;"></div>
+                                                <textarea id="J_md_brief" name="brief" style="display: none;"><c:out value="${model.brief }" escapeXml="true"></c:out><c:if test="${model.brief ==null}">—/马哥/0000000000000马哥Linux高端运维云计算就业班-教学总监老王主讲/
+├──1-01-课程架构介绍和计算机基础.mp4 147.51M
+├──1-02-计算机硬件组成.mp4 341.69M
+├──1-03-操作系统基础.mp4 205.91M
+├──1-04-Linux介绍.mp4 361.36M
+├──10-1文本处理三剑客之sed.mp4 620.57M
+├──11-01-软件管理基础.mp4 216.81M</c:if></textarea>
                                         </div>
 
                                         <div class="form-group">
                                                 <span class="glyphicon glyphicon-star"></span>学习内容
-                                                <textarea id="J_md_text" style="height: 200px; max-height: 400px;"
-                                                          name="content" rows="5" >
-                                                         <c:out value="${model.content }" escapeXml="true"></c:out>
-
-                                                       <c:if test="${model.content ==null}">
-                                                      <pre style="box-sizing: inherit; overflow-y: scroll; font-variant-numeric: normal; font-variant-east-asian: normal; font-stretch: normal; font-size: 14px; line-height: 20px; font-family: 'courier new'; padding: 30px; margin-top: 20px; margin-bottom: 10px; color: rgb(111, 187, 114); background: rgb(43, 48, 59); border-width: 0px; border-style: initial; border-color: initial; border-radius: 3px;">—/马哥/0000000000000马哥Linux高端运维云计算就业班-教学总监老王主讲/
-                                                        ├──1-01-课程架构介绍和计算机基础.mp4 147.51M
-                                                        ├──1-02-计算机硬件组成.mp4 341.69M
-                                                        ├──1-03-操作系统基础.mp4 205.91M
-                                                        ├──1-04-Linux介绍.mp4 361.36M
-                                                        ├──10-1文本处理三剑客之sed.mp4 620.57M
-                                                        ├──11-01-软件管理基础.mp4 216.81M</pre>
-
-
-                                                       </c:if>
-                                                </textarea>
+                                                <div id="J_md_text_editor" style="height: 200px;"></div>
+                                                <textarea id="J_md_text" name="content" style="display: none;"><c:out value="${model.content }" escapeXml="true"></c:out><c:if test="${model.content ==null}">—/马哥/0000000000000马哥Linux高端运维云计算就业班-教学总监老王主讲/
+├──1-01-课程架构介绍和计算机基础.mp4 147.51M
+├──1-02-计算机硬件组成.mp4 341.69M
+├──1-03-操作系统基础.mp4 205.91M
+├──1-04-Linux介绍.mp4 361.36M
+├──10-1文本处理三剑客之sed.mp4 620.57M
+├──11-01-软件管理基础.mp4 216.81M</c:if></textarea>
                                         </div>
 
 
@@ -144,65 +124,99 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script src="/static/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="/static/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
 <script type="text/javascript">
         $(function () {
-                let editor = $('#J_md_text').wangEditor({
-                        'menuConfig': [
-                                ['viewSourceCode'],
-                                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                                ['list', 'justify', 'blockquote'],
-                                ['createLink', 'insertHr', 'undo'],
-                                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-                        ]
+                // Quill.js 编辑器配置
+                const toolbarOptions = [
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+                        [{ 'header': 1 }, { 'header': 2 }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        [{ 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'direction': 'rtl' }],
+                        [{ 'size': ['small', false, 'large', 'huge'] }],
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'font': [] }],
+                        [{ 'align': [] }],
+                        ['clean'],
+                        ['link', 'image', 'video']
+                ];
+
+                // 初始化学习内容编辑器
+                const contentEditor = new Quill('#J_md_text_editor', {
+                        theme: 'snow',
+                        modules: {
+                                toolbar: toolbarOptions
+                        }
                 });
 
-                let editor2 = $('#J_path').wangEditor({
-                        'menuConfig': [
-                                ['viewSourceCode'],
-                                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                                ['list', 'justify', 'blockquote'],
-                                ['createLink', 'insertHr', 'undo'],
-                                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-                        ]
+                // 初始化下载地址编辑器
+                const pathEditor = new Quill('#J_path_editor', {
+                        theme: 'snow',
+                        modules: {
+                                toolbar: toolbarOptions
+                        }
                 });
 
-                let editor3 = $('#J_md_brief').wangEditor({
-                        'menuConfig': [
-                                ['viewSourceCode'],
-                                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                                ['list', 'justify', 'blockquote'],
-                                ['createLink', 'insertHr', 'undo'],
-                                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-                        ]
+                // 初始化学习预览编辑器
+                const briefEditor = new Quill('#J_md_brief_editor', {
+                        theme: 'snow',
+                        modules: {
+                                toolbar: toolbarOptions
+                        }
                 });
 
+                // 设置初始内容
+                const contentTextarea = document.getElementById('J_md_text');
+                const pathTextarea = document.getElementById('J_path');
+                const briefTextarea = document.getElementById('J_md_brief');
 
+                if (contentTextarea.value.trim()) {
+                        contentEditor.root.innerHTML = contentTextarea.value;
+                }
 
-                //追加字符串
-                //editor.append('##学习简介');
+                if (pathTextarea.value.trim()) {
+                        pathEditor.root.innerHTML = pathTextarea.value;
+                }
 
-                //提交表单
+                if (briefTextarea.value.trim()) {
+                        briefEditor.root.innerHTML = briefTextarea.value;
+                }
+
+                // 监听编辑器内容变化，同步到隐藏的textarea
+                contentEditor.on('text-change', function() {
+                        contentTextarea.value = contentEditor.root.innerHTML;
+                });
+
+                pathEditor.on('text-change', function() {
+                        pathTextarea.value = pathEditor.root.innerHTML;
+                });
+
+                briefEditor.on('text-change', function() {
+                        briefTextarea.value = briefEditor.root.innerHTML;
+                });
+
+                // 提交表单
                 $("#formSubmit").click(function () {
-                        if ($("#J_name").val() && $("#J_md_text").val() && $("#J_color").val() && $("#J_path").val() && $("#J_tag").val() && $("#J_tag_code").val() ) {
+                        // 确保在提交前同步编辑器内容到textarea
+                        contentTextarea.value = contentEditor.root.innerHTML;
+                        pathTextarea.value = pathEditor.root.innerHTML;
+                        briefTextarea.value = briefEditor.root.innerHTML;
 
+                        if ($("#J_name").val() && contentTextarea.value && $("#J_color").val() && pathTextarea.value && $("#J_tag").val() && $("#J_tag_code").val()) {
                                 $.ajax({
                                         url: "/learning/addItem",
                                         type: "post",
                                         dataType: "json",
-                                        data: $('#addItemForm').serialize(),// 要提交的表单 ,
+                                        data: $('#addItemForm').serialize(),
                                         success: function (msg) {
-
                                                 if (msg.data == "success") {
-
                                                         art.dialog.tips('添加成功');
                                                         $('#formSubmit').attr("disabled", 'disabled');
-
                                                 }
-
                                         }
-
                                 });
                         } else {
                                 art.dialog.tips('填写必要信息');

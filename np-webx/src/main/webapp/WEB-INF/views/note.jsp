@@ -41,7 +41,17 @@
         <meta name="description"
             content="${user.username}的个人树洞 - 专属的心灵记录空间，在这里可以自由记录心情、分享生活感悟、留下珍贵的情感足迹。一个富有交互性和趣味性的精神角落，见证成长的每一个瞬间。">
 
-        <link href="/static/wangEditor/css/wangEditor-1.3.12.css" rel="stylesheet" />
+        <!-- Quill.js 富文本编辑器 -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        
+        <style>
+            #editor {
+                height: 200px;
+            }
+            .ql-editor {
+                min-height: 150px;
+            }
+        </style>
 
 
     </head>
@@ -83,8 +93,8 @@
                                         <input name="userid" type="hidden" value="${user.id }" />
 
                                         <div class="form-group">
-                                            <textarea id="J_md_text" style="height:200px; max-height:400px; width:100%;"
-                                                name="note" rows="5"></textarea>
+                                            <div id="editor"></div>
+                                            <textarea id="note-content" name="note" style="display:none;"></textarea>
                                         </div>
                                         <div class="form-group">
                                             <button type="submit" class="btn btn-inverse btn-md"><span
@@ -135,13 +145,54 @@
 
                 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
-                    <script src="/static/wangEditor/js/jquery-1.10.2.min.js"
-                        type="text/javascript"></script>
-                    <script src="/static/wangEditor/js/wangEditor-1.3.12.js"
-                        type="text/javascript"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/jquery.min.js"></script>
+                    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+                    
+                    <script>
+                        // 初始化 Quill 编辑器
+                        var quill = new Quill('#editor', {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    [{ 'header': [1, 2, 3, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    [{ 'color': [] }, { 'background': [] }],
+                                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                    [{ 'align': [] }],
+                                    ['link', 'blockquote', 'code-block'],
+                                    ['clean']
+                                ]
+                            },
+                            placeholder: '请输入内容...'
+                        });
 
-
-                    <script src="/static/js/page/note.js"></script>
+                        // 表单提交时同步内容
+                        $('form').on('submit', function() {
+                            var content = quill.root.innerHTML;
+                            $('#note-content').val(content);
+                        });
+                        
+                        // 删除功能
+                        function removes(obj) {
+                            var id = $(obj).attr('rel');
+                            if (confirm('你确定要删除曾经的故事吗？')) {
+                                $.ajax({
+                                    url: "/note/remove",
+                                    type: "post",
+                                    data: {"id": id},
+                                    dataType: "json",
+                                    success: function (msg) {
+                                        if (msg.data == "success.") {
+                                            $(obj).parent().parent().remove();
+                                            alert(msg.result);
+                                        } else {
+                                            alert(msg.result);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    </script>
 
     </body>
 

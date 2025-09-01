@@ -17,7 +17,8 @@
     <title>NorthPark / 添加电影</title>
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
-    <link href="/static/wangEditor/css/wangEditor-1.3.12.css" rel="stylesheet"/>
+    <!-- Quill.js 富文本编辑器 -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 </head>
 
@@ -47,10 +48,8 @@
                     <div class="form-group ">
 
                          <span class="glyphicon glyphicon-star"></span>下载地址
-                         <textarea id="J_path" style="height: 200px; max-height: 400px;"
-                                      name="path" rows="5">
-								${model.path }
-						 </textarea>
+                         <div id="J_path" style="height: 200px;"></div>
+                         <input type="hidden" id="J_path_hidden" name="path" value="${model.path}">
                     </div>
 					<div class="form-group ">
 						<span class="glyphicon glyphicon-star"></span>电影颜色
@@ -72,10 +71,8 @@
                     </div>
                     <div class="form-group">
                         <span class="glyphicon glyphicon-star"></span>电影内容
-							<textarea id="J_md_text" style="height: 200px; max-height: 400px;"
-                                      name="movieDesc" rows="5">
-								${model.movieDesc }
-						    </textarea>
+							<div id="J_md_text" style="height: 200px;"></div>
+							<input type="hidden" id="J_md_text_hidden" name="movieDesc" value="${model.movieDesc}">
                     </div>
 
                     <div class="form-group">
@@ -99,28 +96,40 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script src="/static/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="/static/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/jquery.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script type="text/javascript">
     $(function () {
-        var editor = $('#J_md_text').wangEditor({
-            'menuConfig': [
-                ['viewSourceCode'],
-                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                ['list', 'justify', 'blockquote'],
-                ['createLink', 'insertHr', 'undo'],
-                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-            ]
+        var quill1 = new Quill('#J_md_text', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'blockquote', 'code-block'],
+                    ['clean']
+                ]
+            }
         });
 
-        var editor2 = $('#J_path').wangEditor({
-            'menuConfig': [
-                ['viewSourceCode'],
-                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                ['list', 'justify', 'blockquote'],
-                ['createLink', 'insertHr', 'undo'],
-                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-            ]
+        var quill2 = new Quill('#J_path', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'blockquote', 'code-block'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // 表单提交时同步内容
+        $('form').on('submit', function() {
+            $('#J_md_text_hidden').val(quill1.root.innerHTML);
+            $('#J_path_hidden').val(quill2.root.innerHTML);
         });
 
         //追加字符串

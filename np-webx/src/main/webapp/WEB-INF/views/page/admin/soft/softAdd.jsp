@@ -17,7 +17,8 @@
     <title>NorthPark / 添加软件</title>
 
     <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
-    <link href="/static/wangEditor/css/wangEditor-1.3.12.css" rel="stylesheet"/>
+    <!-- Quill.js 富文本编辑器 -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 
 </head>
 
@@ -53,33 +54,20 @@
                     <div class="form-group ">
 
                          <span class="glyphicon glyphicon-star padding-b20"></span>下载地址
-                         <textarea id="J_path" style="height: 200px; max-height: 400px;"
-                                      name="path" rows="5">
-								${model.path }
-								<a href=""
-                                   class="btn btn-donate mr-3 btn-warning"
-                                   role="button"
-                                   title="${model.title}"
-                                   target="_black">
-                                    <i class="fa fa-download padding5"></i> 云盘下载
-                                </a>
-						 </textarea>
+                         <div id="J_path" style="height: 200px;"></div>
+                         <input type="hidden" id="J_path_hidden" name="path" value="${model.path}">
                     </div>
 
                     <div class="form-group">
                     		<span class="glyphicon glyphicon-star padding-b20"></span>软件简介
-							<textarea id="J_brief" style="height: 200px; max-height: 400px;"
-                                      name="brief" rows="5">
-								${model.brief }
-						    </textarea>
+							<div id="J_brief" style="height: 200px;"></div>
+							<input type="hidden" id="J_brief_hidden" name="brief" value="${model.brief}">
                     </div>
 
                     <div class="form-group">
                     		<span class="glyphicon glyphicon-star padding-b20"></span>软件详情
-							<textarea id="J_md_text" style="height: 200px; max-height: 400px;"
-                                      name="content" rows="5">
-								${model.content }
-						    </textarea>
+							<div id="J_md_text" style="height: 200px;"></div>
+							<input type="hidden" id="J_md_text_hidden" name="content" value="${model.content}">
                     </div>
 
                     <div class="checkbox">
@@ -112,9 +100,8 @@
 
                     <div class="form-group ">
                         <span class="glyphicon glyphicon-star padding-b20 "></span>标签tips
-                        <textarea ID="J_tag_tips" style="height: 200px; max-height: 400px;"  rows="5">
-                                001 系统、应用软件<div>002 开发、设计软件</div><div>003 媒体软件</div><div>004 网络、安全软件</div><div>005 其他软件</div><div>006 游戏一箩筐</div><div>007 限免软件</div><div>008 疑难杂症</div><div>005 其他软件</div>
-                        </textarea>
+                        <div id="J_tag_tips" style="height: 200px;"></div>
+                        <input type="hidden" id="J_tag_tips_hidden" name="tagTips" value="001 系统、应用软件<div>002 开发、设计软件</div><div>003 媒体软件</div><div>004 网络、安全软件</div><div>005 其他软件</div><div>006 游戏一箩筐</div><div>007 限免软件</div><div>008 疑难杂症</div><div>005 其他软件</div>">
                     </div>
 
                     <div class="form-group ">
@@ -156,47 +143,70 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 
 
-<script src="/static/wangEditor/js/jquery-1.10.2.min.js" type="text/javascript"></script>
-<script src="/static/wangEditor/js/wangEditor-1.3.12.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/jquery.min.js"></script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script type="text/javascript">
     $(function () {
-        var editor = $('#J_md_text').wangEditor({
-            'menuConfig': [
-                ['viewSourceCode'],
-                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                ['list', 'justify', 'blockquote'],
-                ['createLink', 'insertHr', 'undo'],
-                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-            ]
+        // 初始化多个 Quill 编辑器
+        var quill1 = new Quill('#J_md_text', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'blockquote', 'code-block'],
+                    ['clean']
+                ]
+            }
         });
 
-        var editor2 = $('#J_path').wangEditor({
-            'menuConfig': [
-                ['viewSourceCode'],
-                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                ['list', 'justify', 'blockquote'],
-                ['createLink', 'insertHr', 'undo'],
-                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-            ]
+        var quill2 = new Quill('#J_path', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'blockquote', 'code-block'],
+                    ['clean']
+                ]
+            }
         });
 
-        var editor3 = $('#J_brief').wangEditor({
-            'menuConfig': [
-                ['viewSourceCode'],
-                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                ['list', 'justify', 'blockquote'],
-                ['createLink', 'insertHr', 'undo'],
-                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-            ]
+        var quill3 = new Quill('#J_brief', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'blockquote', 'code-block'],
+                    ['clean']
+                ]
+            }
         });
 
-        var editor4 = $('#J_tag_tips').wangEditor({
-            'menuConfig': [
-                ['viewSourceCode'],
-                ['fontFamily', 'fontSize', 'bold', 'setHead'],
-                ['list', 'justify', 'blockquote'],
-                ['createLink', 'insertHr', 'undo'],
-                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
+        var quill4 = new Quill('#J_tag_tips', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'blockquote', 'code-block'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // 表单提交时同步内容
+        $('form').on('submit', function() {
+            $('#J_md_text_hidden').val(quill1.root.innerHTML);
+            $('#J_path_hidden').val(quill2.root.innerHTML);
+            $('#J_brief_hidden').val(quill3.root.innerHTML);
+            $('#J_tag_tips_hidden').val(quill4.root.innerHTML);
+        });
             ]
         });
 

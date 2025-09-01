@@ -38,13 +38,30 @@ function complete(XMLHttpRequest, textStatus) {
 
 
 $(function () {
-    var editor = $('#J_md_text').wangEditor({
-        'menuConfig': [
-            ['viewSourceCode'],
-            ['fontFamily', 'fontSize', 'bold', 'setHead'],
-            ['list', 'justify', 'blockquote'],
-            ['createLink', 'insertHr', 'undo', 'redo'],
-            ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
-        ]
-    });
+    // 确保字体加载完成后再初始化编辑器
+    function initEditor() {
+        var editor = $('#J_md_text').wangEditor({
+            'menuConfig': [
+                ['viewSourceCode'],
+                ['fontFamily', 'fontSize', 'bold', 'setHead'],
+                ['list', 'justify', 'blockquote'],
+                ['createLink', 'insertHr', 'undo', 'redo'],
+                ['insertImage', 'insertVideo', 'insertLocation', 'insertCode']
+            ]
+        });
+    }
+    
+    // 检查字体是否加载
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(function() {
+            console.log('字体加载完成，初始化编辑器');
+            initEditor();
+        });
+    } else {
+        // 降级处理，延迟初始化
+        setTimeout(function() {
+            console.log('延迟初始化编辑器');
+            initEditor();
+        }, 1000);
+    }
 });
