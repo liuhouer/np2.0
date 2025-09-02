@@ -950,6 +950,54 @@ a.project-card-link {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
+/* 导航栏头像样式 */
+.avatar-image {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+    object-fit: cover;
+    vertical-align: middle;
+}
+
+/* 用户头像下拉菜单样式 */
+.user-avatar-dropdown {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.user-avatar-dropdown .dropdown-toggle {
+    display: inline-block;
+    padding: 0;
+    line-height: 38px;
+    vertical-align: middle;
+    text-decoration: none !important;
+}
+
+.user-avatar-dropdown .dropdown-toggle:hover,
+.user-avatar-dropdown .dropdown-toggle:focus {
+    text-decoration: none !important;
+}
+
+/* 统一所有头像元素的垂直对齐 */
+.user-avatar-dropdown .avatar-image,
+.user-avatar-dropdown .user-avatar-letter {
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.user-avatar-letter {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
+}
+
 .avatar span {
     display: inline-block;
     width: 50px;
