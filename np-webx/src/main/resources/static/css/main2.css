@@ -3,8 +3,10 @@ body {
     padding: 0;
     margin: 0;
     position: relative;
-    min-height: 720px;/* 设置最小高度撑起窗口 */
-    overflow-x:hidden;/* 隐藏横向滚动条 */
+    min-height: 720px;
+    /* 设置最小高度撑起窗口 */
+    overflow-x: hidden;
+    /* 隐藏横向滚动条 */
 }
 
 hr {
@@ -52,7 +54,7 @@ hr {
     padding-top: 1em;
     padding-top: 30px;
     font-family: PingHei, STHeitiSC-Light, Lucida Grande,
-    Lucida Sans Unicode, Helvetica, Arial, Verdana, sans-serif;
+        Lucida Sans Unicode, Helvetica, Arial, Verdana, sans-serif;
 }
 
 .mainfoot a {
@@ -123,7 +125,8 @@ a.btn {
 
 .btn-hero {
     color: #fff;
-    text-shadow: none; /* Prevent inheritence from `body` */
+    text-shadow: none;
+    /* Prevent inheritence from `body` */
     background-color: #45d0c6;
     border: none;
 }
@@ -133,9 +136,7 @@ a.btn {
     background-color: #49c7be;
 }
 
-.btn-success {
-
-}
+.btn-success {}
 
 .btn-warning {
     background: #f1c281;
@@ -143,7 +144,8 @@ a.btn {
     color: #fff;
 }
 
-.btn-warning:hover, .btn-warning:focus {
+.btn-warning:hover,
+.btn-warning:focus {
     background: #ebba76;
     border: 0;
     color: #fff;
@@ -155,13 +157,15 @@ a.btn {
     color: #fff;
 }
 
-.btn-pink:hover, .btn-pink:focus {
+.btn-pink:hover,
+.btn-pink:focus {
     background: #eb7fa0;
     border: 0;
     color: #fff;
 }
 
-.loveyearBtn, .loveyearBtn small {
+.loveyearBtn,
+.loveyearBtn small {
     color: #fff;
     text-decoration: none;
     background: none;
@@ -171,7 +175,8 @@ a.btn {
     border-bottom: 1px dotted #fff;
 }
 
-.loveyearBtn:focus, .loveyearBtn:hover {
+.loveyearBtn:focus,
+.loveyearBtn:hover {
     color: #fff;
     text-decoration: none;
     background: none;
@@ -183,23 +188,29 @@ a.btn {
     color: #333;
 }
 
-.pagination > li > a, .pagination > li > span {
+.pagination>li>a,
+.pagination>li>span {
     color: #7a8c8c;
     text-decoration: none;
     background-color: #fff;
     border: 1px solid #ddd;
 }
 
-.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus,
-.pagination > li > span:focus {
+.pagination>li>a:hover,
+.pagination>li>span:hover,
+.pagination>li>a:focus,
+.pagination>li>span:focus {
     color: #7a8c8c;
     background-color: #eee;
     border-color: #ddd;
 }
 
-.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover,
-.pagination > .active > span:hover, .pagination > .active > a:focus,
-.pagination > .active > span:focus {
+.pagination>.active>a,
+.pagination>.active>span,
+.pagination>.active>a:hover,
+.pagination>.active>span:hover,
+.pagination>.active>a:focus,
+.pagination>.active>span:focus {
     z-index: 2;
     color: #fff;
     cursor: default;
@@ -261,6 +272,13 @@ a.btn {
     line-height: 60px;
     display: flex;
     align-items: center;
+    justify-content: flex-start;
+}
+
+.mainhead-navbox .navbar-brand img {
+    vertical-align: middle;
+    margin: 0;
+    display: block;
 }
 
 .mainhead-navbox .navbar-brand a {
@@ -277,15 +295,15 @@ a.btn {
     height: 40px;
 }
 
-.mainhead-nav > li {
+.mainhead-nav>li {
     display: inline-block;
 }
 
-.mainhead-nav > li + li {
+.mainhead-nav>li+li {
     /*margin-left: 10px;*/
 }
 
-.mainhead-nav > li > a {
+.mainhead-nav>li>a {
     padding-right: 1.2em;
     padding-left: 1.2em;
     font-size: 1.2em;
@@ -297,8 +315,10 @@ a.btn {
     border-bottom: 3px solid transparent;
 }
 
-.mainhead-nav > li > a:hover, .mainhead-nav > li > a:focus, .mainhead-nav > .active > a,
-.mainhead-nav > .active > a:active {
+.mainhead-nav>li>a:hover,
+.mainhead-nav>li>a:focus,
+.mainhead-nav>.active>a,
+.mainhead-nav>.active>a:active {
     color: #fff;
     background: #45d0c6;
     text-shadow: none;
@@ -309,7 +329,8 @@ a.btn {
     background: #fff;
 }
 
-.mainhead-navbtn:hover, .mainhead-navbtn:focus {
+.mainhead-navbtn:hover,
+.mainhead-navbtn:focus {
     background: #f9f9f9;
     background: #f9f9f9 !important;
 }
@@ -336,7 +357,7 @@ a.btn {
 }
 
 /* extend end*/
-@media ( max-width: 768px) {
+@media (max-width: 768px) {
     .mainhead-collapse {
         background: #edf0ef;
     }
@@ -345,11 +366,11 @@ a.btn {
         float: right;
     }
 
-    .mainhead-nav > li + li {
+    .mainhead-nav>li+li {
         margin-left: 1px;
     }
 
-    .mainhead-nav > li > a {
+    .mainhead-nav>li>a {
         padding-right: 0.8em;
         padding-left: 0.8em;
         font-size: 1em;
@@ -362,7 +383,7 @@ a.btn {
     }
 }
 
-@media ( min-width: 768px) {
+@media (min-width: 768px) {
     .mainhead-brand {
         float: left;
     }
@@ -372,19 +393,19 @@ a.btn {
     }
 }
 
-@media ( min-width: 768px) {
+@media (min-width: 768px) {
     .container {
         width: 768px;
     }
 }
 
-@media ( min-width: 992px) {
+@media (min-width: 992px) {
     .container {
         width: 992px;
     }
 }
 
-@media ( min-width: 1200px) {
+@media (min-width: 1200px) {
     .container {
         width: 1180px;
     }
@@ -396,38 +417,42 @@ a.btn {
     margin-bottom: 10px;
 }
 
-.btn-toolbar > .btn + .btn, .btn-toolbar > .btn-group + .btn, .btn-toolbar > .btn + .btn-group {
+.btn-toolbar>.btn+.btn,
+.btn-toolbar>.btn-group+.btn,
+.btn-toolbar>.btn+.btn-group {
     margin-left: 5px;
 }
 
-.btn-group > .btn {
+.btn-group>.btn {
     position: relative;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
 }
 
-.btn-group > .btn + .btn {
+.btn-group>.btn+.btn {
     margin-left: -1px;
 }
 
-.btn-group > .btn, .btn-group > .dropdown-menu, .btn-group > .popover {
+.btn-group>.btn,
+.btn-group>.dropdown-menu,
+.btn-group>.popover {
     font-size: 14px;
 }
 
-.btn-group > .btn-mini {
+.btn-group>.btn-mini {
     font-size: 10.5px;
 }
 
-.btn-group > .btn-small {
+.btn-group>.btn-small {
     font-size: 11.9px;
 }
 
-.btn-group > .btn-large {
+.btn-group>.btn-large {
     font-size: 17.5px;
 }
 
-.btn-group > .btn:first-child {
+.btn-group>.btn:first-child {
     margin-left: 0;
     -webkit-border-top-left-radius: 4px;
     -moz-border-radius-topleft: 4px;
@@ -437,7 +462,8 @@ a.btn {
     border-bottom-left-radius: 4px;
 }
 
-.btn-group > .btn:last-child, .btn-group > .dropdown-toggle {
+.btn-group>.btn:last-child,
+.btn-group>.dropdown-toggle {
     -webkit-border-top-right-radius: 4px;
     -moz-border-radius-topright: 4px;
     border-top-right-radius: 4px;
@@ -446,7 +472,7 @@ a.btn {
     border-bottom-right-radius: 4px;
 }
 
-.btn-group > .btn.large:first-child {
+.btn-group>.btn.large:first-child {
     margin-left: 0;
     -webkit-border-top-left-radius: 6px;
     -moz-border-radius-topleft: 6px;
@@ -456,7 +482,8 @@ a.btn {
     border-bottom-left-radius: 6px;
 }
 
-.btn-group > .btn.large:last-child, .btn-group > .large.dropdown-toggle {
+.btn-group>.btn.large:last-child,
+.btn-group>.large.dropdown-toggle {
     -webkit-border-top-right-radius: 6px;
     -moz-border-radius-topright: 6px;
     border-top-right-radius: 6px;
@@ -465,16 +492,19 @@ a.btn {
     border-bottom-right-radius: 6px;
 }
 
-.btn-group > .btn:hover, .btn-group > .btn:focus, .btn-group > .btn:active,
-.btn-group > .btn.active {
+.btn-group>.btn:hover,
+.btn-group>.btn:focus,
+.btn-group>.btn:active,
+.btn-group>.btn.active {
     z-index: 2;
 }
 
-.btn-group .dropdown-toggle:active, .btn-group.open .dropdown-toggle {
+.btn-group .dropdown-toggle:active,
+.btn-group.open .dropdown-toggle {
     outline: 0;
 }
 
-.btn-group > .btn + .dropdown-toggle {
+.btn-group>.btn+.dropdown-toggle {
     padding-left: 8px;
     padding-right: 8px;
     -webkit-box-shadow: inset 1px 0 0 rgba(255, 255, 255, .125), inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
@@ -484,19 +514,19 @@ a.btn {
     *padding-bottom: 5px;
 }
 
-.btn-group > .btn-mini + .dropdown-toggle {
+.btn-group>.btn-mini+.dropdown-toggle {
     padding-left: 5px;
     padding-right: 5px;
     *padding-top: 2px;
     *padding-bottom: 2px;
 }
 
-.btn-group > .btn-small + .dropdown-toggle {
+.btn-group>.btn-small+.dropdown-toggle {
     *padding-top: 5px;
     *padding-bottom: 4px;
 }
 
-.btn-group > .btn-large + .dropdown-toggle {
+.btn-group>.btn-large+.dropdown-toggle {
     padding-left: 12px;
     padding-right: 12px;
     *padding-top: 7px;
@@ -553,7 +583,8 @@ a.btn {
     border-top-width: 5px;
 }
 
-.btn-mini .caret, .btn-small .caret {
+.btn-mini .caret,
+.btn-small .caret {
     margin-top: 8px;
 }
 
@@ -613,7 +644,8 @@ a.btn {
 }
 
 .touming p {
-    position: relative; /*实现IE文字不透明*/
+    position: relative;
+    /*实现IE文字不透明*/
     font-size: 20px;
     line-height: 1.67;
     font-weight: 400;
@@ -735,7 +767,7 @@ a.project-card-link {
     text-align: center;
     color: #fff;
     background: -moz-linear-gradient(top, rgba(0, 0, 0, 0) 0,
-    rgba(0, 0, 0, 0.7) 80px);
+            rgba(0, 0, 0, 0.7) 80px);
     background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.7) 80px);
     background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.7) 80px);
     background: -o-linear-gradient(top, rgba(0, 0, 0, 0) 0, rgba(0, 0, 0, 0.7) 80px);
@@ -776,7 +808,7 @@ a.project-card-link {
     margin: 32px 16px
 }
 
-.card-content > .maia-cols {
+.card-content>.maia-cols {
     margin-bottom: -16px
 }
 
@@ -793,8 +825,13 @@ a.project-card-link {
 }
 
 @media screen and (max-width: 767px) {
-    .card-content h1, .card-content h2, .card-content h3, .card-content h4,
-    .card-content h5, .card-content h6 {
+
+    .card-content h1,
+    .card-content h2,
+    .card-content h3,
+    .card-content h4,
+    .card-content h5,
+    .card-content h6 {
         margin-top: 1em
     }
 }
@@ -908,7 +945,8 @@ a.project-card-link {
     box-shadow: none
 }
 
-.card-footer-button-flat:hover, .card-footer-button-flat:focus,
+.card-footer-button-flat:hover,
+.card-footer-button-flat:focus,
 .card-footer-button-flat:active {
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
@@ -936,10 +974,17 @@ a.project-card-link {
     box-shadow: none
 }
 
-.card > .maia-cols > .maia-col-1, .card > .maia-cols > .maia-col-2, .card > .maia-cols > .maia-col-3,
-.card > .maia-cols > .maia-col-4, .card > .maia-cols > .maia-col-5, .card > .maia-cols > .maia-col-6,
-.card > .maia-cols > .maia-col-7, .card > .maia-cols > .maia-col-8, .card > .maia-cols > .maia-col-9,
-.card > .maia-cols > .maia-col-10, .card > .maia-cols > .maia-col-11 {
+.card>.maia-cols>.maia-col-1,
+.card>.maia-cols>.maia-col-2,
+.card>.maia-cols>.maia-col-3,
+.card>.maia-cols>.maia-col-4,
+.card>.maia-cols>.maia-col-5,
+.card>.maia-cols>.maia-col-6,
+.card>.maia-cols>.maia-col-7,
+.card>.maia-cols>.maia-col-8,
+.card>.maia-cols>.maia-col-9,
+.card>.maia-cols>.maia-col-10,
+.card>.maia-cols>.maia-col-11 {
     margin-bottom: 0 !important
 }
 
@@ -1010,134 +1055,207 @@ a.project-card-link {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22);
 }
 
-.avatar .text-a, .avatar .text-1, .avatar .text-n,
-.user-avatar-letter.text-A, .user-avatar-letter.text-1, .user-avatar-letter.text-N {
+.avatar .text-a,
+.avatar .text-1,
+.avatar .text-n,
+.user-avatar-letter.text-A,
+.user-avatar-letter.text-1,
+.user-avatar-letter.text-N {
     background: #F44336;
     color: #fff !important;
 }
 
-.avatar .text-b, .avatar .text-2, .avatar .text-o,
-.user-avatar-letter.text-B, .user-avatar-letter.text-2, .user-avatar-letter.text-O {
+.avatar .text-b,
+.avatar .text-2,
+.avatar .text-o,
+.user-avatar-letter.text-B,
+.user-avatar-letter.text-2,
+.user-avatar-letter.text-O {
     background: #E91E63;
     color: #fff !important;
 }
 
-.avatar .text-c, .avatar .text-3, .avatar .text-p,
-.user-avatar-letter.text-C, .user-avatar-letter.text-3, .user-avatar-letter.text-P {
+.avatar .text-c,
+.avatar .text-3,
+.avatar .text-p,
+.user-avatar-letter.text-C,
+.user-avatar-letter.text-3,
+.user-avatar-letter.text-P {
     background: #FFC107;
     color: #333 !important;
 }
 
-.avatar .text-d, .avatar .text-4, .avatar .text-q,
-.user-avatar-letter.text-D, .user-avatar-letter.text-4, .user-avatar-letter.text-Q {
+.avatar .text-d,
+.avatar .text-4,
+.avatar .text-q,
+.user-avatar-letter.text-D,
+.user-avatar-letter.text-4,
+.user-avatar-letter.text-Q {
     background: #61C5FF;
     color: #fff !important;
 }
 
-.avatar .text-e, .avatar .text-5, .avatar .text-r,
-.user-avatar-letter.text-E, .user-avatar-letter.text-5, .user-avatar-letter.text-R {
+.avatar .text-e,
+.avatar .text-5,
+.avatar .text-r,
+.user-avatar-letter.text-E,
+.user-avatar-letter.text-5,
+.user-avatar-letter.text-R {
     background: #2196F3;
     color: #fff !important;
 }
 
-.avatar .text-f, .avatar .text-6, .avatar .text-s,
-.user-avatar-letter.text-F, .user-avatar-letter.text-6, .user-avatar-letter.text-S {
+.avatar .text-f,
+.avatar .text-6,
+.avatar .text-s,
+.user-avatar-letter.text-F,
+.user-avatar-letter.text-6,
+.user-avatar-letter.text-S {
     background: #00BCD4;
     color: #fff !important;
 }
 
-.avatar .text-g, .avatar .text-7, .avatar .text-t,
-.user-avatar-letter.text-G, .user-avatar-letter.text-7, .user-avatar-letter.text-T {
+.avatar .text-g,
+.avatar .text-7,
+.avatar .text-t,
+.user-avatar-letter.text-G,
+.user-avatar-letter.text-7,
+.user-avatar-letter.text-T {
     background: #009688;
     color: #fff !important;
 }
 
-.avatar .text-h, .avatar .text-8, .avatar .text-u,
-.user-avatar-letter.text-H, .user-avatar-letter.text-8, .user-avatar-letter.text-U {
+.avatar .text-h,
+.avatar .text-8,
+.avatar .text-u,
+.user-avatar-letter.text-H,
+.user-avatar-letter.text-8,
+.user-avatar-letter.text-U {
     background: #4CAF50;
     color: #fff !important;
 }
 
-.avatar .text-i, .avatar .text-9, .avatar .text-v,
-.user-avatar-letter.text-I, .user-avatar-letter.text-9, .user-avatar-letter.text-V {
+.avatar .text-i,
+.avatar .text-9,
+.avatar .text-v,
+.user-avatar-letter.text-I,
+.user-avatar-letter.text-9,
+.user-avatar-letter.text-V {
     background: #CDDC39;
     color: #333 !important;
 }
 
-.avatar .text-j, .avatar .text-0, .avatar .text-w,
-.user-avatar-letter.text-J, .user-avatar-letter.text-0, .user-avatar-letter.text-W {
+.avatar .text-j,
+.avatar .text-0,
+.avatar .text-w,
+.user-avatar-letter.text-J,
+.user-avatar-letter.text-0,
+.user-avatar-letter.text-W {
     background: #FFC107;
     color: #333 !important;
 }
 
-.avatar .text-k, .avatar .text-x,
-.user-avatar-letter.text-K, .user-avatar-letter.text-X {
+.avatar .text-k,
+.avatar .text-x,
+.user-avatar-letter.text-K,
+.user-avatar-letter.text-X {
     background: #FF9800;
     color: #fff !important;
 }
 
-.avatar .text-l, .avatar .text-y,
-.user-avatar-letter.text-L, .user-avatar-letter.text-Y {
+.avatar .text-l,
+.avatar .text-y,
+.user-avatar-letter.text-L,
+.user-avatar-letter.text-Y {
     background: #FF5722;
     color: #fff !important;
 }
 
-.avatar .text-m, .avatar .text-z ,.avatar .text-\[,.avatar .text-【,
-.user-avatar-letter.text-M, .user-avatar-letter.text-Z {
+.avatar .text-m,
+.avatar .text-z,
+.avatar .text-\[,
+.avatar .text-【,
+.user-avatar-letter.text-M,
+.user-avatar-letter.text-Z {
     background: #FF6639;
     color: #fff !important;
 }
 
 /* 文本字体颜色--开始 */
-.text-color-A, .text-color-1, .text-color-N {
+.text-color-A,
+.text-color-1,
+.text-color-N {
     color: #F44336;
 }
 
-.text-color-B, .text-color-2, .text-color-O {
+.text-color-B,
+.text-color-2,
+.text-color-O {
     color: #E91E63;
 }
 
-.text-color-C, .text-color-3, .text-color-P {
+.text-color-C,
+.text-color-3,
+.text-color-P {
     color: #FFC107;
 }
 
-.text-color-D, .text-color-4, .text-color-Q {
+.text-color-D,
+.text-color-4,
+.text-color-Q {
     color: #61C5FF;
 }
 
-.text-color-E, .text-color-5, .text-color-R {
+.text-color-E,
+.text-color-5,
+.text-color-R {
     color: #2196F3;
 }
 
-.text-color-F, .text-color-6, .text-color-S {
+.text-color-F,
+.text-color-6,
+.text-color-S {
     color: #00BCD4;
 }
 
-.text-color-G, .text-color-7, .text-color-T {
+.text-color-G,
+.text-color-7,
+.text-color-T {
     color: #009688;
 }
 
-.text-color-H, .text-color-8, .text-color-U {
+.text-color-H,
+.text-color-8,
+.text-color-U {
     color: #4CAF50;
 }
 
-.text-color-I, .text-color-9, .text-color-V {
+.text-color-I,
+.text-color-9,
+.text-color-V {
     color: #CDDC39;
 }
 
-.text-color-J, .text-color-0, .text-color-W {
+.text-color-J,
+.text-color-0,
+.text-color-W {
     color: #FFC107;
 }
 
-.text-color-K, .text-color-X {
+.text-color-K,
+.text-color-X {
     color: #FF9800;
 }
 
-.text-color-L, .text-color-Y {
+.text-color-L,
+.text-color-Y {
     color: #FF5722;
 }
 
-.text-color-M, .text-color-Z , .text-color-\[,text-color-【{
+.text-color-M,
+.text-color-Z,
+.text-color-\[,
+text-color-【 {
     color: #FF6639;
 }
 
@@ -1209,7 +1327,7 @@ a.project-card-link {
 
 .content-show a {
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+        sans-serif;
     font-size: 16px;
     font-weight: 700;
     color: #fff;
@@ -1244,7 +1362,7 @@ a.project-card-link {
     margin-top: 60px;
     color: #fff;
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+        sans-serif;
 }
 
 .slider-caption h1 {
@@ -1331,7 +1449,7 @@ a.project-card-link {
 
 .blog-head h3 {
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+        sans-serif;
     color: #333;
     font-size: 2.5em;
     font-weight: 700;
@@ -1340,7 +1458,7 @@ a.project-card-link {
 
 .blog-head p {
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+        sans-serif;
     font-size: 1.4em;
     padding: 0em 0;
     color: #777;
@@ -1486,7 +1604,7 @@ a.project-card-link {
 
 .client-head h3 {
     font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial,
-    sans-serif;
+        sans-serif;
     color: #333;
     font-size: 2.5em;
     font-weight: 700;
@@ -1540,7 +1658,8 @@ a.project-card-link {
 }
 
 /*** Navigation ***/
-.nbs-flexisel-nav-left, .nbs-flexisel-nav-right {
+.nbs-flexisel-nav-left,
+.nbs-flexisel-nav-right {
     width: 22px;
     height: 22px;
     position: absolute;
@@ -1599,7 +1718,8 @@ a.project-card-link {
     top: 0px
 }
 
-.og_prev, .og_next {
+.og_prev,
+.og_next {
     width: 30px;
     height: 50px;
     background: url(/static/img/index/PreAndNext.png) no-repeat;
@@ -1638,9 +1758,9 @@ a.project-card-link {
     vertical-align: top;
     -webkit-font-smoothing: antialiased;
     font-family: -apple-system, "Helvetica Neue", Arial, "PingFang SC",
-    "lucida grande", "lucida sans unicode", lucida, helvetica,
-    "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei",
-    sans-serif;
+        "lucida grande", "lucida sans unicode", lucida, helvetica,
+        "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei",
+        sans-serif;
     display: block;
     -webkit-margin-before: 1em;
     -webkit-margin-after: 1em;
@@ -1778,17 +1898,17 @@ a.project-card-link {
 
 /* 边框虚线 */
 .dashed {
-	border-bottom-style: dashed;
-	border-left-style: dashed;
-	border-right-style: dashed;
-	border-top-style: dashed;
-	border-width: thin;
-	border-color: #f1c281;
+    border-bottom-style: dashed;
+    border-left-style: dashed;
+    border-right-style: dashed;
+    border-top-style: dashed;
+    border-width: thin;
+    border-color: #f1c281;
 }
 
 
-.label-small{
-	font-size: 3px;
+.label-small {
+    font-size: 3px;
     line-height: 1;
     font-weight: 400;
     letter-spacing: normal;
@@ -1799,9 +1919,9 @@ a.project-card-link {
 }
 
 /* 设置页面主内容的高度来撑起窗口   */
-.maincontent{
+.maincontent {
 
-	min-height: 620px;
+    min-height: 620px;
 
 }
 
@@ -1817,7 +1937,7 @@ a.project-card-link {
 .mainhead-navbox {
     background: #fff;
     border-bottom: 1px solid #e8e8e8;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
@@ -1829,13 +1949,13 @@ a.project-card-link {
     transform: scale(1.05);
 }
 
-.mainhead-nav > li > a {
+.mainhead-nav>li>a {
     transition: all 0.3s ease;
     border-radius: 4px;
     margin: 0 2px;
 }
 
-.mainhead-nav > li > a:hover {
+.mainhead-nav>li>a:hover {
     background: linear-gradient(135deg, #45d0c6, #3bc4ba);
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(69, 208, 198, 0.3);
@@ -1886,10 +2006,11 @@ a.project-card-link {
     color: #fff !important;
     font-size: 16px;
     font-weight: 600;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
     border: 2px solid #45d0c6;
     transition: all 0.3s ease;
-    background: #45d0c6; /* 默认背景色 */
+    background: #45d0c6;
+    /* 默认背景色 */
 }
 
 .user-avatar-letter:hover {
@@ -1965,10 +2086,11 @@ a.project-card-link {
     min-width: 200px;
     border: none;
     border-radius: 8px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     padding: 8px 0;
     margin-top: 8px;
-    overflow: hidden; /* 防止内容溢出 */
+    overflow: hidden;
+    /* 防止内容溢出 */
 }
 
 .user-avatar-dropdown .dropdown-menu li a {
@@ -2002,9 +2124,17 @@ a.project-card-link {
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* Mobile Navigation Improvements */
@@ -2023,7 +2153,9 @@ a.project-card-link {
         height: 35px;
         font-size: 14px;
     }
-}/*
+}
+
+/*
 Logo 垂直居中优化 */
 .mainhead-navbox .navbar-brand img {
     vertical-align: middle;

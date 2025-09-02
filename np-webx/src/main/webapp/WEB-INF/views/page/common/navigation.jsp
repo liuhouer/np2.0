@@ -16,7 +16,7 @@
                         </button>
 
                         <a class="navbar-brand" href="/"><img src="/static/img/logo.png" width="96"
-                                height="16"></img></a>
+                                height="16"/></a>
                         <%-- <div class="navbar-brand">--%>
 
                             <%-- <c:if test="${user==null }">--%>
