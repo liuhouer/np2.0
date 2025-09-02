@@ -82,7 +82,7 @@
 
 <div class="clearfix maincontent grayback">
     <div class="container">
-        <div class="mainbody padding-t20" id="J_maincontent">
+        <div class="mainbody " id="J_maincontent">
 
             <!-- 面包屑导航 -->
             <nav aria-label="breadcrumb" class="container" style="margin-top: 50px;">
