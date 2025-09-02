@@ -3,9 +3,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 
-<div class="row">
+<div class="story-row">
     <c:forEach items="${list }" var="s" varStatus="ss">
-        <div class="col-sm-6 ">
+        <div class="story-col">
             <div class="story-card">
                 <div class="row">
                     <div class="col-sm-3">
@@ -62,23 +62,10 @@
 
                                     title="${s.username}的最爱">${s.username}</a> 写到：
                             </p>
-                            <div id="brief_${ss.index}" class="note-brief">
-
-                                <c:if test="${!fn:startsWith(s.brief, '<')}">
-                                <p></p>
-                                <p>
-                                    </c:if>
-                                        ${s.brief }
-
-                                    <c:if test="${!fn:endsWith(s.brief, '>')}">
-                                </p>
-                                </c:if>
-
-
-                            </div>
-                            <div class="clearfix note-brief hidden" id="text_${ss.index}">
-                                    ${s.note }
-
+                            <div id="content_${ss.index}" class="story-content-text" data-content="${fn:escapeXml(s.note)}">
+                                <div class="story-text-content">
+                                    ${s.note}
+                                </div>
                             </div>
 
                             <div class="hidden" id="stuffCommentList_${s.noteid}">
@@ -95,11 +82,31 @@
 
 
 
+                            <!-- 操作按钮区域 -->
+                            <div class="story-actions">
+                                <button class="btn story-action-btn story-expand-btn" 
+                                        data-target="#content_${ss.index}"
+                                        style="display: none;">
+                                    <span class="glyphicon glyphicon-chevron-down expand-icon"></span>
+                                    <span class="expand-text">展开</span>
+                                </button>
+                                
+                                <c:if test="${user!=null }">
+                                    <button class="btn story-action-btn click2comment"
+                                            title="点击回复"
+                                            data-dismiss="#comment_${s.noteid}_${ss.index}"
+                                            data-target="#comment_${s.noteid}_${ss.index}">
+                                        <span class="glyphicon glyphicon-comment"></span> 回复
+                                    </button>
+                                </c:if>
+                            </div>
+
+                            <!-- 评论区域 -->
                             <c:if test="${user!=null }">
-                                <div class="form-group clearfix note-comment" id="comment_${s.noteid}_${ss.index}" style="display: none">
+                                <div class="form-group note-comment" id="comment_${s.noteid}_${ss.index}" style="display: none">
                                     <textarea id="input_cm_${s.noteid}_${ss.index}"
-                                              class="form-control bg-lyellow"
-                                              placeholder="回复点什么..."
+                                              class="form-control"
+                                              placeholder="分享你的想法..."
                                               rows="3"></textarea>
 
                                     <button title="提交评论"
@@ -109,31 +116,11 @@
                                             from-uid="${user.id}"
                                             from-uname="${user.username}"
                                             data-dismiss="#comment_${s.noteid}_${ss.index}"
-                                            data-target="#text_${ss.index}"
-                                            data-input="#input_cm_${s.noteid}_${ss.index}"
-                                    ><i class="fa fa-floppy-o"></i> 回复</button>
-
+                                            data-target="#content_${ss.index}"
+                                            data-input="#input_cm_${s.noteid}_${ss.index}">
+                                        <i class="fa fa-paper-plane"></i> 发送
+                                    </button>
                                 </div>
-                            </c:if>
-
-
-
-                                <button class="clearfix btn btn-gray btn-xs click2show "
-                                        topic-id="${s.noteid}"
-                                        data-input="#comment_${s.noteid}_${ss.index}"
-                                        data-dismiss="#brief_${ss.index}"
-                                        data-target="#text_${ss.index}"> &nbsp;
-                                 <span class="glyphicon glyphicon-chevron-down"></span> &nbsp;
-                                </button>
-
-
-                            <c:if test="${user!=null }">
-                                <button class="clearfix btn btn-gray btn-xs click2comment "
-                                        title="点击回复/收起回复"
-                                        data-dismiss="#comment_${s.noteid}_${ss.index}"
-                                        data-target="#comment_${s.noteid}_${ss.index}"> &nbsp;
-                                    <span class="glyphicon glyphicon-comment"></span> &nbsp;
-                                </button>
                             </c:if>
                         </div>
                     </div>
@@ -141,6 +128,5 @@
             </div>
         </div>
     </c:forEach>
-
 </div>
 

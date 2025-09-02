@@ -2030,3 +2030,67 @@ Logo 垂直居中优化 */
     margin: 0;
     display: block;
 }
+
+/* 树洞页面补充样式 */
+.story-page .container {
+    max-width: 1200px;
+}
+
+.story-page .mainbody {
+    padding: 0 15px;
+}
+
+.story-page h1.font-elegant {
+    text-align: center;
+    color: #333;
+    font-weight: 300;
+    margin: 40px 0;
+    font-size: 2.5em;
+}
+
+/* 优化响应式布局 */
+@media (max-width: 992px) {
+    .story-page .col-sm-6 {
+        width: 100%;
+        padding: 0 10px;
+    }
+}
+
+@media (min-width: 992px) {
+    .story-page .col-sm-6 {
+        padding: 0 12px;
+    }
+}
+
+/* 改进加载状态 */
+.story-page #J_progress {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 优化文本渲染 */
+.story-content-text p {
+    margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+.story-content-text p:last-child {
+    margin-bottom: 0;
+}
+
+.story-content-text img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+.story-content-text blockquote {
+    border-left: 4px solid #45d0c6;
+    padding-left: 15px;
+    margin: 15px 0;
+    color: #666;
+    font-style: italic;
+}

@@ -64,51 +64,45 @@ public class NoteController {
             }
             note.setCreateTime(TimeUtils.nowTime());
 
-            //处理笔记和介绍
-            String note_ = note.getNote();
-            //note_ = "<p>"+note_+"</p>";
-            note_ = note_.replaceAll("script", "urshit").replaceAll("alert", "caonima").replaceAll("location", "tiaonima");
-            note.setNote(note_);
-            StringBuilder sb = handleNotes(note_);
-            note.setBrief(sb.toString());
-            //end-------------------
+            // 处理笔记内容，进行安全过滤和格式化
+            String noteContent = note.getNote();
+            if (StringUtils.isNotEmpty(noteContent)) {
+                noteContent = processNoteContent(noteContent);
+                note.setNote(noteContent);
+                
+                // 不再需要生成brief，前端通过CSS控制显示
+                note.setBrief("");
+            }
+            
             this.noteService.addNote(note);
         }
         return LIST_ACTION;
     }
 
     /**
-     * 处理笔记
+     * 处理笔记内容，进行安全过滤和格式化
      *
-     * @param note_
-     * @return
+     * @param noteContent 原始笔记内容
+     * @return 处理后的内容
      */
-    private StringBuilder handleNotes(String note_) {
-        note_.replaceAll("<p><br></p>", "<br><br>");
-        StringBuilder sb = new StringBuilder();
-        String str[] = note_.split("</p>");
-        if (str.length >= 3) {
-            sb.append(str[0].replace("<p>", "")).append("<br>");
-            sb.append(str[1].replace("<p>", "")).append("<br>");
-            sb.append(str[2].replace("<p>", "")).append("<br>");
-        } else {
-            String rp_ = note_.replaceAll("<p>", "").replaceAll("</p>", "");
-            String br[] = rp_.split("<br>");
-            if (br.length >= 3) {
-                sb.append(br[0]).append("<br>");
-                sb.append(br[1]).append("<br>");
-                sb.append(br[2]).append("<br>");
-            } else {
-                String space[] = rp_.split(" ");
-                for (int i = 0; i < space.length; i++) {
-                    if (i != space.length - 1) {
-                        space[i] += "<br>";
-                    }
-                    sb.append(space[i]);
-                }
-            }
+    private String processNoteContent(String noteContent) {
+        if (StringUtils.isEmpty(noteContent)) {
+            return "";
         }
-        return sb;
+        
+        // 基础安全过滤
+        String processed = noteContent
+            .replaceAll("(?i)<script[^>]*>.*?</script>", "")
+            .replaceAll("(?i)javascript:", "")
+            .replaceAll("(?i)on\\w+\\s*=\\s*[\"'][^\"']*[\"']", "")
+            .replaceAll("(?i)on\\w+\\s*=\\s*[^\\s>]+", "");
+        
+        // 清理多余的空段落
+        processed = processed.replaceAll("<p>\\s*</p>", "")
+                           .replaceAll("<p><br></p>", "")
+                           .replaceAll("(<br>\\s*){3,}", "<br><br>");
+        
+        return processed.trim();
     }
 
 
@@ -340,6 +334,8 @@ public class NoteController {
 
         map.addAttribute("pageInfo", pageInfo);
         map.addAttribute("actionUrl", "/note");
+        map.addAttribute("page", 1);
+
 
         return "story";
     }
@@ -429,13 +425,13 @@ public class NoteController {
 
     @NotNull
     private StringBuilder getPlazzSQL() {
-        StringBuilder sql = new StringBuilder("SELECT a.id as noteid,a.brief as brief ,a.note as note,a.opened as openid,a.create_time as create_time,a.userid as userid,b.username as username,b.tail_slug as tail_slug,b.head_path as head_path ,b.email as email,b.head_span,b.head_span_class "
-                + " FROM                                   	"
-                + " bc_note a                              	"
-                + " inner JOIN bc_user  b on a.userid = b.id where 1=1 ");
+        StringBuilder sql = new StringBuilder("SELECT a.id as noteid, a.note as note, a.opened as openid, a.create_time as create_time, a.userid as userid, b.username as username, b.tail_slug as tail_slug, b.head_path as head_path, b.email as email, b.head_span, b.head_span_class "
+                + " FROM bc_note a "
+                + " INNER JOIN bc_user b ON a.userid = b.id "
+                + " WHERE 1=1 ");
 
-        sql.append(" and a.opened = 'yes' ");
-        sql.append(" order by a.create_time desc ");
+        sql.append(" AND a.opened = 'yes' ");
+        sql.append(" ORDER BY a.create_time DESC ");
         return sql;
     }
 

@@ -75,20 +75,27 @@
     </script>
 </head>
 
-<body>
+<body class="story-page">
 
 <%@ include file="/WEB-INF/views/page/common/navigation.jsp" %>
 
-<!-- 页面标题 -->
-<h1 class="font-elegant">树洞-心灵驿站</h1>
+
 <div class="clearfix maincontent grayback">
     <div class="container">
-        <div class="mainbody padding-t20" id="J_maincontent" style="margin-top:70px;">
+        <div class="mainbody padding-t20" id="J_maincontent">
 
+            <!-- 面包屑导航 -->
+            <nav aria-label="breadcrumb" class="container" style="margin-top: 50px;">
+                <ol class="breadcrumb" style="background-color: transparent;">
+                    <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i> 首页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">🌳 树洞心灵驿站</li>
+                    <c:if test="${page!=null && page!=''}">
+                        <li class="breadcrumb-item active" aria-current="page">第${page}页</li>
+                    </c:if>
+                </ol>
+            </nav>
 
             <div id="J_progress" class="center padding-t20"></div>
-
-
         </div>
     </div>
 </div>

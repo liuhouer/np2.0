@@ -1,38 +1,279 @@
+/* 面包屑导航样式 */
+.breadcrumb {
+    padding: 8px 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    color: #6c757d;
+}
+
+.breadcrumb-item a {
+    color: #45d0c6;
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    color: #3bb5ab;
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: #6c757d;
+}
+
+/* 等高卡片布局 */
+.story-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -12px;
+}
+
+.story-col {
+    flex: 0 0 50%;
+    max-width: 50%;
+    padding: 0 12px;
+    margin-bottom: 24px;
+    display: flex;
+}
+
 /* 树洞卡片样式 */
 .story-card {
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
     transition: all 0.3s ease;
-    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px solid #f0f0f0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .story-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    border-color: #e0e0e0;
 }
 
-/* 头像样式优化 */
-.avatar img {
+.story-card .row {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 用户信息区域 */
+.user-profile {
+    padding: 0 15px;
+}
+
+.user-profile .thumbnail {
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.user-profile .avatar {
+    margin-bottom: 8px;
+}
+
+.user-profile .avatar img,
+.user-profile .avatar span {
+    width: 56px;
+    height: 56px;
+    line-height: 56px;
     border-radius: 50%;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.user-profile .avatar:hover img,
+.user-profile .avatar:hover span {
+    transform: scale(1.05);
+}
+
+.user-profile p {
+    margin: 0;
+    font-size: 13px;
+}
+
+.user-profile .gray-text {
+    color: #666;
+    font-weight: 500;
+}
+
+/* 故事内容区域 */
+.story-content {
+    padding-left: 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.story-content > p {
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: #888;
+}
+
+.story-content .label-gray {
+    background-color: #f5f5f5;
+    color: #666;
+    font-weight: normal;
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+.story-content a {
+    color: #45d0c6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.story-content a:hover {
+    color: #3bb5ab;
+    text-decoration: none;
+}
+
+/* 内容文本样式 */
+.story-content-text {
+    margin: 15px 0;
+    flex: 1;
+}
+
+.story-text-content {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #333;
+    position: relative;
+}
+
+.story-text-content.truncated {
+    max-height: 120px;
+    overflow: hidden;
+}
+
+.story-text-content.truncated::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    background: linear-gradient(transparent, #fff);
+    pointer-events: none;
+}
+
+.story-text-content.expanded {
+    max-height: none;
+}
+
+.story-text-content.expanded::after {
+    display: none;
+}
+
+/* 统一的操作按钮样式 */
+.story-action-btn {
+    color: #45d0c6;
+    padding: 6px 12px;
+    font-size: 13px;
+    border: 1px solid #45d0c6;
+    background: #fff;
+    border-radius: 16px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.story-action-btn:hover,
+.story-action-btn:focus {
+    color: #3bb5ab;
+    background: rgba(69, 208, 198, 0.1);
+    border-color: #3bb5ab;
+    text-decoration: none;
+}
+
+.story-action-btn .expand-icon {
+    transition: transform 0.3s ease;
+}
+
+.story-action-btn.expanded .expand-icon {
+    transform: rotate(180deg);
+}
+
+/* 评论区域 */
+.note-comment {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+}
+
+.note-comment textarea {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.note-comment textarea:focus {
+    border-color: #45d0c6;
+    box-shadow: 0 0 0 2px rgba(69, 208, 198, 0.2);
+    outline: none;
+}
+
+.note-comment .btn-hero {
+    background: #45d0c6;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.note-comment .btn-hero:hover {
+    background: #3bb5ab;
+    transform: translateY(-1px);
+}
+
+/* 操作按钮组 */
+.story-actions {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 /* 加载动画 */
 .loading-wrapper {
     text-align: center;
-    padding: 20px;
+    padding: 40px 20px;
 }
 
 .loading-spinner {
     width: 40px;
     height: 40px;
-    margin: 0 auto;
+    margin: 0 auto 15px;
     border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
+    border-top: 3px solid #45d0c6;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+.loading-text {
+    color: #666;
+    font-size: 14px;
 }
 
 @keyframes spin {
@@ -40,23 +281,87 @@
     100% { transform: rotate(360deg); }
 }
 
-/* 内容样式优化 */
-.note-brief {
-    font-size: 15px;
-    line-height: 1.6;
-    color: #333;
-    padding: 15px 0;
-}
-
-/* 交互按钮样式 */
-.action-buttons {
-    margin-top: 15px;
-    padding-top: 10px;
-    border-top: 1px solid #eee;
-}
-
-.action-buttons button {
-    padding: 5px 12px;
-    margin-right: 10px;
-    border-radius: 15px;
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .story-row {
+        margin: 0 -8px;
+    }
+    
+    .story-col {
+        flex: 0 0 100%;
+        max-width: 100%;
+        padding: 0 8px;
+        margin-bottom: 20px;
+    }
+    
+    .story-card {
+        padding: 15px;
+        border-radius: 8px;
+    }
+    
+    .user-profile {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    
+    .story-content {
+        padding-left: 0;
+    }
+    
+    .story-text-content.truncated {
+        max-height: 100px;
+    }
+    
+    .story-actions {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .story-action-btn {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
 } 
+/* 兼容性和额外样
+式 */
+.story-row::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* 确保卡片内容区域填满剩余空间 */
+.story-card .col-sm-9 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 面包屑导航增强 */
+.breadcrumb {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.breadcrumb .fa-home {
+    margin-right: 5px;
+}
+
+/* 加载状态优化 */
+#J_progress {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 确保在所有设备上都有良好的间距 */
+@media (min-width: 992px) {
+    .story-col {
+        padding: 0 15px;
+    }
+    
+    .story-row {
+        margin: 0 -15px;
+    }
+}
