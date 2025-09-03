@@ -235,6 +235,8 @@ a.btn {
 .navbar-fixed-top {
     background: #fff;
     border-bottom: 1px solid #f9f9f9;
+    z-index: 1030;
+    /* 确保导航栏在页面内容之上 */
 }
 
 .navbar-header a {
@@ -2091,6 +2093,10 @@ text-color-【 {
     margin-top: 8px;
     overflow: hidden;
     /* 防止内容溢出 */
+    z-index: 9999;
+    /* 确保下拉菜单在最顶层，避免被其他内容遮挡 */
+    position: absolute;
+    /* 确保定位正确 */
 }
 
 .user-avatar-dropdown .dropdown-menu li a {
@@ -2152,6 +2158,22 @@ text-color-【 {
         width: 35px;
         height: 35px;
         font-size: 14px;
+    }
+
+    /* 移动端下拉菜单特殊处理 */
+    .user-avatar-dropdown .dropdown-menu {
+        z-index: 10000 !important;
+        /* 移动端使用更高的z-index */
+        position: fixed !important;
+        /* 使用fixed定位避免被遮挡 */
+        right: 15px;
+        /* 右对齐 */
+        left: auto !important;
+        /* 覆盖默认的left定位 */
+        top: 60px !important;
+        /* 导航栏高度下方 */
+        min-width: 180px;
+        /* 移动端稍微窄一些 */
     }
 }
 
