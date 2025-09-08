@@ -138,10 +138,16 @@ data-cf-beacon='{"token": "77408708315e467b876ee630114c6196"}'>
                 if(msg.result){
                     //自动登陆成功
                     console.log(msg.data);
-                    art.dialog.tips(msg.data+' | 必要时刷新页面');
+                    art.dialog.tips(msg.data+' | 正在刷新页面...');
+
 
                     //拉取未读消息数量
                     fetchNotifyCount();
+
+                    // 延迟1秒后自动刷新页面，让用户看到提示信息
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000);
 
 
                 }else{
