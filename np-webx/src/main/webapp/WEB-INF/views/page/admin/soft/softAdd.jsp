@@ -150,55 +150,58 @@
                 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/jquery.min.js"></script>
                 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
                 <script type="text/javascript">
+                    // 声明全局变量
+                    var quill1, quill2, quill3, quill4;
+                    
                     $(function () {
                         // 初始化多个 Quill 编辑器
-                        var quill1 = new Quill('#J_md_text', {
+                        quill1 = new Quill('#J_md_text', {
                             theme: 'snow',
                             modules: {
                                 toolbar: [
                                     [{ 'header': [1, 2, 3, false] }],
                                     ['bold', 'italic', 'underline'],
                                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                    ['link', 'blockquote', 'code-block'],
+                                    ['link', 'image', 'blockquote', 'code-block'],
                                     ['clean']
                                 ]
                             }
                         });
 
-                        var quill2 = new Quill('#J_path', {
+                        quill2 = new Quill('#J_path', {
                             theme: 'snow',
                             modules: {
                                 toolbar: [
                                     [{ 'header': [1, 2, 3, false] }],
                                     ['bold', 'italic', 'underline'],
                                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                    ['link', 'blockquote', 'code-block'],
+                                    ['link', 'image', 'blockquote', 'code-block'],
                                     ['clean']
                                 ]
                             }
                         });
 
-                        var quill3 = new Quill('#J_brief', {
+                        quill3 = new Quill('#J_brief', {
                             theme: 'snow',
                             modules: {
                                 toolbar: [
                                     [{ 'header': [1, 2, 3, false] }],
                                     ['bold', 'italic', 'underline'],
                                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                    ['link', 'blockquote', 'code-block'],
+                                    ['link', 'image', 'blockquote', 'code-block'],
                                     ['clean']
                                 ]
                             }
                         });
 
-                        var quill4 = new Quill('#J_tag_tips', {
+                        quill4 = new Quill('#J_tag_tips', {
                             theme: 'snow',
                             modules: {
                                 toolbar: [
                                     [{ 'header': [1, 2, 3, false] }],
                                     ['bold', 'italic', 'underline'],
                                     [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-                                    ['link', 'blockquote', 'code-block'],
+                                    ['link', 'image', 'blockquote', 'code-block'],
                                     ['clean']
                                 ]
                             }
