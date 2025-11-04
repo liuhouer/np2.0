@@ -49,7 +49,7 @@
 
                          <span class="glyphicon glyphicon-star"></span>下载地址
                          <div id="J_path" style="height: 200px;"></div>
-                         <input type="hidden" id="J_path_hidden" name="path" value="${model.path}">
+                         <textarea id="J_path_hidden" name="path" style="display:none;">${model.path}</textarea>
                     </div>
 					<div class="form-group ">
 						<span class="glyphicon glyphicon-star"></span>电影颜色
@@ -72,7 +72,7 @@
                     <div class="form-group">
                         <span class="glyphicon glyphicon-star"></span>电影内容
 							<div id="J_md_text" style="height: 200px;"></div>
-							<input type="hidden" id="J_md_text_hidden" name="movieDesc" value="${model.movieDesc}">
+							<textarea id="J_md_text_hidden" name="movieDesc" style="display:none;">${model.movieDesc}</textarea>
                     </div>
 
                     <div class="form-group">
@@ -126,6 +126,40 @@
             }
         });
 
+        // 初始化编辑器内容（编辑模式时填充已有内容）
+        var contentValue = $('#J_md_text_hidden').val();
+        console.log('电影内容原始值:', contentValue);
+        if (contentValue && contentValue.trim() !== '') {
+            try {
+                quill1.clipboard.dangerouslyPasteHTML(contentValue);
+                console.log('电影内容设置成功');
+            } catch (e) {
+                console.log('设置电影内容失败:', e);
+                quill1.setText(contentValue);
+            }
+        }
+
+        var pathValue = $('#J_path_hidden').val();
+        console.log('下载地址原始值:', pathValue);
+        if (pathValue && pathValue.trim() !== '') {
+            try {
+                quill2.clipboard.dangerouslyPasteHTML(pathValue);
+                console.log('下载地址设置成功');
+            } catch (e) {
+                console.log('设置下载地址失败:', e);
+                quill2.setText(pathValue);
+            }
+        }
+
+        // 内容变化时实时同步到隐藏字段
+        quill1.on('text-change', function() {
+            $('#J_md_text_hidden').val(quill1.root.innerHTML);
+        });
+
+        quill2.on('text-change', function() {
+            $('#J_path_hidden').val(quill2.root.innerHTML);
+        });
+
         // 表单提交时同步内容
         $('form').on('submit', function() {
             $('#J_md_text_hidden').val(quill1.root.innerHTML);
@@ -137,27 +171,42 @@
 
         //提交表单
         $("#formSubmit").click(function () {
-            if ($("#J_name").val() && $("#J_md_text").val() && $("#J_color").val() && $("#J_path").val() && $("#J_tag").val() && $("#J_tag_code").val() ) {
+            // 提交前先同步所有富文本编辑器内容
+            $('#J_md_text_hidden').val(quill1.root.innerHTML);
+            $('#J_path_hidden').val(quill2.root.innerHTML);
+
+            // 验证必填字段
+            var movieName = $("#J_name").val().trim();
+            var content = $('#J_md_text_hidden').val().trim();
+            var path = $('#J_path_hidden').val().trim();
+            var color = $("#J_color").val().trim();
+            var tag = $("#J_tag").val().trim();
+            var tagCode = $("#J_tag_code").val().trim();
+
+            if (movieName && content && color && path && tag && tagCode) {
+                // 禁用提交按钮防止重复提交
+                $('#formSubmit').attr("disabled", 'disabled').val('提交中...');
 
                 $.ajax({
                     url: "/movies/addItem",
                     type: "post",
                     dataType: "json",
-                    data: $('#addItemForm').serialize(),// 要提交的表单 ,
+                    data: $('#addItemForm').serialize(),
                     success: function (msg) {
-
                         if (msg.data == "success") {
-
                             art.dialog.tips('添加成功');
-                            $('#formSubmit').attr("disabled", 'disabled');
-
+                        } else {
+                            art.dialog.tips('操作失败：' + (msg.message || '未知错误'));
+                            $('#formSubmit').removeAttr("disabled").val('添加');
                         }
-
+                    },
+                    error: function(xhr, status, error) {
+                        art.dialog.tips('网络错误，请重试');
+                        $('#formSubmit').removeAttr("disabled").val('添加');
                     }
-
                 });
             } else {
-                art.dialog.tips('填写必要信息');
+                art.dialog.tips('请填写所有必要信息');
             }
         });
     });

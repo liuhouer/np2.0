@@ -173,16 +173,37 @@
                 const pathTextarea = document.getElementById('J_path');
                 const briefTextarea = document.getElementById('J_md_brief');
 
+                console.log('学习内容原始值:', contentTextarea.value);
                 if (contentTextarea.value.trim()) {
-                        contentEditor.root.innerHTML = contentTextarea.value;
+                        try {
+                                contentEditor.clipboard.dangerouslyPasteHTML(contentTextarea.value);
+                                console.log('学习内容设置成功');
+                        } catch (e) {
+                                console.log('设置学习内容失败:', e);
+                                contentEditor.setText(contentTextarea.value);
+                        }
                 }
 
+                console.log('下载地址原始值:', pathTextarea.value);
                 if (pathTextarea.value.trim()) {
-                        pathEditor.root.innerHTML = pathTextarea.value;
+                        try {
+                                pathEditor.clipboard.dangerouslyPasteHTML(pathTextarea.value);
+                                console.log('下载地址设置成功');
+                        } catch (e) {
+                                console.log('设置下载地址失败:', e);
+                                pathEditor.setText(pathTextarea.value);
+                        }
                 }
 
+                console.log('学习预览原始值:', briefTextarea.value);
                 if (briefTextarea.value.trim()) {
-                        briefEditor.root.innerHTML = briefTextarea.value;
+                        try {
+                                briefEditor.clipboard.dangerouslyPasteHTML(briefTextarea.value);
+                                console.log('学习预览设置成功');
+                        } catch (e) {
+                                console.log('设置学习预览失败:', e);
+                                briefEditor.setText(briefTextarea.value);
+                        }
                 }
 
                 // 监听编辑器内容变化，同步到隐藏的textarea
@@ -205,7 +226,19 @@
                         pathTextarea.value = pathEditor.root.innerHTML;
                         briefTextarea.value = briefEditor.root.innerHTML;
 
-                        if ($("#J_name").val() && contentTextarea.value && $("#J_color").val() && pathTextarea.value && $("#J_tag").val() && $("#J_tag_code").val()) {
+                        // 验证必填字段
+                        var title = $("#J_name").val().trim();
+                        var content = contentTextarea.value.trim();
+                        var color = $("#J_color").val().trim();
+                        var path = pathTextarea.value.trim();
+                        var tag = $("#J_tag").val().trim();
+                        var tagCode = $("#J_tag_code").val().trim();
+                        var price = $("#J_price").val().trim();
+
+                        if (title && content && color && path && tag && tagCode && price) {
+                                // 禁用提交按钮防止重复提交
+                                $('#formSubmit').attr("disabled", 'disabled').val('提交中...');
+
                                 $.ajax({
                                         url: "/learning/addItem",
                                         type: "post",
@@ -214,12 +247,18 @@
                                         success: function (msg) {
                                                 if (msg.data == "success") {
                                                         art.dialog.tips('添加成功');
-                                                        $('#formSubmit').attr("disabled", 'disabled');
+                                                } else {
+                                                        art.dialog.tips('操作失败：' + (msg.message || '未知错误'));
+                                                        $('#formSubmit').removeAttr("disabled").val('添加');
                                                 }
+                                        },
+                                        error: function(xhr, status, error) {
+                                                art.dialog.tips('网络错误，请重试');
+                                                $('#formSubmit').removeAttr("disabled").val('添加');
                                         }
                                 });
                         } else {
-                                art.dialog.tips('填写必要信息');
+                                art.dialog.tips('请填写所有必要信息（包括定价）');
                         }
                 });
         });
