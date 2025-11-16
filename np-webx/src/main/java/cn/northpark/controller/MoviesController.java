@@ -452,71 +452,68 @@ public class MoviesController {
                 && StringUtils.isNotBlank(model.getColor());
         String rs = "success";
         try {
-        	//更新
-        	if(model.getId()!=null && model.getId()!=0) {
+
+            // 更新
+            if (model.getId() != null && model.getId() != 0) {
                 model.setAddTime(TimeUtils.nowDate());
-        		moviesService.updateMovies(model);
+                moviesService.updateMovies(model);
 
-                //从redis set里面删除更新的失效资源
-                if(RedisUtil.getInstance().sMembers(BC_Constant.REDIS_FEEDBACK).toString().contains(model.getId().toString())){
-                    RedisUtil.getInstance().sMembers(BC_Constant.REDIS_FEEDBACK).forEach(item->{
-                        if(item.contains(model.getId().toString())) {
-                            //{"spanID":"746358","uID":"519795","href":"https://northpark.cn/movies/post-746358.html",
-                            // "title":"《卡比利亚之夜》百度云网盘下载[MP4//mkv]蓝光"}
-                            Map<String, Object> feed_map = JsonUtil.json2map(item);
+                String spanID = model.getId().toString();
+                String redisKey = BC_Constant.REDIS_FEEDBACK + ":" + spanID;
+                RedisUtil redisUtil = RedisUtil.getInstance();
 
-                            //===================================异步操作=================================================
-                            ThreadPoolExecutor threadPoolExecutor = AsyncThreadPool.getInstance().getThreadPoolExecutor();
-                            threadPoolExecutor.execute(new Runnable() {
-                                @Override
-                                public void run() {
+                // 检查是否存在反馈记录
+                String feedbackJson = redisUtil.hGet(redisKey, "feedback");
+                if (feedbackJson != null) {
+                    Map<String, Object> feedbackData = JsonUtil.json2map(feedbackJson);
+                    String title = (String) feedbackData.get("title");
+                    String href = (String) feedbackData.get("href");
 
-                                    //发送异步站长通知消息
-                                    try {
-                                        //=================================消息提醒====================================================
+                    // 获取所有反馈用户
+                    Set<String> userIds = redisUtil.sMembers(redisKey + ":users");
+                    if (userIds != null && !userIds.isEmpty()) {
+                        ThreadPoolExecutor executor = AsyncThreadPool.getInstance().getThreadPoolExecutor();
 
-                                        //判断主题类型
-                                        NotifyEnum match = NotifyEnum.FEED;
+                        for (String uID : userIds) {
+                            String finalUID = uID;
+                            executor.execute(() -> {
+                                try {
+                                    // 站内通知
+                                    NotifyEnum match = NotifyEnum.FEED;
+                                    NotifyRemindB nr = new NotifyRemindB();
+                                    nr.setRecipientId(finalUID);
+                                    nr.setSenderName("系统");
+                                    nr.setObject(title);
+                                    nr.setObjectId(spanID);
+                                    nr.setObjectLinks(href);
+                                    nr.setMessage("---" + TimeUtils.nowTime() + "---资源已更新，请知悉---");
+                                    nr.setStatus("0");
+                                    match.notifyInstance.execute(nr);
 
-                                        //提醒系统赋值
-                                        NotifyRemindB nr = new NotifyRemindB();
-
-                                        //common
-                                        nr.setRecipientId(feed_map.get("uID").toString());
-                                        nr.setObject(feed_map.get("title").toString());
-                                        nr.setObjectId(feed_map.get("spanID").toString());
-                                        nr.setObjectLinks(feed_map.get("href").toString());
-                                        nr.setMessage("---"+TimeUtils.nowTime()+"---资源已更新，请知悉---");
-                                        nr.setStatus("0");
-
-
-                                        match.notifyInstance.execute(nr);
-
-
-                                        // 邮件通知所有反馈用户
-                                        String userEmail = NotifyUtil.getUserEmailByID(feed_map.get("uID").toString());
-                                        if (org.apache.commons.lang3.StringUtils.isNotBlank(userEmail)) {
-                                            String subject = "资源失效反馈更新通知";
-                                            String msg = String.format("自动化任务：您反馈的资源《%s》已更新，请访问 <a href=\"%s\">%s</a> 查看。",
-                                                    feed_map.get("title").toString(), feed_map.get("href").toString(), feed_map.get("href").toString());
-                                            EmailUtils.getInstance().sendEMAIL(userEmail, subject, msg);
-                                        }
-
-                                        //=================================消息提醒====================================================
-                                    }catch (Exception ig){
-                                        log.error("addItem-notice-has-ignored-------:",ig);
+                                    // 邮件通知
+                                    String userEmail = NotifyUtil.getUserEmailByID(finalUID);
+                                    if (StringUtils.isNotBlank(userEmail)) {
+                                        String subject = "资源失效反馈更新通知";
+                                        String msg = String.format(
+                                                "您好，<br><br>您反馈的资源已更新：<br><br>" +
+                                                        "《<strong>%s</strong>》<br><br>" +
+                                                        "请点击查看最新资源：<a href=\"%s\">%s</a><br><br>" +
+                                                        "感谢您的反馈！",
+                                                title, href, href
+                                        );
+                                        EmailUtils.getInstance().sendEMAIL(userEmail, subject, msg);
                                     }
+                                } catch (Exception e) {
+                                    log.error("通知用户 {} 资源更新失败: {}", finalUID, e.getMessage());
                                 }
-
-
-
                             });
-                            //===================================异步操作=================================================
-
-                            //从redis移除
-                            RedisUtil.getInstance().sRem(BC_Constant.REDIS_FEEDBACK, item);
                         }
-                    });
+                    }
+
+                    // 清理 Redis 反馈数据（避免重复通知）
+                    redisUtil.del(redisKey);                    // 删除 hash
+                    redisUtil.del(redisKey + ":users");         // 删除用户集合
+                    redisUtil.del(redisKey + ":count");         // 删除计数器
                 }
 
         	}else {//新增
