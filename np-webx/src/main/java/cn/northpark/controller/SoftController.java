@@ -230,6 +230,16 @@ public class SoftController {
 
                                         match.notifyInstance.execute(nr);
 
+
+                                        // 邮件通知所有反馈用户
+                                        String userEmail = NotifyUtil.getUserEmailByID(feed_map.get("uID").toString());
+                                        if (org.apache.commons.lang3.StringUtils.isNotBlank(userEmail)) {
+                                            String subject = "资源失效反馈更新通知";
+                                            String msg = String.format("自动化任务：您反馈的资源《%s》已更新，请访问 <a href=\"%s\">%s</a> 查看。",
+                                                    feed_map.get("title").toString(), feed_map.get("href").toString(), feed_map.get("href").toString());
+                                            EmailUtils.getInstance().sendEMAIL(userEmail, subject, msg);
+                                        }
+
                                         //=================================消息提醒====================================================
                                     }catch (Exception ig){
                                         log.error("addItem-notice-has-ignored-------:",ig);
