@@ -420,7 +420,8 @@ public class BaZiEngine {
         BaZiEngine engine = new BaZiEngine();
 
         // 使用参考案例：1991年12月31日 13:10 男
-        String[] results = engine.getFullResult(1990, 1, 20, 8, 20, false, "李宣");
+//        String[] results = engine.getFullResult(1990, 1, 20, 8, 20, false, "李宣");
+        String[] results = engine.getFullResult(1991, 4, 1, 15, 30, true, "张云成");
 
         System.out.println(results[0]);  // 排盘结果
 

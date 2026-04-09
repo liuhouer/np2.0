@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.northpark.mapper.BaZiRecordMapper">
+
+    <insert id="insert" parameterType="cn.northpark.model.BaZiRecord" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bc_bazi_record
+            (user_id, user_name, name, gender, birth_year, birth_month, birth_day,
+             birth_hour, birth_minute, pan_result, yun_result, ip, is_free, create_time)
+        VALUES
+            (#{userId}, #{userName}, #{name}, #{gender}, #{birthYear}, #{birthMonth}, #{birthDay},
+             #{birthHour}, #{birthMinute}, #{panResult}, #{yunResult}, #{ip}, #{isFree}, NOW())
+    </insert>
+
+</mapper>
