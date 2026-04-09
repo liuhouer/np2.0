@@ -59,7 +59,7 @@ public class BaZiEngine {
         sb.append(String.format("%s  \n", r.isMale ? "男" : "女"));
 
         int dispYear = r.birthYear <= 0 ? r.birthYear - 1 : r.birthYear;
-        sb.append(String.format("%d-%d-%d %02d:%02d(北京时间),星期%s\n",
+        sb.append(String.format("阳历：%d-%d-%d %02d:%02d(北京时间),星期%s\n",
             dispYear, r.birthMonth, r.birthDay, r.birthHour, r.birthMinute,
             BaZiConstants.WEEK[DateCalc.getWeek(r.birthYear, r.birthMonth, r.birthDay)]));
 
@@ -70,7 +70,7 @@ public class BaZiEngine {
         String nlDayStr = r.nlDay <= 10 ? "初" + DateCalc.numToHz(r.nlDay) : DateCalc.numToHz(r.nlDay) + "日";
         // 时辰
         int shiZhi = ((r.birthHour % 2 == 1 ? (r.birthHour + 1) % 24 : r.birthHour) / 2 + 1) % 12;
-        sb.append(String.format("%s年%s%s%s时(%s)\n\n",
+        sb.append(String.format("阴历：%s年%s%s%s时(%s)\n\n",
             nlYearStr, nlMonthStr, nlDayStr,
             BaZiConstants.DIZHI[shiZhi],
             r.yueTotal >= 30 ? "大月" : "小月"));
