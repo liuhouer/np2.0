@@ -66,6 +66,10 @@ public class ResourceFeedbackTask {
                         String encodedTitle = URLEncoder.encode(searchTerm, "UTF-8");
                         String apiUrl = String.format(SEARCH_API, encodedTitle);
                         String response = httpGet(apiUrl);
+                        if (response == null || !response.trim().startsWith("{")) {
+                            log.warn("搜索接口返回非 JSON 响应，跳过 key={}，response={}", key, response);
+                            continue;
+                        }
                         Map<String, Object> result = mapper.readValue(response, Map.class);
 
                         // 处理搜索结果

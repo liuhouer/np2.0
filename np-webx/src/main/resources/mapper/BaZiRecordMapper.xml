@@ -5,10 +5,10 @@
 
     <insert id="insert" parameterType="cn.northpark.model.BaZiRecord" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO bc_bazi_record
-            (user_id, user_name, name, gender, birth_year, birth_month, birth_day,
+            (user_id, user_name,open_id, name, gender, birth_year, birth_month, birth_day,
              birth_hour, birth_minute, pan_result, yun_result, ip, is_free, create_time)
         VALUES
-            (#{userId}, #{userName}, #{name}, #{gender}, #{birthYear}, #{birthMonth}, #{birthDay},
+            (#{userId}, #{userName}, #{openId},#{name}, #{gender}, #{birthYear}, #{birthMonth}, #{birthDay},
              #{birthHour}, #{birthMinute}, #{panResult}, #{yunResult}, #{ip}, #{isFree}, NOW())
     </insert>
 
