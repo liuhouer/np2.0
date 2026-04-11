@@ -7,7 +7,6 @@ import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
 import cn.northpark.service.BaZiService;
 import cn.northpark.utils.RedisUtil;
-import cn.northpark.vo.UserVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,14 +28,13 @@ public class BaZiServiceImpl implements BaZiService {
 
     @Override
     public Result<?> fullReading(int year, int month, int day, int hour, int minute,
-                                 boolean isMale, String name, UserVO user, HttpServletRequest request) {
+                                 boolean isMale, String name, String openId, HttpServletRequest request) {
 
-        String redisKey = "bazi:free:" + user.getId() + ":" + LocalDate.now();
+        String redisKey = "bazi:free:" + openId + ":" + LocalDate.now();
         String countStr = RedisUtil.getInstance().get(redisKey);
         int usedCount = countStr == null ? 0 : Integer.parseInt(countStr);
 
-        boolean isFree = usedCount < FREE_DAILY_LIMIT;
-        if (!isFree) {
+        if (usedCount >= FREE_DAILY_LIMIT) {
             return ResultGenerator.genErrorResult(429, "今日免费次数已用完，请明日再试");
         }
 
@@ -58,8 +56,7 @@ public class BaZiServiceImpl implements BaZiService {
 
         // 保存记录
         BaZiRecord record = new BaZiRecord();
-        record.setUserId(user.getId());
-        record.setUserName(user.getUsername());
+        record.setOpenId(openId);
         record.setName(name);
         record.setGender(isMale ? 1 : 0);
         record.setBirthYear(year);
