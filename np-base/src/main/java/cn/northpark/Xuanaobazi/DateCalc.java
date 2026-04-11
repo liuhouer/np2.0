@@ -93,7 +93,7 @@ public class DateCalc {
         int iVal = m * 30 - 75;
 
         double T1 = 0, T2 = 0;
-        for (int iter = 0; iter < 200; iter++) {
+        for (int iter = 0; iter < 30; iter++) {
             double W1 = (y + iVal / 360.0 + 1.0) * PI2;
             double W2 = (y + (iVal + 30) / 360.0 + 1.0) * PI2;
             T1 = qi_high(W1);
@@ -118,14 +118,18 @@ public class DateCalc {
     /**
      * 获取月支（0-11）
      * 对应原版 MYiDateEx.GetYueZhi
+     * 通过搜索包含该日期的节气区间来确定月支
      */
     public static short getYueZhi(short[] gDate) {
         double dStart = toJulian(gDate);
         int y = gDate[0] - 2000;
+        // 以该月为中心，初始iVal从该月对应的黄经偏移开始
+        // m = gDate[1]-1，iVal = m*30 - 75
         int m = gDate[1] - 1;
         int iVal = m * 30 - 75;
 
-        for (int iter = 0; iter < 200; iter++) {
+        // 迭代找到包含 dStart 的节气区间 [T1, T2)
+        for (int iter = 0; iter < 30; iter++) {
             double W1 = (y + iVal / 360.0 + 1.0) * PI2;
             double W2 = (y + (iVal + 30) / 360.0 + 1.0) * PI2;
             double T1 = qi_high(W1);
@@ -135,8 +139,10 @@ public class DateCalc {
             else iVal += 30;
         }
 
-        int iVal2 = iVal;
-        while (iVal2 < 0) iVal2 += 360;
+        // 将 iVal 归一化到 [0, 360)
+        int iVal2 = ((iVal % 360) + 360) % 360;
+        // 月支计算：iVal=0对应夏至(午月=7)，每+30增加一个月
+        // 原版公式：i = iVal2 - 285; if(i<0) i+=360; return (i/30+1+1)%12
         int i = iVal2 - 285;
         if (i < 0) i += 360;
         return (short) ((i / 30 + 1 + 1) % 12);
@@ -219,10 +225,8 @@ public class DateCalc {
      * 地球黄经（简化版，使用VSOP87主项）
      */
     private static double E_Lon(double t, int n) {
-        // 简化VSOP87 L0项（主要项）
         double L = 1.75347046 + 628.3319653318 * t
             + 5.291838e-6 * t * t;
-        // L1项
         L += 3.34166e-2 * Math.cos(4.669257 + 628.307585 * t);
         L += 3.489e-4  * Math.cos(4.6261   + 1256.61517 * t);
         L += 2.061e-4  * Math.cos(2.67823  + 628.307585 * t) * t;
@@ -230,7 +234,8 @@ public class DateCalc {
         L += 1.164e-5  * Math.cos(2.9244   + 5753.3849  * t);
         L += 9.94e-6   * Math.cos(5.0      + 5507.5532  * t);
         L += 9.42e-6   * Math.cos(0.0      + 5223.6939  * t);
-        return rad2rrad(L);
+        // 不做 rad2rrad，保持未归一化，与原版 XL0_calc 一致
+        return L;
     }
 
     /**

@@ -421,7 +421,12 @@ public class BaZiEngine {
 
         // 使用参考案例：1991年12月31日 13:10 男
 //        String[] results = engine.getFullResult(1990, 1, 20, 8, 20, false, "李宣");
-        String[] results = engine.getFullResult(1991, 4, 1, 15, 30, true, "张云成");
+//        String[] results = engine.getFullResult(1991, 4, 1, 15, 30, true, "张云成");
+//        String[] results = engine.getFullResult(1991, 12, 31, 13, 10, true, "Jeey");
+//        String[] results = engine.getFullResult(1992, 8, 24, 21, 0, false, "陈杨");
+//        String[] results = engine.getFullResult(1994, 11, 13, 12, 0, true, "巨人旗");
+        String[] results = engine.getFullResult(1991, 3, 17, 16, 0, true, "刘伟");
+
 
         System.out.println(results[0]);  // 排盘结果
 
