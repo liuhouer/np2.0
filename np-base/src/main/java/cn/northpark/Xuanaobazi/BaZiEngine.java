@@ -495,8 +495,17 @@ public class BaZiEngine {
             pillar.setDiZhi(BaZiConstants.DIZHI[r.gz[i] % 12]);
             pillar.setGanZhi(pillar.getTianGan() + pillar.getDiZhi());
             pillar.setNaYin(r.getNaYinName(i));
-            pillar.setTianGanShiShen(BaZiConstants.SHISHEN[r.tian[i].shiShen]);
-            pillar.setDiZhiShiShen(BaZiConstants.SHISHEN[r.di[i].shiShen]);
+            // 防御性检查十神
+            if (r.tian[i].shiShen >= 0 && r.tian[i].shiShen < BaZiConstants.SHISHEN.length) {
+                pillar.setTianGanShiShen(BaZiConstants.SHISHEN[r.tian[i].shiShen]);
+            } else {
+                pillar.setTianGanShiShen("未知");
+            }
+            if (r.di[i].shiShen >= 0 && r.di[i].shiShen < BaZiConstants.SHISHEN.length) {
+                pillar.setDiZhiShiShen(BaZiConstants.SHISHEN[r.di[i].shiShen]);
+            } else {
+                pillar.setDiZhiShiShen("未知");
+            }
             
             // 地支藏干十神
             java.util.List<String> cangGanList = new java.util.ArrayList<>();
@@ -505,7 +514,12 @@ public class BaZiEngine {
             if (r.di[i].shiShen2[2] >= 0) cangGanList.add(BaZiConstants.SHISHEN[r.di[i].shiShen2[2]]);
             pillar.setDiZhiCangGanShiShen(cangGanList);
             
-            pillar.setG12(BaZiConstants.G12[r.di[i].wang]);
+            // 十二长生（防御性检查）
+            if (r.di[i].wang >= 0 && r.di[i].wang < BaZiConstants.G12.length) {
+                pillar.setG12(BaZiConstants.G12[r.di[i].wang]);
+            } else {
+                pillar.setG12("未知");
+            }
             pillar.setSanHe(r.di[i].sanHe >= 0);
             pillar.setSanHui(r.di[i].sanHui >= 0);
             pillar.setChong(r.di[i].chong >= 0);
