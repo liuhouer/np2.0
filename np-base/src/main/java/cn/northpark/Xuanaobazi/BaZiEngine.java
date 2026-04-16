@@ -1,5 +1,8 @@
 package cn.northpark.Xuanaobazi;
 
+import cn.northpark.Xuanaobazi.vo.BaZiPanVO;
+import cn.northpark.Xuanaobazi.vo.BaZiYunVO;
+
 /**
  * 八字排盘主引擎 - 统一对外接口
  *
@@ -7,6 +10,8 @@ package cn.northpark.Xuanaobazi;
  *   BaZiEngine engine = new BaZiEngine();
  *   String pan = engine.getPanResult(1991, 12, 31, 13, 10, true, "张三");
  *   String yun = engine.getYunReport(1991, 12, 31, 13, 10, true, "张三");
+ *   BaZiPanVO panVO = engine.getPanVO(1991, 12, 31, 13, 10, true, "张三");
+ *   BaZiYunVO yunVO = engine.getYunVO(1991, 12, 31, 13, 10, true, "张三");
  */
 public class BaZiEngine {
 
@@ -46,6 +51,24 @@ public class BaZiEngine {
     public BaZiResult getRawResult(int year, int month, int day, int hour, int minute,
                                     boolean isMale, String name) {
         return calc.calc(year, month, day, hour, minute, isMale, name);
+    }
+
+    /**
+     * 获取排盘 VO（结构化数据）
+     */
+    public BaZiPanVO getPanVO(int year, int month, int day, int hour, int minute,
+                              boolean isMale, String name) {
+        BaZiResult r = calc.calc(year, month, day, hour, minute, isMale, name);
+        return buildPanVO(r);
+    }
+
+    /**
+     * 获取运势 VO（结构化数据）
+     */
+    public BaZiYunVO getYunVO(int year, int month, int day, int hour, int minute,
+                              boolean isMale, String name) {
+        BaZiResult r = calc.calc(year, month, day, hour, minute, isMale, name);
+        return buildYunVO(r);
     }
 
     // ===== 排盘格式化（对应原版 BzRun 输出格式）=====
@@ -431,5 +454,241 @@ public class BaZiEngine {
         System.out.println(results[0]);  // 排盘结果
 
         System.out.println(results[1]);  // 运势报告
+    }
+
+    // ===== VO 构建方法 =====
+
+    private BaZiPanVO buildPanVO(BaZiResult r) {
+        BaZiPanVO vo = new BaZiPanVO();
+
+        // 基本信息
+        BaZiPanVO.BasicInfo basicInfo = new BaZiPanVO.BasicInfo();
+        basicInfo.setName(r.name.isEmpty() ? null : r.name);
+        basicInfo.setGender(r.isMale ? "男" : "女");
+        basicInfo.setSolarYear(r.birthYear <= 0 ? r.birthYear - 1 : r.birthYear);
+        basicInfo.setSolarMonth(r.birthMonth);
+        basicInfo.setSolarDay(r.birthDay);
+        basicInfo.setSolarHour(r.birthHour);
+        basicInfo.setSolarMinute(r.birthMinute);
+        basicInfo.setWeekDay(BaZiConstants.WEEK[DateCalc.getWeek(r.birthYear, r.birthMonth, r.birthDay)]);
+        
+        // 农历
+        String nlYearStr = DateCalc.numToHz(r.nlYear > 0 ? r.nlYear : -r.nlYear);
+        String nlMonthStr = r.nlMonth == 1 ? "正月" : DateCalc.numToHz(r.nlMonth) + "月";
+        if (r.nlRun) nlMonthStr = "闰" + nlMonthStr;
+        String nlDayStr = r.nlDay <= 10 ? "初" + DateCalc.numToHz(r.nlDay) : DateCalc.numToHz(r.nlDay) + "日";
+        int shiZhi = ((r.birthHour % 2 == 1 ? (r.birthHour + 1) % 24 : r.birthHour) / 2 + 1) % 12;
+        basicInfo.setLunarYear(nlYearStr);
+        basicInfo.setLunarMonth(nlMonthStr);
+        basicInfo.setLunarDay(nlDayStr);
+        basicInfo.setLunarHourZhi(BaZiConstants.DIZHI[shiZhi]);
+        basicInfo.setLunarMonthSize(r.yueTotal >= 30 ? "大月" : "小月");
+        vo.setBasicInfo(basicInfo);
+
+        // 四柱
+        java.util.List<BaZiPanVO.PillarVO> pillars = new java.util.ArrayList<>();
+        String[] pillarNames = {"年柱", "月柱", "日柱", "时柱"};
+        for (int i = 0; i < 4; i++) {
+            BaZiPanVO.PillarVO pillar = new BaZiPanVO.PillarVO();
+            pillar.setPillarName(pillarNames[i]);
+            pillar.setTianGan(BaZiConstants.TIANGAN[r.gz[i] % 10]);
+            pillar.setDiZhi(BaZiConstants.DIZHI[r.gz[i] % 12]);
+            pillar.setGanZhi(pillar.getTianGan() + pillar.getDiZhi());
+            pillar.setNaYin(r.getNaYinName(i));
+            pillar.setTianGanShiShen(BaZiConstants.SHISHEN[r.tian[i].shiShen]);
+            pillar.setDiZhiShiShen(BaZiConstants.SHISHEN[r.di[i].shiShen]);
+            
+            // 地支藏干十神
+            java.util.List<String> cangGanList = new java.util.ArrayList<>();
+            if (r.di[i].shiShen2[0] >= 0) cangGanList.add(BaZiConstants.SHISHEN[r.di[i].shiShen2[0]]);
+            if (r.di[i].shiShen2[1] >= 0) cangGanList.add(BaZiConstants.SHISHEN[r.di[i].shiShen2[1]]);
+            if (r.di[i].shiShen2[2] >= 0) cangGanList.add(BaZiConstants.SHISHEN[r.di[i].shiShen2[2]]);
+            pillar.setDiZhiCangGanShiShen(cangGanList);
+            
+            pillar.setG12(BaZiConstants.G12[r.di[i].wang]);
+            pillar.setSanHe(r.di[i].sanHe >= 0);
+            pillar.setSanHui(r.di[i].sanHui >= 0);
+            pillar.setChong(r.di[i].chong >= 0);
+            pillar.setHe(r.di[i].bHe);
+            pillar.setXing(r.di[i].bXing);
+            pillars.add(pillar);
+        }
+        vo.setPillars(pillars);
+
+        // 节气
+        int yueZhiIdx = (r.gz[1] % 12) - 1;
+        if (yueZhiIdx < 1) yueZhiIdx += 12;
+        String jq1Name = BaZiConstants.JIEQI[(yueZhiIdx - 1) * 2];
+        String jq2Name = BaZiConstants.JIEQI[((yueZhiIdx) % 12) * 2];
+        int[] jq1Date = DateCalc.fromJulian(r.dtmp1);
+        int[] jq2Date = DateCalc.fromJulian(r.dtmpend);
+        int jq1Year = jq1Date[0] <= 0 ? jq1Date[0] - 1 : jq1Date[0];
+        int jq2Year = jq2Date[0] <= 0 ? jq2Date[0] - 1 : jq2Date[0];
+        BaZiPanVO.JieQiVO jieQi = new BaZiPanVO.JieQiVO();
+        jieQi.setPrevJieQiName(jq1Name);
+        jieQi.setPrevJieQiDate(String.format("%d-%02d-%02d %02d:%02d", jq1Year, jq1Date[1], jq1Date[2], jq1Date[3], jq1Date[4]));
+        jieQi.setNextJieQiName(jq2Name);
+        jieQi.setNextJieQiDate(String.format("%d-%02d-%02d %02d:%02d", jq2Year, jq2Date[1], jq2Date[2], jq2Date[3], jq2Date[4]));
+        vo.setJieQi(jieQi);
+
+        // 大运
+        int direction = (r.isMale && r.gz[0] % 2 == 1) || (!r.isMale && r.gz[0] % 2 == 0) ? 1 : -1;
+        BaZiPanVO.DaYunSummary daYun = new BaZiPanVO.DaYunSummary();
+        daYun.setDirection(direction > 0 ? "顺行" : "逆行");
+        daYun.setStartAge(r.daYunAge);
+        daYun.setStartYear(r.dynian + r.yunYear - 1);
+        
+        java.util.List<BaZiPanVO.DaYunStepVO> daYunSteps = new java.util.ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            int gz = ((r.gz[1] + i * direction) % 60 + 60) % 60;
+            int ss = calc.qiuLq(r.gz[2], gz);
+            BaZiPanVO.DaYunStepVO step = new BaZiPanVO.DaYunStepVO();
+            step.setStep(i);
+            step.setStepName(BaZiConstants.JIANPING_3[i - 1]);
+            step.setGanZhi(BaZiConstants.TIANGAN[gz % 10] + BaZiConstants.DIZHI[gz % 12]);
+            step.setTianGan(BaZiConstants.TIANGAN[gz % 10]);
+            step.setDiZhi(BaZiConstants.DIZHI[gz % 12]);
+            step.setShiShen(BaZiConstants.SHISHEN[ss]);
+            int g12 = calc.jiSheng12(r.gz[2] % 10, gz % 12);
+            step.setG12(BaZiConstants.G12[g12]);
+            step.setStartAge(r.daYunAge + (i - 1) * 10);
+            step.setStartYear(daYun.getStartYear() + (i - 1) * 10);
+            daYunSteps.add(step);
+        }
+        daYun.setSteps(daYunSteps);
+        
+        // 流年表
+        int startYear = daYun.getStartYear();
+        java.util.List<java.util.List<String>> liuNianTable = new java.util.ArrayList<>();
+        for (int row = 0; row < 10; row++) {
+            java.util.List<String> rowList = new java.util.ArrayList<>();
+            for (int col = 0; col < 8; col++) {
+                int yr = startYear + row + col * 10;
+                int gz = ((yr + 897 + 6000) % 60);
+                rowList.add(BaZiConstants.TIANGAN[gz % 10] + BaZiConstants.DIZHI[gz % 12]);
+            }
+            liuNianTable.add(rowList);
+        }
+        daYun.setLiuNianTable(liuNianTable);
+        daYun.setLiuNianStartYear(startYear);
+        daYun.setLiuNianEndYear(startYear + 79);
+        vo.setDaYun(daYun);
+
+        // 胎元、命宫、身宫
+        BaZiPanVO.SpecialStars specialStars = new BaZiPanVO.SpecialStars();
+        specialStars.setTaiYuan(BaZiConstants.TIANGAN[r.tai % 10] + BaZiConstants.DIZHI[r.tai % 12]);
+        specialStars.setTaiYuanNaYin(getNaYinName(r.tai));
+        specialStars.setMingGong(BaZiConstants.TIANGAN[r.ming % 10] + BaZiConstants.DIZHI[r.ming % 12]);
+        specialStars.setMingGongNaYin(getNaYinName(r.ming));
+        specialStars.setShenGong(BaZiConstants.TIANGAN[r.shen % 10] + BaZiConstants.DIZHI[r.shen % 12]);
+        specialStars.setShenGongNaYin(getNaYinName(r.shen));
+        vo.setSpecialStars(specialStars);
+
+        // 神煞
+        BaZiPanVO.ShenShaVO shenSha = new BaZiPanVO.ShenShaVO();
+        shenSha.setNianZhu(buildShenShaList(r, 0));
+        shenSha.setYueZhu(buildShenShaList(r, 1));
+        shenSha.setRiZhu(buildShenShaList(r, 2));
+        shenSha.setShiZhu(buildShenShaList(r, 3));
+        vo.setShenSha(shenSha);
+
+        // 星座、生肖、文昌、天乙
+        BaZiPanVO.XingZuoEtcVO xingZuoEtc = new BaZiPanVO.XingZuoEtcVO();
+        String[] xingZuo = {"白羊", "金牛", "双子", "巨蟹", "狮子", "处女",
+                             "天秤", "天蝎", "人马", "摩羯", "宝瓶", "双鱼"};
+        int i24 = (r.gz[1] % 12) - 1;
+        if (i24 < 1) i24 += 12;
+        if (r.dtmpsat >= r.zhongQi) i24++;
+        int xzIdx = (i24 + 8) % 12;
+        xingZuoEtc.setXingZuo(xingZuo[xzIdx]);
+        xingZuoEtc.setShengXiao(BaZiConstants.SHENGXIAO[r.gz[0] % 12]);
+        
+        int tri = r.gz[2] % 10;
+        String wenChangDir;
+        switch (tri) {
+            case 0: wenChangDir = "卯方、即东方"; break;
+            case 1: wenChangDir = "巳方、即东南方"; break;
+            case 2: wenChangDir = "午方、即南方"; break;
+            case 3: wenChangDir = "申方、即西南方"; break;
+            case 4: wenChangDir = "酉方、即西方"; break;
+            case 5: wenChangDir = "申方、即西南方"; break;
+            case 6: wenChangDir = "酉方、即西方"; break;
+            case 7: wenChangDir = "亥方、即西北方"; break;
+            case 8: wenChangDir = "子方、即北方"; break;
+            default: wenChangDir = "寅方、即东北方"; break;
+        }
+        xingZuoEtc.setWenChangDir(wenChangDir);
+        
+        int g1, g2;
+        switch (tri) {
+            case 0: case 9: g1 = 4; g2 = 6; break;
+            case 1: case 5: g1 = 2; g2 = 8; break;
+            case 2: case 6: g1 = 1; g2 = 9; break;
+            case 3: case 4: g1 = 0; g2 = 10; break;
+            default:        g1 = 3; g2 = 7; break;
+        }
+        xingZuoEtc.setTianYi1(BaZiConstants.DIZHI[g1]);
+        xingZuoEtc.setTianYi2(BaZiConstants.DIZHI[g2]);
+        vo.setXingZuoEtc(xingZuoEtc);
+
+        // 五行力量
+        BaZiPanVO.WuXingVO wuXing = new BaZiPanVO.WuXingVO();
+        int total = 0;
+        for (short v : r.wuXingJ) total += v;
+        wuXing.setShui(r.wuXingJ[0]);
+        wuXing.setShuiPct(total > 0 ? r.wuXingJ[0] * 100.0 / total : 0);
+        wuXing.setMu(r.wuXingJ[1]);
+        wuXing.setMuPct(total > 0 ? r.wuXingJ[1] * 100.0 / total : 0);
+        wuXing.setHuo(r.wuXingJ[2]);
+        wuXing.setHuoPct(total > 0 ? r.wuXingJ[2] * 100.0 / total : 0);
+        wuXing.setTu(r.wuXingJ[3]);
+        wuXing.setTuPct(total > 0 ? r.wuXingJ[3] * 100.0 / total : 0);
+        wuXing.setJin(r.wuXingJ[4]);
+        wuXing.setJinPct(total > 0 ? r.wuXingJ[4] * 100.0 / total : 0);
+        
+        int shengZhu = r.shiShenJ[0] + r.shiShenJ[4];
+        int keXie    = r.shiShenJ[1] + r.shiShenJ[2] + r.shiShenJ[3];
+        int szTotal  = shengZhu + keXie;
+        wuXing.setShengZhu(shengZhu);
+        wuXing.setShengZhuPct(szTotal > 0 ? shengZhu * 100.0 / szTotal : 0);
+        wuXing.setKeXie(keXie);
+        wuXing.setKeXiePct(szTotal > 0 ? keXie * 100.0 / szTotal : 0);
+        wuXing.setYinScore(r.yyScore[0]);
+        wuXing.setYinPct((r.yyScore[0] + r.yyScore[1]) > 0 ? r.yyScore[0] * 100.0 / (r.yyScore[0] + r.yyScore[1]) : 0);
+        wuXing.setYangScore(r.yyScore[1]);
+        wuXing.setYangPct((r.yyScore[0] + r.yyScore[1]) > 0 ? r.yyScore[1] * 100.0 / (r.yyScore[0] + r.yyScore[1]) : 0);
+        vo.setWuXing(wuXing);
+
+        // 日元旺衰 + 用神
+        BaZiPanVO.RiYuanYongShenVO riYuanYongShen = new BaZiPanVO.RiYuanYongShenVO();
+        riYuanYongShen.setScore(r.score);
+        riYuanYongShen.setRiYuanDesc(getRiYuanDesc(r.riYuan));
+        riYuanYongShen.setXiYong1(BaZiConstants.WUXING[r.wsYong[0][0]]);
+        if (r.wsYong[0].length > 1) riYuanYongShen.setXiYong2(BaZiConstants.WUXING[r.wsYong[0][1]]);
+        if (r.wsYong[0].length > 2) riYuanYongShen.setJiChou1(BaZiConstants.WUXING[r.wsYong[0][2]]);
+        if (r.wsYong[0].length > 3) riYuanYongShen.setJiChou2(BaZiConstants.WUXING[r.wsYong[0][3]]);
+        vo.setRiYuanYongShen(riYuanYongShen);
+
+        return vo;
+    }
+
+    private java.util.List<String> buildShenShaList(BaZiResult r, int pillar) {
+        java.util.List<String> list = new java.util.ArrayList<>();
+        for (byte sha : r.shenSha[pillar]) {
+            if (sha > 0) {
+                // 这里需要从 shenSha 数组映射到名称，简化处理
+                // 实际应该有完整的神煞名称数组
+            }
+        }
+        return list;
+    }
+
+    private BaZiYunVO buildYunVO(BaZiResult r) {
+        // 运势 VO 构建较复杂，需要调用 YunQiCalc
+        BaZiYunVO vo = new BaZiYunVO();
+        // YunQiCalc yunCalc = new YunQiCalc(r);
+        // 这里可以从 YunQiCalc 中提取数据，或者直接返回文本报告
+        // 为了简化，暂时返回空 VO，后续可扩展
+        return vo;
     }
 }

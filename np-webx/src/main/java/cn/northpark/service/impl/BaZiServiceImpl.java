@@ -1,6 +1,8 @@
 package cn.northpark.service.impl;
 
 import cn.northpark.Xuanaobazi.BaZiEngine;
+import cn.northpark.Xuanaobazi.vo.BaZiPanVO;
+import cn.northpark.Xuanaobazi.vo.BaZiYunVO;
 import cn.northpark.mapper.BaZiRecordMapper;
 import cn.northpark.model.BaZiRecord;
 import cn.northpark.result.Result;
@@ -40,10 +42,15 @@ public class BaZiServiceImpl implements BaZiService {
             return ResultGenerator.genErrorResult(429, "今日免费次数已用完，请明日再试");
         }
 
-        // 调用八字引擎
+        // 调用八字引擎，获取 VO 和文本
+        BaZiEngine engine = new BaZiEngine();
+        BaZiPanVO panVO;
+        BaZiYunVO yunVO;
         String[] fullResult;
         try {
-            fullResult = new BaZiEngine().getFullResult(year, month, day, hour, minute, isMale, name);
+            panVO = engine.getPanVO(year, month, day, hour, minute, isMale, name);
+            yunVO = engine.getYunVO(year, month, day, hour, minute, isMale, name);
+            fullResult = engine.getFullResult(year, month, day, hour, minute, isMale, name);
         } catch (Exception e) {
             log.error("BaZiEngine error", e);
             return ResultGenerator.genErrorResult(500, "排盘计算失败，请检查输入参数");
@@ -79,8 +86,10 @@ public class BaZiServiceImpl implements BaZiService {
 
         // 组装返回
         Map<String, Object> data = new LinkedHashMap<>();
-        data.put("pan", fullResult[0]);
-        data.put("yun", fullResult[1]);
+        data.put("panVO", panVO);
+        data.put("yunVO", yunVO);
+        data.put("panText", fullResult[0]);
+        data.put("yunText", fullResult[1]);
         data.put("recordId", record.getId());
 
         return ResultGenerator.genSuccessResult(data);
