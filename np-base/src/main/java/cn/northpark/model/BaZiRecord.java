@@ -12,6 +12,8 @@ public class BaZiRecord {
     private Long id;
     private Integer userId;
     private String userName;
+    /** 微信用户 openId */
+    private String openId;
     /** 姓名/备注（可选） */
     private String name;
     /** 性别：1=男，0=女 */
