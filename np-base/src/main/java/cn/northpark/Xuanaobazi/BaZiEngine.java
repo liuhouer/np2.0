@@ -688,21 +688,149 @@ public class BaZiEngine {
 
     private java.util.List<String> buildShenShaList(BaZiResult r, int pillar) {
         java.util.List<String> list = new java.util.ArrayList<>();
-        for (byte sha : r.shenSha[pillar]) {
-            if (sha > 0) {
-                // 这里需要从 shenSha 数组映射到名称，简化处理
-                // 实际应该有完整的神煞名称数组
+        String shaStr = calcShenSha(r, pillar);
+        if (shaStr != null && !shaStr.isEmpty()) {
+            String[] shas = shaStr.trim().split("\\s+");
+            for (String sha : shas) {
+                if (!sha.isEmpty()) {
+                    list.add(sha);
+                }
             }
         }
         return list;
     }
 
     private BaZiYunVO buildYunVO(BaZiResult r) {
-        // 运势 VO 构建较复杂，需要调用 YunQiCalc
         BaZiYunVO vo = new BaZiYunVO();
-        // YunQiCalc yunCalc = new YunQiCalc(r);
-        // 这里可以从 YunQiCalc 中提取数据，或者直接返回文本报告
-        // 为了简化，暂时返回空 VO，后续可扩展
+        
+        java.util.List<BaZiYunVO.LiuNianVO> preYun = new java.util.ArrayList<>();
+        java.util.List<BaZiYunVO.DaYunVO> daYunList = new java.util.ArrayList<>();
+        
+        // 未交大运前的流年
+        if (r.daYunAge > 1) {
+            int maxAge = Math.min(r.daYunAge - 1, 70);
+            for (int age = 1; age <= maxAge; age++) {
+                BaZiYunVO.LiuNianVO ln = buildLiuNianVO(r, age, -1);
+                preYun.add(ln);
+            }
+        }
+        vo.setPreYun(preYun);
+        
+        // 各步大运
+        for (int step = 1; step <= 9; step++) {
+            int startAge = r.daYunAge + (step - 1) * 10;
+            if (startAge > 70) break;
+            
+            BaZiYunVO.DaYunVO daYun = buildDaYunVO(r, step);
+            
+            // 该步大运下的流年
+            java.util.List<BaZiYunVO.LiuNianVO> liuNianList = new java.util.ArrayList<>();
+            int endAge = Math.min(startAge + 9, 70);
+            for (int age = startAge; age <= endAge; age++) {
+                BaZiYunVO.LiuNianVO ln = buildLiuNianVO(r, age, step);
+                liuNianList.add(ln);
+            }
+            daYun.setLiuNianList(liuNianList);
+            daYunList.add(daYun);
+        }
+        vo.setDaYunList(daYunList);
+        
         return vo;
+    }
+    
+    private BaZiYunVO.DaYunVO buildDaYunVO(BaZiResult r, int step) {
+        BaZiYunVO.DaYunVO daYun = new BaZiYunVO.DaYunVO();
+        
+        int direction = (r.isMale && r.gz[0] % 2 == 1) || (!r.isMale && r.gz[0] % 2 == 0) ? 1 : -1;
+        int i = step - 1;
+        int gz = ((r.gz[1] + (i + 1) * direction) % 60 + 60) % 60;
+        int startYear = r.yunYear + r.daYunAge - 1 + i * 10;
+        int endYear = startYear + 9;
+        int shiShen = calc.qiuLq(r.gz[2], gz);
+        int g12 = calc.jiSheng12(r.gz[2] % 10, gz % 12);
+        
+        daYun.setStep(step);
+        daYun.setStepName(BaZiConstants.JIANPING_3[i]);
+        daYun.setGanZhi(BaZiConstants.TIANGAN[gz % 10] + BaZiConstants.DIZHI[gz % 12]);
+        daYun.setTianGan(BaZiConstants.TIANGAN[gz % 10]);
+        daYun.setDiZhi(BaZiConstants.DIZHI[gz % 12]);
+        daYun.setShiShen(BaZiConstants.SHISHEN[shiShen]);
+        daYun.setG12(BaZiConstants.G12[g12]);
+        daYun.setStartYear(startYear);
+        daYun.setEndYear(endYear);
+        daYun.setScoreFront(r.dyun[i * 2] & 0xFF);
+        daYun.setScoreBack(r.dyun[i * 2 + 1] & 0xFF);
+        
+        // 用神属性
+        int tgWx = BaZiConstants.TIANGAN_WXJ[gz % 10];
+        int dzWx = BaZiConstants.DIZHI_WXJ[gz % 12];
+        daYun.setTianGanYongShen(getYongShenDesc(tgWx, r.wsYong));
+        daYun.setDiZhiYongShen(getYongShenDesc(dzWx, r.wsYong));
+        
+        // 空亡判断
+        int[] kongWang = getKongWang(r.gz[0]);
+        int dzGz = gz % 12;
+        daYun.setKongWang(dzGz == kongWang[0] || dzGz == kongWang[1]);
+        
+        return daYun;
+    }
+    
+    private BaZiYunVO.LiuNianVO buildLiuNianVO(BaZiResult r, int age, int daYunStep) {
+        BaZiYunVO.LiuNianVO ln = new BaZiYunVO.LiuNianVO();
+        
+        int direction = (r.isMale && r.gz[0] % 2 == 1) || (!r.isMale && r.gz[0] % 2 == 0) ? 1 : -1;
+        int lnianGz = ((r.yunYear + age - 1 + 897 + 6000) % 60);
+        int xiaoYunGz = ((r.gz[3] + direction * age) % 60 + 60) % 60;
+        int calYear = r.yunYear + age - 1;
+        if (calYear <= 0) calYear--;
+        
+        int lnianSS = calc.qiuLq(r.gz[2], lnianGz);
+        int lnianG12 = calc.jiSheng12(r.gz[2] % 10, lnianGz % 12);
+        
+        ln.setAge(age);
+        ln.setCalYear(calYear);
+        ln.setLiuNianGanZhi(BaZiConstants.TIANGAN[lnianGz % 10] + BaZiConstants.DIZHI[lnianGz % 12]);
+        ln.setLiuNianTianGan(BaZiConstants.TIANGAN[lnianGz % 10]);
+        ln.setLiuNianDiZhi(BaZiConstants.DIZHI[lnianGz % 12]);
+        ln.setXiaoYunGanZhi(BaZiConstants.TIANGAN[xiaoYunGz % 10] + BaZiConstants.DIZHI[xiaoYunGz % 12]);
+        ln.setLiuNianShiShen(BaZiConstants.SHISHEN[lnianSS]);
+        ln.setLiuNianG12(BaZiConstants.G12[lnianG12]);
+        
+        // 用神属性
+        int tgWx = BaZiConstants.TIANGAN_WXJ[lnianGz % 10];
+        int dzWx = BaZiConstants.DIZHI_WXJ[lnianGz % 12];
+        ln.setTianGanYongShen(getYongShenDesc(tgWx, r.wsYong));
+        ln.setDiZhiYongShen(getYongShenDesc(dzWx, r.wsYong));
+        
+        // 运势分值
+        int lnianFen = r.lnian[age - 1] & 0xFF;
+        int xiaoFen = r.xxian[age - 1] & 0xFF;
+        int zFen = r.zscore[age - 1] & 0xFF;
+        ln.setLiuNianFen(lnianFen);
+        ln.setXiaoFen(xiaoFen);
+        ln.setZongHeFen(zFen);
+        
+        // 运势等级
+        if (zFen >= 80) ln.setScoreLevel("优");
+        else if (zFen >= 60) ln.setScoreLevel("良");
+        else if (zFen >= 40) ln.setScoreLevel("中");
+        else ln.setScoreLevel("差");
+        
+        return ln;
+    }
+    
+    private String getYongShenDesc(int wx, byte[][] wsYong) {
+        for (int i = 0; i < 5; i++) {
+            if (wsYong[0][i] == wx) {
+                return BaZiConstants.YONGSHEN[i];
+            }
+        }
+        return "闲神";
+    }
+    
+    private int[] getKongWang(int gz) {
+        int xun = (gz / 10) * 10;
+        int start = xun % 12;
+        return new int[]{(start + 10) % 12, (start + 11) % 12};
     }
 }

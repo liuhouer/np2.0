@@ -1,5 +1,6 @@
 package cn.northpark.Xuanaobazi.vo;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 import java.util.List;
 
@@ -186,6 +187,7 @@ public class BaZiPanVO {
     // 内部类：神煞
     // =========================================================
     @Data
+    @JsonPropertyOrder({"nianZhu", "yueZhu", "riZhu", "shiZhu"})
     public static class ShenShaVO {
         /** 年柱神煞列表（如["天乙","驿马"]） */
         private List<String> nianZhu;
