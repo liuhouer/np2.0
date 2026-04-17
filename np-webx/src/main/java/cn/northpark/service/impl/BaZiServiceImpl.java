@@ -8,7 +8,9 @@ import cn.northpark.model.BaZiRecord;
 import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
 import cn.northpark.service.BaZiService;
+import cn.northpark.utils.EnvCfgUtil;
 import cn.northpark.utils.RedisUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +24,8 @@ import java.util.Map;
 @Service
 public class BaZiServiceImpl implements BaZiService {
 
-    /** 每用户每天免费调用次数 */
-    private static final int FREE_DAILY_LIMIT = 1;
+    /** 每用户每天免费调用次数  八字排盘每日免费调用次数（限时免费）*/
+    private static final int FREE_DAILY_LIMIT = Integer.parseInt(EnvCfgUtil.getValByCfgName("FREE_DAILY_LIMIT"));;
 
     @Autowired
     private BaZiRecordMapper baZiRecordMapper;
@@ -71,6 +73,8 @@ public class BaZiServiceImpl implements BaZiService {
         record.setBirthDay(day);
         record.setBirthHour(hour);
         record.setBirthMinute(minute);
+        record.setPanVo(JSON.toJSONString(panVO));
+        record.setYunVo(JSON.toJSONString(yunVO));
         record.setPanResult(fullResult[0]);
         record.setYunResult(fullResult[1]);
         record.setIp(ip);

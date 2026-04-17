@@ -24,6 +24,8 @@ public class BaZiRecord {
     private Integer birthHour;
     /** 出生分，默认0 */
     private Integer birthMinute;
+    private String panVo;
+    private String yunVo;
     /** 排盘结果 */
     private String panResult;
     /** 运势结果 */
