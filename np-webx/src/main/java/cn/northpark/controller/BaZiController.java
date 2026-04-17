@@ -4,6 +4,9 @@ import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
 import cn.northpark.service.BaZiService;
 import cn.northpark.utils.EnvCfgUtil;
+import cn.northpark.utils.RedisUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 八字排盘 & 运势接口
@@ -27,9 +33,70 @@ import javax.servlet.http.HttpServletRequest;
 public class BaZiController {
 
     private static final String BAZI_TOKEN = EnvCfgUtil.getValByCfgName("BAZI_TOKEN");
+    private static final String AppID = EnvCfgUtil.getValByCfgName("AppID");//AppID(小程序ID)
+    private static final String AppSecret = EnvCfgUtil.getValByCfgName("AppSecret");//AppSecret(小程序密钥)
 
     @Autowired
     private BaZiService baZiService;
+
+    /**
+     * 【新增】小程序通过 code 换取 openid
+     * <p>
+     * POST /api/bazi/getOpenId
+     * 前端小程序登录时调用此接口，传入 wx.login() 获取的 code
+     *
+     * @param code 微信小程序登录返回的 code（必须）
+     * @return { "code": 200, "data": { "openid": "xxxxxx" } }
+     */
+    @PostMapping("/getOpenId")
+    public Result<?> getOpenId(@RequestParam String code, HttpServletRequest request) {
+
+        if (StringUtils.isBlank(code)) {
+            return ResultGenerator.genErrorResult(400, "code 不能为空");
+        }
+
+        try {
+            // 调用微信接口换取 openid
+            String url = "https://api.weixin.qq.com/sns/jscode2session?" +
+                    "appid=" + AppID +
+                    "&secret=" + AppSecret +
+                    "&js_code=" + code +
+                    "&grant_type=authorization_code";
+
+            // 这里推荐使用 RestTemplate 或 WebClient 调用（下面给出 RestTemplate 示例）
+            RestTemplate restTemplate = new RestTemplate();
+            String response = restTemplate.getForObject(url, String.class);
+
+            // 解析返回的 JSON
+            JSONObject jsonObject = JSON.parseObject(response);
+
+            if (jsonObject.containsKey("openid")) {
+                String openid = jsonObject.getString("openid");
+                // 可选：记录 session_key（建议存入 redis，后续解密手机号等会用到）
+                String sessionKey = jsonObject.getString("session_key");
+
+                String redisKey = "openid_:" + openid;
+                RedisUtil.getInstance().set(redisKey, sessionKey);
+
+                log.info("微信换取openid成功: {}", openid);
+
+                // 返回 openid（可根据实际需求同时返回 session_key）
+                Map<String, Object> data = new HashMap<>();
+                data.put("openid", openid);
+
+                return ResultGenerator.genSuccessResult(data);
+            } else {
+                String errcode = jsonObject.getString("errcode");
+                String errmsg = jsonObject.getString("errmsg");
+                log.error("微信换取openid失败: errcode={}, errmsg={}", errcode, errmsg);
+                return ResultGenerator.genErrorResult(500, "获取openid失败: " + errmsg);
+            }
+
+        } catch (Exception e) {
+            log.error("调用微信jscode2session接口异常", e);
+            return ResultGenerator.genErrorResult(500, "服务器内部错误");
+        }
+    }
 
     /**
      * 八字排盘 + 运势查看
