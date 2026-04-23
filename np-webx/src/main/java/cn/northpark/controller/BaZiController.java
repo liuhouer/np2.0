@@ -10,45 +10,90 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 八字排盘 & 运势接口
- * <p>
- * POST /api/bazi/reading
- * 通过 Header 中的 token 与 BAZI_TOKEN 匹配完成授权，无需系统用户登录。
- * 每个微信用户（open_id）每天限制访问 1 次。
  */
 @Slf4j
-@RestController
+@Controller
 @RequestMapping("/api/bazi")
 public class BaZiController {
 
     private static final String BAZI_TOKEN = EnvCfgUtil.getValByCfgName("BAZI_TOKEN");
-    private static final String AppID = EnvCfgUtil.getValByCfgName("AppID");//AppID(小程序ID)
-    private static final String AppSecret = EnvCfgUtil.getValByCfgName("AppSecret");//AppSecret(小程序密钥)
+
+    // 小程序 AppID / AppSecret（原有，保留）
+    private static final String AppID     = EnvCfgUtil.getValByCfgName("AppID");
+    private static final String AppSecret = EnvCfgUtil.getValByCfgName("AppSecret");
+
+    // 公众号 AppID / AppSecret
+    private static final String GZHAppID     = EnvCfgUtil.getValByCfgName("GZHAppID");
+    private static final String GZHAppSecret = EnvCfgUtil.getValByCfgName("GZHAppSecret");
 
     @Autowired
     private BaZiService baZiService;
 
-    /**
-     * 【新增】小程序通过 code 换取 openid
-     * <p>
-     * POST /api/bazi/getOpenId
-     * 前端小程序登录时调用此接口，传入 wx.login() 获取的 code
-     *
-     * @param code 微信小程序登录返回的 code（必须）
-     * @return { "code": 200, "data": { "openid": "xxxxxx" } }
-     */
+    // ─────────────────────────────────────────────────────────────────────────
+    // 页面入口：微信公众号菜单直接跳转此 URL
+    //   流程：
+    //   1. 用户点击公众号菜单 → 跳转 /bazi/index
+    //   2. 若无 code 参数，重定向到微信 OAuth2 授权页
+    //   3. 微信回调 /bazi/index?code=xxx，后端换取 openId 后渲染 bazi.jsp
+    // ─────────────────────────────────────────────────────────────────────────
+    @GetMapping("/index")
+    public String baziPage(
+            @RequestParam(required = false) String code,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            ModelMap map) throws IOException {
+
+        // 先检查 session 中是否已有 openId（避免重复换取）
+        String openId = (String) request.getSession().getAttribute("baziOpenId");
+
+        if (StringUtils.isBlank(openId)) {
+            if (StringUtils.isBlank(code)) {
+                // 没有 code，发起微信网页授权（snsapi_base 静默授权，无需用户同意）
+                String callbackUrl = "https://northpark.cn/api/bazi/index";
+                String encodedUrl = java.net.URLEncoder.encode(callbackUrl, "UTF-8");
+                String authUrl = "https://open.weixin.qq.com/connect/oauth2/authorize"
+                        + "?appid=" + GZHAppID
+                        + "&redirect_uri=" + encodedUrl
+                        + "&response_type=code"
+                        + "&scope=snsapi_base"
+                        + "&state=bazi"
+                        + "#wechat_redirect";
+                response.sendRedirect(authUrl);
+                return null;
+            }
+
+            // 用 code 换取 openId
+            openId = fetchGzhOpenId(code);
+            if (StringUtils.isNotBlank(openId)) {
+                request.getSession().setAttribute("baziOpenId", openId);
+                log.info("公众号八字页面获取openId成功: {}", openId);
+            } else {
+                log.error("公众号八字页面获取openId失败, code={}", code);
+            }
+        }
+
+        map.addAttribute("openId", openId != null ? openId : "");
+        return "bazi";
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 原有：小程序通过 code 换取 openid（保留不动）
+    // ─────────────────────────────────────────────────────────────────────────
     @PostMapping("/getOpenId")
+    @ResponseBody
     public Result<?> getOpenId(@RequestParam String code, HttpServletRequest request) {
 
         if (StringUtils.isBlank(code)) {
@@ -56,61 +101,41 @@ public class BaZiController {
         }
 
         try {
-            // 调用微信接口换取 openid
-            String url = "https://api.weixin.qq.com/sns/jscode2session?" +
-                    "appid=" + AppID +
-                    "&secret=" + AppSecret +
-                    "&js_code=" + code +
-                    "&grant_type=authorization_code";
+            String url = "https://api.weixin.qq.com/sns/jscode2session?"
+                    + "appid=" + AppID
+                    + "&secret=" + AppSecret
+                    + "&js_code=" + code
+                    + "&grant_type=authorization_code";
 
-            // 这里推荐使用 RestTemplate 或 WebClient 调用（下面给出 RestTemplate 示例）
             RestTemplate restTemplate = new RestTemplate();
-            String response = restTemplate.getForObject(url, String.class);
+            String resp = restTemplate.getForObject(url, String.class);
+            JSONObject json = JSON.parseObject(resp);
 
-            // 解析返回的 JSON
-            JSONObject jsonObject = JSON.parseObject(response);
+            if (json.containsKey("openid")) {
+                String openid = json.getString("openid");
+                String sessionKey = json.getString("session_key");
+                RedisUtil.getInstance().set("openid_:" + openid, sessionKey);
+                log.info("小程序换取openid成功: {}", openid);
 
-            if (jsonObject.containsKey("openid")) {
-                String openid = jsonObject.getString("openid");
-                // 可选：记录 session_key（建议存入 redis，后续解密手机号等会用到）
-                String sessionKey = jsonObject.getString("session_key");
-
-                String redisKey = "openid_:" + openid;
-                RedisUtil.getInstance().set(redisKey, sessionKey);
-
-                log.info("微信换取openid成功: {}", openid);
-
-                // 返回 openid（可根据实际需求同时返回 session_key）
                 Map<String, Object> data = new HashMap<>();
                 data.put("openid", openid);
-
                 return ResultGenerator.genSuccessResult(data);
             } else {
-                String errcode = jsonObject.getString("errcode");
-                String errmsg = jsonObject.getString("errmsg");
-                log.error("微信换取openid失败: errcode={}, errmsg={}", errcode, errmsg);
+                String errmsg = json.getString("errmsg");
+                log.error("小程序换取openid失败: {}", errmsg);
                 return ResultGenerator.genErrorResult(500, "获取openid失败: " + errmsg);
             }
-
         } catch (Exception e) {
             log.error("调用微信jscode2session接口异常", e);
             return ResultGenerator.genErrorResult(500, "服务器内部错误");
         }
     }
 
-    /**
-     * 八字排盘 + 运势查看
-     *
-     * @param openId  微信用户 openId（必须），用于每日限流
-     * @param year    出生年（必须）
-     * @param month   出生月（必须）
-     * @param day     出生日（必须）
-     * @param hour    出生时，0-23（必须）
-     * @param minute  出生分，0-59（可选，默认0）
-     * @param gender  性别（必须）：male / female
-     * @param name    姓名/备注（可选）
-     */
+    // ─────────────────────────────────────────────────────────────────────────
+    // 八字排盘主接口（小程序 & 公众号 H5 共用）
+    // ─────────────────────────────────────────────────────────────────────────
     @PostMapping("/reading")
+    @ResponseBody
     public Result<?> reading(
             @RequestParam("open_id") String openId,
             @RequestParam int year,
@@ -122,18 +147,13 @@ public class BaZiController {
             @RequestParam(required = false) String name,
             HttpServletRequest request) {
 
-        // Token 校验
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token) || !token.equals(BAZI_TOKEN)) {
             return ResultGenerator.genErrorResult(401, "token 无效或缺失");
         }
-
-        // open_id 校验
         if (StringUtils.isBlank(openId)) {
             return ResultGenerator.genErrorResult(400, "open_id 不能为空");
         }
-
-        // 参数校验
         if (month < 1 || month > 12 || day < 1 || day > 31
                 || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
             return ResultGenerator.genErrorResult(400, "日期或时间参数不合法");
@@ -144,5 +164,30 @@ public class BaZiController {
         boolean isMale = "male".equalsIgnoreCase(gender.trim()) || "1".equals(gender.trim());
 
         return baZiService.fullReading(year, month, day, hour, minute, isMale, name, openId, request);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // 私有：公众号 OAuth2 code 换取 openId
+    // ─────────────────────────────────────────────────────────────────────────
+    private String fetchGzhOpenId(String code) {
+        try {
+            String url = "https://api.weixin.qq.com/sns/oauth2/access_token?"
+                    + "appid=" + GZHAppID
+                    + "&secret=" + GZHAppSecret
+                    + "&code=" + code
+                    + "&grant_type=authorization_code";
+
+            RestTemplate restTemplate = new RestTemplate();
+            String resp = restTemplate.getForObject(url, String.class);
+            JSONObject json = JSON.parseObject(resp);
+
+            if (json != null && json.containsKey("openid")) {
+                return json.getString("openid");
+            }
+            log.error("公众号换取openId失败: {}", resp);
+        } catch (Exception e) {
+            log.error("公众号换取openId异常", e);
+        }
+        return null;
     }
 }
