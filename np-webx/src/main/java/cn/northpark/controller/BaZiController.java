@@ -43,11 +43,16 @@ public class BaZiController {
     private BaZiService baZiService;
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 页面入口：微信公众号菜单直接跳转此 URL
-    //   流程：
-    //   1. 用户点击公众号菜单 → 跳转 /bazi/index
-    //   2. 若无 code 参数，重定向到微信 OAuth2 授权页
-    //   3. 微信回调 /bazi/index?code=xxx，后端换取 openId 后渲染 bazi.jsp
+    // 页面入口：公众号菜单配置跳转此 URL
+    //
+    // 【当前方案：UUID 方案（方案一）】
+    //   个人订阅号不支持网页授权，无法通过 OAuth2 获取 openId。
+    //   改为直接渲染页面，openId 由前端 JS 生成 UUID 并存入 localStorage。
+    //   后端此处不再做任何微信交互，直接返回 bazi.jsp。
+    //
+    // 【保留备用：OAuth2 方案（方案三，升级服务号后可启用）】
+    //   原有的微信授权重定向逻辑已注释保留在下方，
+    //   升级为服务号后取消注释、删除直接 return 即可切换。
     // ─────────────────────────────────────────────────────────────────────────
     @GetMapping("/index")
     public String baziPage(
@@ -56,6 +61,12 @@ public class BaZiController {
             HttpServletResponse response,
             ModelMap map) throws IOException {
 
+        // ── 方案一（当前启用）：直接渲染页面，openId 由前端 UUID 生成 ──────────
+        // 不传任何 openId 给模板，前端 JS 自行生成并管理
+        return "bazi";
+
+        // ── 方案三（备用，升级服务号后启用，删除上方 return 并取消以下注释）──────
+        /*
         // 先检查 session 中是否已有 openId（避免重复换取）
         String openId = (String) request.getSession().getAttribute("baziOpenId");
 
@@ -87,6 +98,7 @@ public class BaZiController {
 
         map.addAttribute("openId", openId != null ? openId : "");
         return "bazi";
+        */
     }
 
     // ─────────────────────────────────────────────────────────────────────────

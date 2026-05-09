@@ -404,8 +404,14 @@ $(function() {
     // 初始化下拉框
     initSelectors();
     
-    // 获取 openId（从微信公众号授权）
-    initOpenId();
+    // ── 方案一（当前启用）：从 localStorage 读取或生成 UUID 作为用户标识 ──────
+    // 个人订阅号不支持网页授权，无法获取真实 openId。
+    // 改用浏览器本地 UUID 作为唯一标识，存入 localStorage 持久化，
+    // 后端限流逻辑不变，直接用此 UUID 作为 open_id 参数。
+    initBaziUid();
+    
+    // ── 方案三（备用，升级服务号后启用，删除上方 initBaziUid() 并取消以下注释）
+    // initOpenId();  // 从 URL 参数 ?openId=xxx 或 localStorage 读取微信 openId
     
     // 性别选择
     $('.gender-option').click(function() {
@@ -479,21 +485,38 @@ $(function() {
         $('#minute').val(0);
     }
     
-    // 初始化 openId（从 URL 参数或微信授权）
+    // ── 方案一：生成或读取 UUID 作为用户唯一标识 ─────────────────────────────
+    // 首次访问时生成一个带 h5_ 前缀的 UUID，写入 localStorage 持久化。
+    // 后续访问直接读取，不再重新生成，保证同一浏览器每日限流有效。
+    // 注意：清除浏览器缓存或换设备后 UUID 会变，限流重置，属于已知限制。
+    function initBaziUid() {
+        let uid = localStorage.getItem('bazi_uid');
+        if (!uid) {
+            // 生成格式：h5_时间戳_随机串，便于后端日志区分 H5 来源
+            uid = 'h5_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('bazi_uid', uid);
+        }
+        openId = uid;
+    }
+
+    // ── 方案三（备用）：从微信授权回调 URL 参数或 localStorage 读取真实 openId ─
+    // 升级服务号后，后端 baziPage() 会把 openId 注入到 URL 或 session，
+    // 前端从 URL 参数 ?openId=xxx 读取，并缓存到 localStorage。
     function initOpenId() {
-        // 从 URL 参数获取 openId
+        // 优先从 URL 参数读取（后端 OAuth2 回调后附带）
         const urlParams = new URLSearchParams(window.location.search);
         openId = urlParams.get('openId');
-        
+
         if (!openId) {
-            // 从 localStorage 获取缓存的 openId
+            // 其次从 localStorage 读取缓存
             openId = localStorage.getItem('wechat_openId');
         }
-        
-        if (!openId) {
-            // 需要微信授权获取 openId
-            // 这里应该跳转到微信授权页面
-            console.warn('未获取到 openId，需要微信授权');
+
+        if (openId) {
+            // 缓存到 localStorage，避免每次都走授权
+            localStorage.setItem('wechat_openId', openId);
+        } else {
+            console.warn('[bazi] 未获取到微信 openId，需要服务号网页授权');
         }
     }
     
@@ -507,12 +530,14 @@ $(function() {
         const minute = parseInt($('#minute').val());
         const gender = selectedGender;
         
-        if (!openId) {
-            art.dialog.alert('请先通过微信授权登录');
-            return;
-        }
+        // ── 方案一：openId 由 initBaziUid() 保证一定有值，此处无需额外校验 ──
+        // ── 方案三（备用）：若切换为真实 openId 方案，取消以下注释做兜底校验 ──
+        // if (!openId) {
+        //     art.dialog.alert('获取用户标识失败，请刷新页面重试');
+        //     return;
+        // }
         
-        // 显示加载
+        // 显示加载遮罩
         $('#loadingOverlay').css('display', 'flex');
         
         $.ajax({
