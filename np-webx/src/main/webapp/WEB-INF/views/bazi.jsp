@@ -29,7 +29,7 @@
         .bazi-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 40px 30px;
+            padding: 120px 30px;
             text-align: center;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
@@ -51,6 +51,8 @@
             padding: 30px;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            /* 不能设 overflow:hidden，否则 select 下拉列表会被截断 */
+            overflow: visible;
         }
         
         .form-title {
@@ -80,12 +82,35 @@
             border-radius: 8px;
             border: 2px solid #e0e0e0;
             background: #f9f9f9;
+            /* 确保下拉框可点击，不被父级 overflow 截断 */
+            position: relative;
+            z-index: 10;
+            pointer-events: auto;
+            -webkit-appearance: menulist;
+            appearance: menulist;
         }
         
         .form-control:focus {
             border-color: #667eea;
             background: white;
             box-shadow: none;
+            outline: none;
+        }
+        
+        /* select 专属：确保下拉列表不被裁剪 */
+        select.form-control {
+            overflow: visible;
+            cursor: pointer;
+        }
+        
+        /* 强制覆盖 Bootstrap 对 select 的 appearance 重置，恢复原生下拉行为 */
+        select.form-control,
+        select.form-control:focus {
+            -webkit-appearance: menulist !important;
+            -moz-appearance: menulist !important;
+            appearance: menulist !important;
+            background-image: none !important;
+            padding-right: 8px;
         }
         
         .gender-selector {
@@ -102,6 +127,11 @@
             background: #f9f9f9;
             cursor: pointer;
             transition: all 0.3s;
+            /* 确保点击事件不被遮挡 */
+            position: relative;
+            z-index: 5;
+            user-select: none;
+            -webkit-user-select: none;
         }
         
         .gender-option:hover {
@@ -413,15 +443,18 @@ $(function() {
     // ── 方案三（备用，升级服务号后启用，删除上方 initBaziUid() 并取消以下注释）
     // initOpenId();  // 从 URL 参数 ?openId=xxx 或 localStorage 读取微信 openId
     
-    // 性别选择
-    $('.gender-option').click(function() {
+    // 性别选择：用 on 委托绑定，防止 Bootstrap 全局事件干扰
+    $(document).on('click', '.gender-option', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
         $('.gender-option').removeClass('active');
         $(this).addClass('active');
         selectedGender = $(this).data('gender');
     });
     
     // 标签页切换
-    $('.tab-item').click(function() {
+    $(document).on('click', '.tab-item', function(e) {
+        e.preventDefault();
         $('.tab-item').removeClass('active');
         $(this).addClass('active');
         currentTab = $(this).data('tab');
