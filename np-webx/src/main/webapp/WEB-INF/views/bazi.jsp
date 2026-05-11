@@ -363,14 +363,16 @@
         <div class="form-group">
             <label class="form-label">性别</label>
             <div class="gender-selector">
-                <div class="gender-option active" data-gender="male">
+                <label class="gender-option active" id="genderMale">
+                    <input type="radio" name="genderRadio" value="male" checked style="display:none;">
                     <span class="gender-icon">♂</span>
                     <span>男</span>
-                </div>
-                <div class="gender-option" data-gender="female">
+                </label>
+                <label class="gender-option" id="genderFemale">
+                    <input type="radio" name="genderRadio" value="female" style="display:none;">
                     <span class="gender-icon">♀</span>
                     <span>女</span>
-                </div>
+                </label>
             </div>
         </div>
         
@@ -426,39 +428,34 @@
 
 <script>
 $(function() {
-    let selectedGender = 'male';
     let currentTab = 'pan';
     let baziResult = null;
     let openId = null;
-    
-    // 初始化下拉框
+
+    // 初始化下拉框选项
     initSelectors();
-    
-    // ── 方案一（当前启用）：从 localStorage 读取或生成 UUID 作为用户标识 ──────
-    // 个人订阅号不支持网页授权，无法获取真实 openId。
-    // 改用浏览器本地 UUID 作为唯一标识，存入 localStorage 持久化，
-    // 后端限流逻辑不变，直接用此 UUID 作为 open_id 参数。
+
+    // 方案一：生成或读取 UUID 作为用户唯一标识
     initBaziUid();
-    
-    // ── 方案三（备用，升级服务号后启用，删除上方 initBaziUid() 并取消以下注释）
-    // initOpenId();  // 从 URL 参数 ?openId=xxx 或 localStorage 读取微信 openId
-    
-    // 性别选择：用 on 委托绑定，防止 Bootstrap 全局事件干扰
-    $(document).on('click', '.gender-option', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        $('.gender-option').removeClass('active');
-        $(this).addClass('active');
-        selectedGender = $(this).data('gender');
+
+    // 性别切换：用原生 radio change 事件，彻底绕开 Bootstrap 事件干扰
+    $('input[name="genderRadio"]').on('change', function() {
+        var val = $(this).val();
+        if (val === 'male') {
+            $('#genderMale').addClass('active');
+            $('#genderFemale').removeClass('active');
+        } else {
+            $('#genderFemale').addClass('active');
+            $('#genderMale').removeClass('active');
+        }
     });
-    
+
     // 标签页切换
     $(document).on('click', '.tab-item', function(e) {
         e.preventDefault();
         $('.tab-item').removeClass('active');
         $(this).addClass('active');
         currentTab = $(this).data('tab');
-        
         if (currentTab === 'pan') {
             $('#panContent').removeClass('hidden');
             $('#yunContent').addClass('hidden');
@@ -467,271 +464,178 @@ $(function() {
             $('#yunContent').removeClass('hidden');
         }
     });
-    
+
     // 提交排盘
-    $('#submitBtn').click(function() {
+    $('#submitBtn').on('click', function() {
         submitBazi();
     });
-    
+
     // 保存结果
-    $('#saveBtn').click(function() {
+    $('#saveBtn').on('click', function() {
         saveResult();
     });
-    
+
     // 分享结果
-    $('#shareBtn').click(function() {
+    $('#shareBtn').on('click', function() {
         shareResult();
     });
-    
-    // 初始化下拉框
+
+    // 初始化年月日时分下拉框
     function initSelectors() {
-        const currentYear = new Date().getFullYear();
-        
-        // 年份
-        for (let i = currentYear; i >= 1900; i--) {
-            $('#year').append(`<option value="${i}">${i}</option>`);
+        var currentYear = new Date().getFullYear();
+        var i, opt;
+
+        for (i = currentYear; i >= 1900; i--) {
+            $('#year').append('<option value="' + i + '">' + i + '</option>');
         }
         $('#year').val(currentYear);
-        
-        // 月份
-        for (let i = 1; i <= 12; i++) {
-            $('#month').append(`<option value="${i}">${i}</option>`);
+
+        for (i = 1; i <= 12; i++) {
+            $('#month').append('<option value="' + i + '">' + i + '</option>');
         }
         $('#month').val(1);
-        
-        // 日期
-        for (let i = 1; i <= 31; i++) {
-            $('#day').append(`<option value="${i}">${i}</option>`);
+
+        for (i = 1; i <= 31; i++) {
+            $('#day').append('<option value="' + i + '">' + i + '</option>');
         }
         $('#day').val(1);
-        
-        // 小时
-        for (let i = 0; i <= 23; i++) {
-            $('#hour').append(`<option value="${i}">${i.toString().padStart(2, '0')}</option>`);
+
+        for (i = 0; i <= 23; i++) {
+            opt = i < 10 ? '0' + i : '' + i;
+            $('#hour').append('<option value="' + i + '">' + opt + '</option>');
         }
         $('#hour').val(12);
-        
-        // 分钟
-        for (let i = 0; i <= 59; i++) {
-            $('#minute').append(`<option value="${i}">${i.toString().padStart(2, '0')}</option>`);
+
+        for (i = 0; i <= 59; i++) {
+            opt = i < 10 ? '0' + i : '' + i;
+            $('#minute').append('<option value="' + i + '">' + opt + '</option>');
         }
         $('#minute').val(0);
     }
-    
-    // ── 方案一：生成或读取 UUID 作为用户唯一标识 ─────────────────────────────
-    // 首次访问时生成一个带 h5_ 前缀的 UUID，写入 localStorage 持久化。
-    // 后续访问直接读取，不再重新生成，保证同一浏览器每日限流有效。
-    // 注意：清除浏览器缓存或换设备后 UUID 会变，限流重置，属于已知限制。
+
+    // 方案一：生成或读取 UUID
     function initBaziUid() {
-        let uid = localStorage.getItem('bazi_uid');
+        var uid = localStorage.getItem('bazi_uid');
         if (!uid) {
-            // 生成格式：h5_时间戳_随机串，便于后端日志区分 H5 来源
             uid = 'h5_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             localStorage.setItem('bazi_uid', uid);
         }
         openId = uid;
     }
 
-    // ── 方案三（备用）：从微信授权回调 URL 参数或 localStorage 读取真实 openId ─
-    // 升级服务号后，后端 baziPage() 会把 openId 注入到 URL 或 session，
-    // 前端从 URL 参数 ?openId=xxx 读取，并缓存到 localStorage。
+    // 方案三备用：从 URL 参数或 localStorage 读取微信真实 openId
     function initOpenId() {
-        // 优先从 URL 参数读取（后端 OAuth2 回调后附带）
-        const urlParams = new URLSearchParams(window.location.search);
-        openId = urlParams.get('openId');
-
-        if (!openId) {
-            // 其次从 localStorage 读取缓存
-            openId = localStorage.getItem('wechat_openId');
-        }
-
+        var urlParams = new URLSearchParams(window.location.search);
+        openId = urlParams.get('openId') || localStorage.getItem('wechat_openId');
         if (openId) {
-            // 缓存到 localStorage，避免每次都走授权
             localStorage.setItem('wechat_openId', openId);
-        } else {
-            console.warn('[bazi] 未获取到微信 openId，需要服务号网页授权');
         }
     }
-    
+
     // 提交排盘
     function submitBazi() {
-        const name = $('#name').val() || '用户';
-        const year = parseInt($('#year').val());
-        const month = parseInt($('#month').val());
-        const day = parseInt($('#day').val());
-        const hour = parseInt($('#hour').val());
-        const minute = parseInt($('#minute').val());
-        const gender = selectedGender;
-        
-        // ── 方案一：openId 由 initBaziUid() 保证一定有值，此处无需额外校验 ──
-        // ── 方案三（备用）：若切换为真实 openId 方案，取消以下注释做兜底校验 ──
-        // if (!openId) {
-        //     art.dialog.alert('获取用户标识失败，请刷新页面重试');
-        //     return;
-        // }
-        
-        // 显示加载遮罩
+        var name   = $('#name').val() || '用户';
+        var year   = parseInt($('#year').val());
+        var month  = parseInt($('#month').val());
+        var day    = parseInt($('#day').val());
+        var hour   = parseInt($('#hour').val());
+        var minute = parseInt($('#minute').val());
+        // 读取当前选中的 radio 值
+        var gender = $('input[name="genderRadio"]:checked').val() || 'male';
+
         $('#loadingOverlay').css('display', 'flex');
-        
+
         $.ajax({
             url: '/api/bazi/reading',
             type: 'POST',
-            headers: {
-                'token': '@WOAICAOBI@'
-            },
+            headers: { 'token': '@WOAICAOBI@' },
             data: {
                 open_id: openId,
-                year: year,
-                month: month,
-                day: day,
-                hour: hour,
-                minute: minute,
-                gender: gender,
-                name: name
+                year: year, month: month, day: day,
+                hour: hour, minute: minute,
+                gender: gender, name: name
             },
             success: function(response) {
                 $('#loadingOverlay').hide();
-                
                 if (response.code === 200 && response.data) {
                     baziResult = response.data;
                     displayResult(response.data);
                     $('#resultSection').removeClass('hidden');
-                    
-                    // 滚动到结果区域
-                    $('html, body').animate({
-                        scrollTop: $('#resultSection').offset().top - 100
-                    }, 500);
+                    $('html, body').animate({ scrollTop: $('#resultSection').offset().top - 100 }, 500);
                 } else {
-                    const msg = response.message || response.msg || '排盘失败';
-                    art.dialog.alert(msg);
+                    art.dialog.alert(response.message || response.msg || '排盘失败');
                 }
             },
             error: function(xhr) {
                 $('#loadingOverlay').hide();
-                const response = xhr.responseJSON;
-                const msg = response ? (response.message || response.msg || '排盘失败') : '网络请求失败';
-                art.dialog.alert(msg);
+                var r = xhr.responseJSON;
+                art.dialog.alert(r ? (r.message || r.msg || '排盘失败') : '网络请求失败');
             }
         });
     }
-    
-    // 显示结果
+
+    // 渲染排盘结果
     function displayResult(data) {
-        const { panVO, panText, yunText } = data;
-        
+        var panVO = data.panVO, panText = data.panText, yunText = data.yunText;
+
         if (panVO && panVO.basicInfo) {
-            const info = panVO.basicInfo;
-            const xingzuo = panVO.xingZuoEtc || {};
-            
-            $('#basicInfo').html(`
-                <div class="info-item">
-                    <div class="info-label">姓名</div>
-                    <div class="info-value">${info.name || '未知'}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">性别</div>
-                    <div class="info-value">${info.gender || '未知'}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">公历</div>
-                    <div class="info-value">${info.solarYear}-${String(info.solarMonth).padStart(2, '0')}-${String(info.solarDay).padStart(2, '0')}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">时间</div>
-                    <div class="info-value">${String(info.solarHour).padStart(2, '0')}:${String(info.solarMinute).padStart(2, '0')}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">农历</div>
-                    <div class="info-value">${info.lunarYear}年${info.lunarMonth}${info.lunarDay}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">星座</div>
-                    <div class="info-value">${xingzuo.xingZuo || '未知'}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">生肖</div>
-                    <div class="info-value">${xingzuo.shengXiao || '未知'}</div>
-                </div>
-                <div class="info-item">
-                    <div class="info-label">周几</div>
-                    <div class="info-value">星期${info.weekDay || '未知'}</div>
-                </div>
-            `);
+            var info = panVO.basicInfo;
+            var xz   = panVO.xingZuoEtc || {};
+            var pad  = function(n) { return n < 10 ? '0' + n : '' + n; };
+
+            $('#basicInfo').html(
+                '<div class="info-item"><div class="info-label">姓名</div><div class="info-value">' + (info.name || '未知') + '</div></div>' +
+                '<div class="info-item"><div class="info-label">性别</div><div class="info-value">' + (info.gender || '未知') + '</div></div>' +
+                '<div class="info-item"><div class="info-label">公历</div><div class="info-value">' + info.solarYear + '-' + pad(info.solarMonth) + '-' + pad(info.solarDay) + '</div></div>' +
+                '<div class="info-item"><div class="info-label">时间</div><div class="info-value">' + pad(info.solarHour) + ':' + pad(info.solarMinute) + '</div></div>' +
+                '<div class="info-item"><div class="info-label">农历</div><div class="info-value">' + info.lunarYear + '年' + info.lunarMonth + info.lunarDay + '</div></div>' +
+                '<div class="info-item"><div class="info-label">星座</div><div class="info-value">' + (xz.xingZuo || '未知') + '</div></div>' +
+                '<div class="info-item"><div class="info-label">生肖</div><div class="info-value">' + (xz.shengXiao || '未知') + '</div></div>' +
+                '<div class="info-item"><div class="info-label">周几</div><div class="info-value">星期' + (info.weekDay || '未知') + '</div></div>'
+            );
         }
-        
-        // 显示排盘分析（将 \n 转为 <br>）
+
         if (panText) {
-            const formattedPanText = panText.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
-            $('#panText').html(formattedPanText);
+            $('#panText').html(panText.replace(/\\n/g, '<br>').replace(/\n/g, '<br>'));
         }
-        
-        // 显示运势分析（将 \n 转为 <br>）
         if (yunText) {
-            const formattedYunText = yunText.replace(/\\n/g, '<br>').replace(/\n/g, '<br>');
-            $('#yunText').html(formattedYunText);
+            $('#yunText').html(yunText.replace(/\\n/g, '<br>').replace(/\n/g, '<br>'));
         }
     }
-    
-    // 保存结果
+
+    // 保存结果到 localStorage
     function saveResult() {
-        if (!baziResult) {
-            art.dialog.tips('没有排盘结果');
-            return;
-        }
-        
-        const isYun = currentTab === 'yun';
-        const htmlText = isYun ? (baziResult.yunText || '') : (baziResult.panText || '');
-        const plainText = htmlText.replace(/<[^>]+>/g, '').replace(/\\n/g, '\n').replace(/\n/g, '\n');
-        
-        const name = $('#name').val() || '用户';
-        const date = `${$('#year').val()}-${$('#month').val()}-${$('#day').val()}`;
-        const gender = selectedGender === 'male' ? '男' : '女';
-        
-        const content = `【${isYun ? '运势分析' : '八字排盘'}】${name} ${gender} ${date}\n${plainText}`;
-        
-        // 保存到 localStorage
-        const savedList = JSON.parse(localStorage.getItem('baziList') || '[]');
-        savedList.unshift({
-            id: Date.now(),
-            content: content,
-            time: new Date().toLocaleString('zh-CN')
-        });
-        localStorage.setItem('baziList', JSON.stringify(savedList));
-        
+        if (!baziResult) { art.dialog.tips('没有排盘结果'); return; }
+        var isYun    = currentTab === 'yun';
+        var htmlText = isYun ? (baziResult.yunText || '') : (baziResult.panText || '');
+        var plain    = htmlText.replace(/<[^>]+>/g, '');
+        var name     = $('#name').val() || '用户';
+        var date     = $('#year').val() + '-' + $('#month').val() + '-' + $('#day').val();
+        var genderTxt = $('input[name="genderRadio"]:checked').val() === 'female' ? '女' : '男';
+        var content  = '【' + (isYun ? '运势分析' : '八字排盘') + '】' + name + ' ' + genderTxt + ' ' + date + '\n' + plain;
+        var list = JSON.parse(localStorage.getItem('baziList') || '[]');
+        list.unshift({ id: Date.now(), content: content, time: new Date().toLocaleString('zh-CN') });
+        localStorage.setItem('baziList', JSON.stringify(list));
         art.dialog.tips('已保存到本地');
     }
-    
-    // 分享结果
+
+    // 复制结果到剪贴板
     function shareResult() {
-        if (!baziResult) {
-            art.dialog.tips('没有排盘结果');
-            return;
-        }
-        
-        const isYun = currentTab === 'yun';
-        const htmlText = isYun ? (baziResult.yunText || '') : (baziResult.panText || '');
-        const plainText = htmlText.replace(/<[^>]+>/g, '').replace(/\\n/g, '\n').replace(/\n/g, '\n');
-        
-        const name = $('#name').val() || '用户';
-        const date = `${$('#year').val()}-${$('#month').val()}-${$('#day').val()}`;
-        const gender = selectedGender === 'male' ? '男' : '女';
-        
-        const content = `【${isYun ? '运势分析' : '八字排盘'}】${name} ${gender} ${date}\n\n${plainText}`;
-        
-        // 复制到剪贴板
-        const textarea = document.createElement('textarea');
-        textarea.value = content;
-        document.body.appendChild(textarea);
-        textarea.select();
-        
-        try {
-            document.execCommand('copy');
-            art.dialog.tips('已复制到剪贴板');
-        } catch (err) {
-            art.dialog.alert('复制失败，请手动复制');
-        }
-        
-        document.body.removeChild(textarea);
+        if (!baziResult) { art.dialog.tips('没有排盘结果'); return; }
+        var isYun    = currentTab === 'yun';
+        var htmlText = isYun ? (baziResult.yunText || '') : (baziResult.panText || '');
+        var plain    = htmlText.replace(/<[^>]+>/g, '');
+        var name     = $('#name').val() || '用户';
+        var date     = $('#year').val() + '-' + $('#month').val() + '-' + $('#day').val();
+        var genderTxt = $('input[name="genderRadio"]:checked').val() === 'female' ? '女' : '男';
+        var content  = '【' + (isYun ? '运势分析' : '八字排盘') + '】' + name + ' ' + genderTxt + ' ' + date + '\n\n' + plain;
+        var ta = document.createElement('textarea');
+        ta.value = content;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); art.dialog.tips('已复制到剪贴板'); }
+        catch(e) { art.dialog.alert('复制失败，请手动复制'); }
+        document.body.removeChild(ta);
     }
 });
 </script>
