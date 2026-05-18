@@ -166,6 +166,11 @@ public class BaZiController {
         if (StringUtils.isBlank(openId)) {
             return ResultGenerator.genErrorResult(400, "open_id 不能为空");
         }
+        // 防止恶意输入：openId 只允许字母、数字、下划线和连字符，长度限制 64
+        if (!openId.matches("^[a-zA-Z0-9_\\-]{1,64}$")) {
+            log.warn("非法 open_id 被拦截, ip={}, open_id={}", request.getRemoteAddr(), openId);
+            return ResultGenerator.genErrorResult(400, "open_id 格式不合法");
+        }
         if (month < 1 || month > 12 || day < 1 || day > 31
                 || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
             return ResultGenerator.genErrorResult(400, "日期或时间参数不合法");

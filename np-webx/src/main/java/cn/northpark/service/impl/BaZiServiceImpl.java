@@ -34,6 +34,11 @@ public class BaZiServiceImpl implements BaZiService {
     public Result<?> fullReading(int year, int month, int day, int hour, int minute,
                                  boolean isMale, String name, String openId, HttpServletRequest request) {
 
+        // 对 name 做长度截断，防止超长字符串写入数据库
+        if (name != null && name.length() > 20) {
+            name = name.substring(0, 20);
+        }
+
         String redisKey = "bazi:free:" + openId + ":" + LocalDate.now();
         String countStr = RedisUtil.getInstance().get(redisKey);
         int usedCount = countStr == null ? 0 : Integer.parseInt(countStr);
