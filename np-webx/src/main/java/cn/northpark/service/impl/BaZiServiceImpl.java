@@ -1,12 +1,16 @@
 package cn.northpark.service.impl;
 
 import cn.northpark.Xuanaobazi.BaZiEngine;
+import cn.northpark.Xuanaobazi.vo.BaZiPanVO;
+import cn.northpark.Xuanaobazi.vo.BaZiYunVO;
 import cn.northpark.mapper.BaZiRecordMapper;
 import cn.northpark.model.BaZiRecord;
 import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
 import cn.northpark.service.BaZiService;
+import cn.northpark.utils.EnvCfgUtil;
 import cn.northpark.utils.RedisUtil;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +24,8 @@ import java.util.Map;
 @Service
 public class BaZiServiceImpl implements BaZiService {
 
-    /** 每用户每天免费调用次数 */
-    private static final int FREE_DAILY_LIMIT = 1;
+    /** 每用户每天免费调用次数  八字排盘每日免费调用次数（限时免费）*/
+    private static final int FREE_DAILY_LIMIT = Integer.parseInt(EnvCfgUtil.getValByCfgName("FREE_DAILY_LIMIT"));;
 
     @Autowired
     private BaZiRecordMapper baZiRecordMapper;
@@ -29,6 +33,11 @@ public class BaZiServiceImpl implements BaZiService {
     @Override
     public Result<?> fullReading(int year, int month, int day, int hour, int minute,
                                  boolean isMale, String name, String openId, HttpServletRequest request) {
+
+        // 对 name 做长度截断，防止超长字符串写入数据库
+        if (name != null && name.length() > 20) {
+            name = name.substring(0, 20);
+        }
 
         String redisKey = "bazi:free:" + openId + ":" + LocalDate.now();
         String countStr = RedisUtil.getInstance().get(redisKey);
@@ -38,10 +47,15 @@ public class BaZiServiceImpl implements BaZiService {
             return ResultGenerator.genErrorResult(429, "今日免费次数已用完，请明日再试");
         }
 
-        // 调用八字引擎
+        // 调用八字引擎，获取 VO 和文本
+        BaZiEngine engine = new BaZiEngine();
+        BaZiPanVO panVO;
+        BaZiYunVO yunVO;
         String[] fullResult;
         try {
-            fullResult = new BaZiEngine().getFullResult(year, month, day, hour, minute, isMale, name);
+            panVO = engine.getPanVO(year, month, day, hour, minute, isMale, name);
+            yunVO = engine.getYunVO(year, month, day, hour, minute, isMale, name);
+            fullResult = engine.getFullResult(year, month, day, hour, minute, isMale, name);
         } catch (Exception e) {
             log.error("BaZiEngine error", e);
             return ResultGenerator.genErrorResult(500, "排盘计算失败，请检查输入参数");
@@ -64,6 +78,8 @@ public class BaZiServiceImpl implements BaZiService {
         record.setBirthDay(day);
         record.setBirthHour(hour);
         record.setBirthMinute(minute);
+        record.setPanVo(JSON.toJSONString(panVO));
+        record.setYunVo(JSON.toJSONString(yunVO));
         record.setPanResult(fullResult[0]);
         record.setYunResult(fullResult[1]);
         record.setIp(ip);
@@ -76,8 +92,10 @@ public class BaZiServiceImpl implements BaZiService {
 
         // 组装返回
         Map<String, Object> data = new LinkedHashMap<>();
-        data.put("pan", fullResult[0]);
-        data.put("yun", fullResult[1]);
+        data.put("panVO", panVO);
+        data.put("yunVO", yunVO);
+        data.put("panText", fullResult[0]);
+        data.put("yunText", fullResult[1]);
         data.put("recordId", record.getId());
 
         return ResultGenerator.genSuccessResult(data);
