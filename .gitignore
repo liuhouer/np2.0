@@ -54,3 +54,4 @@ mbg_config*.xml
 # Optional: if using npm/Tailwind build
 node_modules/
 package-lock.json
+/target/
