@@ -60,7 +60,7 @@ public class MinioUtils {
 
     public static MinioClient buildClient() {
         return MinioClient.builder()
-                .endpoint(EnvCfgUtil.getValByCfgName("MINIO_API"))
+                .endpoint(EnvCfgUtil.getValByCfgName("MINIO_API_"))
                 .credentials(EnvCfgUtil.getValByCfgName("MINIO_ACCESS_KEY"), EnvCfgUtil.getValByCfgName("MINIO_SECRET_KEY"))
                 .build();
     }

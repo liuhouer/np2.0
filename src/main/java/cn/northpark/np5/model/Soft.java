@@ -56,4 +56,10 @@ public class Soft implements Serializable {
 
     @TableField(exist = false)
     private List<Map<String, String>> tagList;
+
+    @TableField(exist = false)
+    private String briefImg;
+
+    @TableField(exist = false)
+    private String briefShow;
 }

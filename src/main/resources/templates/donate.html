@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('赞助支持NorthPark', '赞助NorthPark,打赏NorthPark,支持NorthPark', '您的支持将帮助我们提供更好的服务！服务器、带宽等支出压力较大,需要您的支持!')"></head>
+<body class="flex flex-col min-h-screen bg-gray-50" x-data="{ activeTab: '1' }">
+    <header th:replace="fragments/nav :: nav"></header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Side - Content -->
+            <div class="lg:col-span-2 space-y-8">
+                <article class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm p-8 md:p-12">
+                    <header class="border-b border-gray-100 pb-6 mb-6">
+                        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">赞助 NorthPark</h1>
+                        <p class="text-sm text-gray-400 mt-2">支持我们走得更远，提供更优质的极净服务</p>
+                    </header>
+
+                    <div class="bg-blue-50/50 rounded-2xl p-6 border border-blue-100/30 text-sm text-gray-700 leading-relaxed mb-8 space-y-2">
+                        <p class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            NorthPark中文网为出于兴趣所作，所有资源均免费分享。
+                        </p>
+                        <p class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            目前注册用户 5万+，每日活跃用户数千人。
+                        </p>
+                        <p class="flex items-center text-red-500 font-medium">
+                            <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            服务器、带宽及存储空间等硬件支出压力较大，感谢每一份支持！
+                        </p>
+                    </div>
+
+                    <!-- Tabs -->
+                    <div>
+                        <div class="flex border-b border-gray-200">
+                            <button @click="activeTab = '1'" :class="{ 'border-blue-600 text-blue-600': activeTab === '1', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== '1' }" class="flex-1 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200">
+                                🌟 大老板
+                            </button>
+                            <button @click="activeTab = '2'" :class="{ 'border-blue-600 text-blue-600': activeTab === '2', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== '2' }" class="flex-1 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200">
+                                🥤 老板
+                            </button>
+                            <button @click="activeTab = '3'" :class="{ 'border-blue-600 text-blue-600': activeTab === '3', 'border-transparent text-gray-500 hover:text-gray-700': activeTab !== '3' }" class="flex-1 py-4 px-1 text-center border-b-2 font-medium text-sm transition-colors duration-200">
+                                ❤️ 好心人
+                            </button>
+                        </div>
+
+                        <!-- Tab contents (AJAX loaded area or template driven) -->
+                        <div class="mt-8">
+                            <div id="donate-items-container" class="space-y-4">
+                                <!-- Loaded list -->
+                            </div>
+
+                            <!-- Inner Pagination -->
+                            <div class="mt-8 flex justify-center space-x-2 text-xs" id="donate-pagination">
+                                <!-- Pagination list -->
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Right Side - Sidebar QRCodes -->
+            <div class="space-y-8">
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 space-y-6 text-center">
+                    <h2 class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-4 text-left">微信 / 支付宝 赞助</h2>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-gray-50 rounded-2xl p-4 flex flex-col items-center">
+                            <div class="w-48 h-48 bg-white border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center p-2">
+                                <img src="https://minioapi.northpark.cn/pic/wechat_pay.jpg" alt="微信赞助二维码" class="w-full h-full object-contain" />
+                            </div>
+                            <span class="text-xs text-gray-500 mt-2">微信扫码赞助</span>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-2xl p-4 flex flex-col items-center">
+                            <div class="w-48 h-48 bg-white border border-gray-100 rounded-xl overflow-hidden flex items-center justify-center p-2">
+                                <img src="https://minioapi.northpark.cn/pic/alipay_pay.jpg" alt="支付宝赞助二维码" class="w-full h-full object-contain" />
+                            </div>
+                            <span class="text-xs text-gray-500 mt-2">支付宝扫码赞助</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+    <script th:src="@{https://code.jquery.com/jquery-3.6.0.min.js}"></script>
+    <script>
+        $(document).ready(function() {
+            var activeTab = '1';
+            var currentPage = 1;
+
+            function loadDonates(typeId, pageNum) {
+                activeTab = typeId;
+                currentPage = pageNum || 1;
+                $.ajax({
+                    url: '/sponsor/list',
+                    type: 'GET',
+                    data: {
+                        typeId: activeTab,
+                        page: currentPage
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if(res.success) {
+                            renderList(res.list);
+                            renderPagination(res.pageNum, res.totalPages);
+                        }
+                    }
+                });
+            }
+
+            function renderList(list) {
+                var html = '';
+                if(list && list.length > 0) {
+                    list.forEach(function(item) {
+                        html += '<div class="bg-gray-50/50 hover:bg-gray-50 border border-gray-100/50 p-5 rounded-2xl transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-4">';
+                        html += '  <div class="space-y-1">';
+                        html += '    <div class="flex items-center space-x-2">';
+                        html += '      <span class="font-semibold text-gray-900 text-sm">' + (item.accountName || '匿名赞赏') + '</span>';
+                        html += '      <span class="text-3xs text-gray-400 font-mono">' + item.addTime + '</span>';
+                        html += '    </div>';
+                        html += '    <p class="text-xs text-gray-500 italic">"' + (item.rewardMsg || '匿名赞赏') + '"</p>';
+                        html += '  </div>';
+                        html += '  <div class="text-right flex items-center md:justify-end space-x-1.5">';
+                        html += '    <span class="text-2xs text-gray-400">赞助</span>';
+                        html += '    <span class="font-mono text-sm font-bold text-emerald-600">￥' + item.orderAmount + '</span>';
+                        html += '  </div>';
+                        html += '</div>';
+                    });
+                } else {
+                    html = '<div class="text-center py-12 text-sm text-gray-400">暂无赞助记录</div>';
+                }
+                $('#donate-items-container').html(html);
+            }
+
+            function renderPagination(current, total) {
+                if(total <= 1) {
+                    $('#donate-pagination').html('');
+                    return;
+                }
+                var html = '';
+                // Prev
+                if(current > 1) {
+                    html += '<button class="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors" data-page="' + (current - 1) + '">&larr;</button>';
+                }
+                
+                // Smart Pagination Window (Current +- 2)
+                var start = Math.max(1, current - 2);
+                var end = Math.min(total, current + 2);
+                
+                if(start > 1) html += '<span class="px-2 py-1.5 text-gray-400">...</span>';
+                
+                for(var i = start; i <= end; i++) {
+                    if(i === current) {
+                        html += '<span class="px-3.5 py-1.5 rounded-lg bg-blue-600 text-white font-bold shadow-sm">' + i + '</span>';
+                    } else {
+                        html += '<button class="px-3.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 hover:border-blue-200 hover:text-blue-600 transition-all duration-200" data-page="' + i + '">' + i + '</button>';
+                    }
+                }
+                
+                if(end < total) html += '<span class="px-2 py-1.5 text-gray-400">...</span>';
+
+                // Next
+                if(current < total) {
+                    html += '<button class="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-colors" data-page="' + (current + 1) + '">&rarr;</button>';
+                }
+                $('#donate-pagination').html(html);
+            }
+
+            // Click events
+            $(document).on('click', '#donate-pagination button', function() {
+                var p = $(this).data('page');
+                loadDonates(activeTab, p);
+            });
+
+            // Watch Alpine tab change
+            window.addEventListener('alpine:init', function() {
+                // Not strictly needed if we just binding click on standard tabs
+            });
+
+            // Fallback interval to capture tab clicked
+            $('button[click]').on('click', function() {
+                // Alpine tab trigger
+            });
+
+            // Let alpine trigger tab loads:
+            // We can listen to tabs clicks directly:
+            $('button').on('click', function() {
+                var txt = $(this).text();
+                if(txt.indexOf('大老板') > -1) { loadDonates('1', 1); }
+                else if(txt.indexOf('老板') > -1) { loadDonates('2', 1); }
+                else if(txt.indexOf('好心人') > -1) { loadDonates('3', 1); }
+            });
+
+            // Init load
+            loadDonates('1', 1);
+        });
+    </script>
+</body>
+</html>

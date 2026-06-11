@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head('关于NorthPark - 发现生活中的美好', 'NorthPark,关于NorthPark,北方公园,免费资源', 'NorthPark是一个充满温度的网络社区,这里有免费的影视资源、Mac资源、学习资源。')"></head>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <header th:replace="fragments/nav :: nav"></header>
+
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Side - Content -->
+            <div class="lg:col-span-2 space-y-8">
+                <article class="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm p-8 md:p-12">
+                    <header class="border-b border-gray-100 pb-6 mb-6">
+                        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">关于 NorthPark</h1>
+                        <p class="text-sm text-gray-400 mt-2">发现生活中的惬意与角落</p>
+                    </header>
+
+                    <div class="prose max-w-none text-gray-800 leading-relaxed space-y-6 text-base">
+                        <p class="indent-8">NorthPark诞生于一个夏夜。</p>
+                        <p class="indent-8">
+                            2014年的一个酷热难耐的夏夜，忙碌了一天的
+                            <span class="font-semibold text-blue-600">小布</span>
+                            回到家，朋友正好做好了香喷喷的饭菜，吃完饭又去买了个冰西瓜，感到浑身透凉。
+                        </p>
+                        <p class="indent-8">
+                            突然外面下起了一阵暴雨。小布躺在床上，看着窗外倾泻的暴雨、闻着清透的泥土气息，闭上眼，突然感到一种特殊的惬意。
+                            原来，生活中充满了让人惬意的东西，比如开着窗欣赏暴雨，比如下雨天了举着小伞走到小巷，比如巷子里的孩子嬉戏的童年。
+                        </p>
+                        <p class="indent-8">
+                            可是，小布知道，这些转瞬即逝的思绪，往往到了第二天就彻底忘记了。
+                            人类总是忘记生活中的美好点滴，只记住了悲伤无趣的记忆，所以人类才会这么不开心。
+                        </p>
+                        <p class="indent-8">
+                            想到这里，他起身坐到电脑桌旁敲起了代码，用两天时间完成了一个初版，包括主题与树洞的功能。
+                        </p>
+                        <p class="indent-8">
+                            因为很喜欢看《南方公园》，里面的小动漫故事透露出形形色色的社会现象，因此注册了北方公园-NorthPark域名，
+                            寓指美好的互动公园，这里的一切都是那么美好：
+                            <a href="/movies" class="text-blue-600 hover:underline font-medium">免费的影视资源</a>，
+                            <a href="/soft/mac" class="text-blue-600 hover:underline font-medium">免费的Mac/Windows软件</a>，
+                            <a href="/learning" class="text-blue-600 hover:underline font-medium">顶级的学习资源</a>。
+                            在这里和美好的大家一起进步，一起快乐的玩耍。
+                        </p>
+                        <p class="indent-8">
+                            是的，再悲伤的人，也一定会有让他感到美好的东西。
+                        </p>
+                        <p class="indent-8">
+                            再不幸的人，也有资格来NorthPark找到精神角落。
+                        </p>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Right Side - Sidebar -->
+            <div class="space-y-8">
+                <!-- Contact Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 space-y-6">
+                    <h2 class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-4">联系合作</h2>
+                    <div class="space-y-4 text-sm text-gray-600">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gray-400">邮箱:</span>
+                            <a href="mailto:zhangyang.z@iCloud.com" class="text-blue-600 hover:underline">zhangyang.z@iCloud.com</a>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-gray-400">QQ:</span>
+                            <span class="font-mono text-gray-800">654714226</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copyright Card -->
+                <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-8 space-y-4">
+                    <h2 class="text-xl font-bold text-gray-900 border-b border-gray-100 pb-4">版权及投稿</h2>
+                    <div class="text-sm text-gray-600 leading-relaxed space-y-4">
+                        <p>本站资源均来自互联网，仅供学习交流使用。如有侵权请联系我们删除。</p>
+                        <div class="flex items-center space-x-3 text-xs border-t border-gray-50 pt-4">
+                            <span class="text-gray-400">版权受理邮箱:</span>
+                            <a href="mailto:qhdsoftware@163.com" class="text-blue-600 hover:underline">qhdsoftware@163.com</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -179,6 +179,17 @@ public class SoftController {
 
     private void handleTags(List<Soft> list) {
         for (Soft s : list) {
+            // 解析 brief 里的 img 标签
+            if (StringUtils.isNotBlank(s.getBrief())) {
+                org.jsoup.nodes.Document doc = Jsoup.parse(s.getBrief());
+                org.jsoup.select.Elements imgs = doc.select("img");
+                if (!imgs.isEmpty()) {
+                    s.setBriefImg(imgs.get(0).attr("src"));
+                }
+                // 去除 HTML 标签后的纯文本，用于简要描述
+                s.setBriefShow(doc.text());
+            }
+
             if (StringUtils.isNotBlank(s.getTags()) && StringUtils.isNotBlank(s.getTagsCode())) {
                 String[] tags = s.getTags().split(",");
                 String[] codes = s.getTagsCode().split(",");
