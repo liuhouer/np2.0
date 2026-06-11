@@ -1,0 +1,56 @@
+# Maven / Build
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs and temporary files
+*.log
+*.tmp
+log/
+logs/
+temp/
+tmp/
+
+# IDE files
+.idea/
+*.iws
+*.iml
+*.ipr
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+.vscode/
+*.code-workspace
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+ /.nb-gradle/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# Local configs & secrets (do not commit credentials/keys/mail/minio params)
+application-dev*.yml
+application-prod*.yml
+application-local*.yml
+application*.local.yml
+*.local.properties
+.env
+.env.*
+hikaricp.properties
+redis.properties
+kafka.properties
+generatorConfig.xml
+mybatis-config.xml
+mbg_config*.xml
+
+# Optional: if using npm/Tailwind build
+node_modules/
+package-lock.json
