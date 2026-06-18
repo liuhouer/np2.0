@@ -43,7 +43,7 @@ public class RetMovieAndSendMQTask {
      */
     @Async("taskExecutor")
 //    @Scheduled(cron = "0 */1 * * * ?")//每1分钟执行一次
-    @Scheduled(cron = "0 23 23 * * ?")//每天中午11:30执行一次
+    // @Scheduled(cron = "0 23 23 * * ?")//每天中午11:30执行一次
     public void RetMovieAndSendMQTask() {
         // 默认爬取第1-2页
         retMovieWithPageRange(1, 2);
