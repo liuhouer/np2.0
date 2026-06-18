@@ -9,6 +9,7 @@ import cn.northpark.constant.MyConstant;
 import cn.northpark.model.Eq;
 import cn.northpark.model.NotifyRemindB;
 import cn.northpark.notify.NotifyEnum;
+import cn.northpark.result.JsonResult;
 import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
 import cn.northpark.service.EqService;
@@ -31,8 +32,13 @@ import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.RedisConnection;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -435,6 +441,70 @@ public class DashController {
 		String sourceDir = request.getParameter("sourceDir");
 		MinioUtils.uploadFiles(bucketName,sourceDir);
 		return ResultGenerator.genSuccessResult();
+	}
+
+	/**
+	 * 获取网站统计信息（管理员使用）
+	 */
+	@RequestMapping("/admin/stat")
+	public String stat(HttpServletRequest request, ModelMap model) {
+		UserVO user = RequestHolder.getUserInfo(request);
+		model.put("user", user);
+		return "/page/admin/statistics";
+	}
+
+	/**
+	 * 获取网站统计信息（管理员使用）
+	 */
+	@RequestMapping("/admin/statistics")
+	@ResponseBody
+	public JsonResult getSiteStatistics() {
+		try {
+			cn.northpark.vo.SiteStatisticsVO stats = new cn.northpark.vo.SiteStatisticsVO();
+			
+			// 统计总数
+			stats.setTotalUsers((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_user", new org.apache.commons.dbutils.handlers.ScalarHandler(), (Object[]) null));
+			stats.setTotalMovies((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_movies", new org.apache.commons.dbutils.handlers.ScalarHandler()));
+			stats.setTotalSofts((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_soft", new org.apache.commons.dbutils.handlers.ScalarHandler()));
+			stats.setTotalKnowledge((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_knowledge", new org.apache.commons.dbutils.handlers.ScalarHandler()));
+			stats.setTotalNotes((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_note", new org.apache.commons.dbutils.handlers.ScalarHandler()));
+			stats.setTotalLyrics((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_lyrics", new org.apache.commons.dbutils.handlers.ScalarHandler()));
+			
+			// 在线用户数（从 Redis 获取）
+			StringRedisTemplate stringRedisTemplate =
+					SpringContextUtils.getBean(StringRedisTemplate.class);
+
+			ScanOptions scanOptions = ScanOptions.scanOptions()
+					.match("token_*")
+					.count(1000)
+					.build();
+
+			long onlineCount = 0L;
+			try (RedisConnection connection = stringRedisTemplate.getConnectionFactory().getConnection();
+				 Cursor<byte[]> cursor = connection.scan(scanOptions)) {
+
+				while (cursor.hasNext()) {
+					cursor.next();
+					onlineCount++;
+				}
+			}
+
+			stats.setOnlineUsers(onlineCount);
+			
+			// 今日新增
+			String todayDate = LocalDate.now().toString();
+			stats.setTodayNewUsers((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_user WHERE DATE(date_joined) = ?",
+					new org.apache.commons.dbutils.handlers.ScalarHandler(), todayDate));
+			stats.setTodayNewMovies((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_movies WHERE DATE(add_time) = ?", 
+					new org.apache.commons.dbutils.handlers.ScalarHandler(), todayDate));
+			stats.setTodayNewComments((Long) NPQueryRunner.query("SELECT COUNT(*) as cnt FROM bc_topic_comment WHERE DATE(add_time) = ?",
+					new org.apache.commons.dbutils.handlers.ScalarHandler(), todayDate));
+			
+			return JsonResult.ok().put("statistics", stats);
+		} catch (Exception e) {
+			log.error("获取网站统计信息失败", e);
+			return JsonResult.error("获取统计信息失败: " + e.getMessage());
+		}
 	}
 
 }

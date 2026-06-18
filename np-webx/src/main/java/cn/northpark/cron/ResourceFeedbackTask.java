@@ -18,14 +18,14 @@ import org.springframework.stereotype.Component;
 import java.net.URLEncoder;
 import java.util.*;
 
-@Component
+@Component("cn.northpark.cron.ResourceFeedbackTask")
 @EnableScheduling
 @Slf4j
 public class ResourceFeedbackTask {
 
     private static final String SEARCH_API = "https://so.northpark.cn/api/search?kw=%s&res=merge&src=all";
 
-    @Scheduled(fixedRate = 5 * 60 * 60 * 1000) // 每5小时执行一次
+    // @Scheduled(fixedRate = 5 * 60 * 60 * 1000) // 每5小时执行一次
     public void processInvalidResources() {
         try {
             RedisUtil redisUtil = RedisUtil.getInstance();

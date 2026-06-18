@@ -125,7 +125,7 @@ public class MinioUtils {
                         file.getInputStream(), file.getSize(), -1)
                         .contentType(file.getContentType())
                         .build());
-        String url = EnvCfgUtil.getValByCfgName("MINIO_API") + "/" + bucketName + "/" + fileName;
+        String url = EnvCfgUtil.getValByCfgName("MINIO_API_") + "/" + bucketName + "/" + fileName;
         String urlHost = EnvCfgUtil.getValByCfgName("MINIO_API_") + "/" + bucketName + "/" + fileName;
         log.info("上传文件成功url ：[{}], urlHost ：[{}]", url, urlHost);
         return new FileUploadResponse(url, urlHost);
@@ -256,7 +256,7 @@ public class MinioUtils {
     public static MinioClient buildClient(){
         MinioClient minioClient =
                 MinioClient.builder()
-                        .endpoint(EnvCfgUtil.getValByCfgName("MINIO_API"))//publish
+                        .endpoint(EnvCfgUtil.getValByCfgName("MINIO_API_"))//publish
 //                        .endpoint("http://node3:9000")//local
                         .credentials(EnvCfgUtil.getValByCfgName("MINIO_ACCESS_KEY"), EnvCfgUtil.getValByCfgName("MINIO_SECRET_KEY"))
                         .build();

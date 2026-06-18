@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.northpark.mapper.CronTaskMapper">
+
+    <resultMap id="BaseResultMap" type="cn.northpark.model.CronTask">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="task_name" property="taskName" jdbcType="VARCHAR"/>
+        <result column="task_class" property="taskClass" jdbcType="VARCHAR"/>
+        <result column="task_method" property="taskMethod" jdbcType="VARCHAR"/>
+        <result column="cron_expression" property="cronExpression" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="support_manual" property="supportManual" jdbcType="TINYINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, task_name, task_class, task_method, cron_expression, description, 
+        status, support_manual, create_time, update_time
+    </sql>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM bc_cron_task
+        ORDER BY id ASC
+    </select>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM bc_cron_task
+        WHERE id = #{id}
+    </select>
+
+    <select id="findByClassAndMethod" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM bc_cron_task
+        WHERE task_class = #{taskClass} AND task_method = #{taskMethod}
+    </select>
+
+    <insert id="insert" parameterType="cn.northpark.model.CronTask" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bc_cron_task (task_name, task_class, task_method, cron_expression, description, status, support_manual)
+        VALUES (#{taskName}, #{taskClass}, #{taskMethod}, #{cronExpression}, #{description}, #{status}, #{supportManual})
+    </insert>
+
+    <update id="update" parameterType="cn.northpark.model.CronTask">
+        UPDATE bc_cron_task
+        <set>
+            <if test="taskName != null">task_name = #{taskName},</if>
+            <if test="taskClass != null">task_class = #{taskClass},</if>
+            <if test="taskMethod != null">task_method = #{taskMethod},</if>
+            <if test="cronExpression != null">cron_expression = #{cronExpression},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="supportManual != null">support_manual = #{supportManual},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM bc_cron_task WHERE id = #{id}
+    </delete>
+
+</mapper>

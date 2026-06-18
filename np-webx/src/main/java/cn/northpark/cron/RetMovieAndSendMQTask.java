@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
  * @author bruce
  * @date 2024年1月25日
  */
-@Component
+@Component("cn.northpark.cron.RetMovieAndSendMQTask")
 @EnableScheduling
 @EnableAsync
 @Slf4j
@@ -45,9 +45,19 @@ public class RetMovieAndSendMQTask {
 //    @Scheduled(cron = "0 */1 * * * ?")//每1分钟执行一次
     @Scheduled(cron = "0 23 23 * * ?")//每天中午11:30执行一次
     public void RetMovieAndSendMQTask() {
-        log.info("#####开始获取["+ TimeUtils.nowDate() +"]电影信息#######");
+        // 默认爬取第1-2页
+        retMovieWithPageRange(1, 2);
+    }
 
-        for (int i = 1; i < 3; i++) {
+    /**
+     * 支持页码范围的爬取电影方法（用于手动触发）
+     * @param startPage 开始页
+     * @param endPage 结束页
+     */
+    public void retMovieWithPageRange(int startPage, int endPage) {
+        log.info("#####开始获取["+ TimeUtils.nowDate() +"]电影信息 (页码范围: " + startPage + "-" + endPage + ")#######");
+
+        for (int i = startPage; i <= endPage; i++) {
             log.info("正在执行task " + i);
 
             //====================执行逻辑=====================

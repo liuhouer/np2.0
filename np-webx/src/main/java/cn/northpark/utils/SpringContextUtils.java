@@ -35,5 +35,16 @@ public class SpringContextUtils implements ApplicationContextAware {//extends Ap
         return getApplicationContext().getBean(name);
     }
 
-
+    /**
+     * 根据类型获取 Bean（推荐写法）
+     */
+    public static <T> T getBean(Class<T> clazz) {
+        return getApplicationContext().getBean(clazz);
+    }
+    /**
+     * 根据名称 + 类型获取 Bean（更安全，避免同类型多个 Bean 的情况）
+     */
+    public static <T> T getBean(String name, Class<T> clazz) {
+        return getApplicationContext().getBean(name, clazz);
+    }
 }

@@ -91,6 +91,131 @@
 <%@ include file="/WEB-INF/views/page/common/common.jsp" %>
 <link media="all" type="text/css" rel="stylesheet" href="/static/css/flexslider.css"><!-- 树洞轮播css -->
 
+<style>
+    /* Admin Toolbox Styles */
+    .admin-toolbox {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    .toolbox-toggle {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: #45d0c6;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .toolbox-toggle:hover {
+        background-color: #38c0b6;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transform: scale(1.1);
+    }
+
+    .toolbox-toggle.active {
+        transform: rotate(45deg);
+    }
+
+    .toolbox-menu {
+        position: absolute;
+        bottom: 80px;
+        right: 0;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        min-width: 200px;
+        display: none;
+        animation: slideUp 0.3s ease forwards;
+    }
+
+    .toolbox-menu.show {
+        display: block;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .toolbox-menu-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        border-bottom: 1px solid #f0f0f0;
+        text-decoration: none;
+        color: #333;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .toolbox-menu-item:last-child {
+        border-bottom: none;
+    }
+
+    .toolbox-menu-item:hover {
+        background-color: #f5f5f5;
+        color: #45d0c6;
+        padding-left: 20px;
+    }
+
+    .toolbox-menu-item i {
+        width: 20px;
+        margin-right: 12px;
+        text-align: center;
+        font-size: 14px;
+    }
+
+    .toolbox-menu-item span {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .toolbox-title {
+        padding: 12px 16px;
+        font-weight: bold;
+        color: #45d0c6;
+        border-bottom: 2px solid #45d0c6;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .admin-toolbox {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .toolbox-toggle {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .toolbox-menu {
+            min-width: 180px;
+        }
+    }
+</style>
 
 </head>
 
@@ -230,6 +355,70 @@
 <%@ include file="/WEB-INF/views/page/common/container.jsp" %>
 <script type="text/javascript" src="/static/js/jquery.flexslider.js"></script><!-- 树洞轮播js -->
 <script src="static/js/main.js"></script>
+
+<!-- Admin Toolbox -->
+<c:if test="${user != null && user.email == '654714226@qq.com'}">
+    <div class="admin-toolbox" id="J_admin_toolbox">
+        <div class="toolbox-menu" id="J_toolbox_menu">
+            <div class="toolbox-title">
+                <i class="fa fa-cog"></i> 管理工具
+            </div>
+            <a href="/admin/cron" class="toolbox-menu-item" title="定时任务管理">
+                <i class="fa fa-clock-o"></i>
+                <span>定时任务</span>
+            </a>
+            <a href="/admin/stat" class="toolbox-menu-item" title="系统概览">
+                <i class="fa fa-bar-chart"></i>
+                <span>系统概览</span>
+            </a>
+        </div>
+        <button class="toolbox-toggle" id="J_toolbox_toggle" title="管理工具">
+            <i class="fa fa-cog"></i>
+        </button>
+    </div>
+
+    <script>
+        (function() {
+            var toggle = document.getElementById('J_toolbox_toggle');
+            var menu = document.getElementById('J_toolbox_menu');
+
+            if (!toggle || !menu) return;
+
+            // Toggle menu visibility
+            toggle.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggle.classList.toggle('active');
+                menu.classList.toggle('show');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                var toolbox = document.getElementById('J_admin_toolbox');
+                if (toolbox && !toolbox.contains(e.target)) {
+                    toggle.classList.remove('active');
+                    menu.classList.remove('show');
+                }
+            });
+
+            // Close menu when menu item is clicked
+            var menuItems = menu.querySelectorAll('.toolbox-menu-item');
+            menuItems.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    toggle.classList.remove('active');
+                    menu.classList.remove('show');
+                });
+            });
+
+            // Close menu on Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    toggle.classList.remove('active');
+                    menu.classList.remove('show');
+                }
+            });
+        })();
+    </script>
+</c:if>
 
 </body>
 
