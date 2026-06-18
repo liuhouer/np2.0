@@ -140,10 +140,15 @@
 												<p id="J_show_path">${model.path }</p>
 											</c:if>
 
-									        <small class="text-muted padding-l10">资源失效、缺失、错误 不要慌 </small>
-											<span class="fa fa-hand-o-right padding-l10"></span>
-											<input id="J_feedback_btn" class="btn tag-node" style="width:150px;" type="button" value="戳我,失效反馈">
-
+											<!-- 反馈区 -->
+											<div class="feedback-section text-center">
+												<small class="text-muted">
+													<i class="fa fa-info-circle"></i> 资源失效、缺失、错误不要慌
+												</small>
+												<button id="J_feedback_btn" class="btn feedback-btn">
+													<i class="fa fa-exclamation-circle"></i> 反馈资源失效
+												</button>
+											</div>
 
 										</div>
 										</p>

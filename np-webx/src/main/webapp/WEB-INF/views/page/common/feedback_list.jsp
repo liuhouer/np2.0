@@ -3,26 +3,21 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <c:if test="${feedback_list != null && feedback_list.size() > 0}">
-	<h4 class="center">
-		<span class="glyphicon glyphicon-exclamation-sign margin5"></span>已失效资源
-	</h4>
-	<div class="clearfix sidebar">
-		<c:forEach var="y" items="${feedback_list}" varStatus="ss">
-			<div class="col-md-12 margin-t10">
-				<div class="col-xs-2 avatar">
-					<span class="text-${ss.count % 10 + 1}">${fn:toLowerCase(fn:substring(y.title, 0, 1))}</span>
-				</div>
-				<div class="col-xs-10">
-					<a style="font-size: 14px; line-height: 32px; color: #888"
-					   href="${y.href}"
-					   title="${y.title}">
-							${y.title}
+	<div class="feedback-list-box">
+		<div class="feedback-list-title">
+			<i class="fa fa-exclamation-circle"></i> 已失效/待更新资源
+		</div>
+		<div>
+			<c:forEach var="y" items="${feedback_list}">
+				<div class="feedback-item">
+					<a class="feedback-item-title" href="${y.href}" title="${y.title}">
+						${y.title}
 					</a>
-					<span style="color: #ff5555; font-size: 12px;">
-                        (反馈次数: ${y.count})
-                    </span>
+					<span class="feedback-item-badge">
+						失效反馈 ${y.count} 次
+					</span>
 				</div>
-			</div>
-		</c:forEach>
+			</c:forEach>
+		</div>
 	</div>
 </c:if>

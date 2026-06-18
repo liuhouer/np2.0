@@ -799,20 +799,82 @@ a:focus, a:hover {
 
   .feedback-section {
     margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px dashed #ddd;
+    padding: 15px 20px;
+    border-top: 1px dashed #e9ecef;
+    background-color: #fdfdfe;
+    border-radius: 6px;
+    display: inline-block;
+    width: 100%;
   }
 
   .feedback-btn {
-    background: #6c757d;
-    border-color: #6c757d;
-    padding: 8px 20px;
+    background: #dc3545;
+    border-color: #dc3545;
+    padding: 6px 18px;
     color: #fff;
+    border-radius: 4px;
+    font-size: 13px;
+    transition: all 0.2s ease-in-out;
   }
 
-  .feedback-btn:hover {
-    background: #5a6268;
-    border-color: #5a6268;
+  .feedback-btn:hover, .feedback-btn:focus {
+    background: #bd2130;
+    border-color: #b21f2d;
+    color: #fff;
+    box-shadow: 0 2px 5px rgba(220,53,69,0.3);
+  }
+
+  /* 已失效资源反馈列表美化 */
+  .feedback-list-box {
+    background: #fff5f5;
+    border: 1px solid #ffe3e3;
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-top: 20px;
+  }
+  
+  .feedback-list-title {
+    font-size: 15px;
+    color: #e1251b;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .feedback-item {
+    padding: 8px 0;
+    border-bottom: 1px solid #ffd8d8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .feedback-item:last-child {
+    border-bottom: none;
+  }
+
+  .feedback-item-title {
+    color: #495057;
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.15s ease-in-out;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 75%;
+  }
+
+  .feedback-item-title:hover {
+    color: #e1251b;
+    text-decoration: none;
+  }
+
+  .feedback-item-badge {
+    background-color: #ffe3e3;
+    color: #e1251b;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: bold;
   }
 
 
