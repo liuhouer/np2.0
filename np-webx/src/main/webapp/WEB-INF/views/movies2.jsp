@@ -181,7 +181,7 @@
                                                        href="/movies/tag/${y.tag_code }">${y.tag}</a></strong>
                                         </c:forEach>
                                         <c:if test="${user!=null }">
-                                            <c:if test="${user.email == '654714226@qq.com' || user.email == 'qhdsoft@126.com' || user.email == 'woaideni@qq.com'}">
+                                            <c:if test="${user.admin}">
                                                 <span class=" glyphicon glyphicon-arrow-up margin10"></span>
 		                                        <a class="common-a-right" title="置顶" href="" onclick="handup('${s.id}')">置顶</a>
 		                                        <span class=" glyphicon glyphicon-eye-close margin10"></span>

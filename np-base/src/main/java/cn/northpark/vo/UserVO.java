@@ -63,6 +63,7 @@ public class UserVO implements Serializable {
 
     private Integer isDel;
 
-
-
+    public boolean isAdmin() {
+        return cn.northpark.utils.AdminUtils.isAdmin(this.email);
+    }
 }

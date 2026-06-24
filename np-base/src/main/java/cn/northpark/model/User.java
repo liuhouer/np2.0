@@ -271,4 +271,8 @@ public class User {
                 ", tailSlug='" + tailSlug + '\'' +
                 '}';
     }
+
+    public boolean isAdmin() {
+        return cn.northpark.utils.AdminUtils.isAdmin(this.email);
+    }
 }

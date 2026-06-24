@@ -35,7 +35,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
                 //在这里实现自己的权限验证逻辑
                 UserVO user = RequestHolder.getUserInfo(request);
                 if (user != null) {//如果验证成功返回true（这里直接写false来模拟验证失败的处理）
-                	if (user.getEmail().equals("654714226@qq.com")||user.getEmail().equals("qhdsoft@126.com")) {
+                	if (user.isAdmin()) {
                 		return true;
                     }else {
 	                	log.error("url={}----->",request.getRequestURI());

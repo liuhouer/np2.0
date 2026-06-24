@@ -357,7 +357,7 @@
 <script src="static/js/main.js"></script>
 
 <!-- Admin Toolbox -->
-<c:if test="${user != null && user.email == '654714226@qq.com'}">
+<c:if test="${user != null && user.admin}">
     <div class="admin-toolbox" id="J_admin_toolbox">
         <div class="toolbox-menu" id="J_toolbox_menu">
             <div class="toolbox-title">
