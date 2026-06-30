@@ -93,10 +93,21 @@
 </head>
 <body>
     <div class="container">
-        <a href="/" class="back-link">
-            <i class="fa fa-arrow-left"></i> 返回首页
-        </a>
-        
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+            <a href="/" class="back-link" style="margin-bottom:0;">
+                <i class="fa fa-home"></i> 返回首页
+            </a>
+            <a href="/admin/cron" class="back-link" style="margin-bottom:0;">
+                <i class="fa fa-clock-o"></i> 定时任务
+            </a>
+            <a href="/admin/users" class="back-link" style="margin-bottom:0;">
+                <i class="fa fa-users"></i> 用户管理
+            </a>
+            <a href="/admin/envcfg" class="back-link" style="margin-bottom:0;">
+                <i class="fa fa-sliders"></i> 环境配置
+            </a>
+        </div>
+
         <div class="page-header">
             <h1>
                 <i class="fa fa-bar-chart"></i> 网站数据统计
@@ -223,13 +234,264 @@
 
     function refreshStats() {
         loadStatistics();
+        loadCharts();
     }
 
     $(function() {
         loadStatistics();
+        loadCharts();
         // 每30秒自动刷新
         setInterval(loadStatistics, 30000);
     });
+    </script>
+
+    <!-- ===== 图表区域 ===== -->
+    <style>
+        .chart-section {
+            margin-top: 20px;
+        }
+        .chart-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            margin-bottom: 25px;
+        }
+        .chart-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 18px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .chart-title i {
+            color: #667eea;
+            margin-right: 6px;
+        }
+        /* 折线图 canvas */
+        #regTrendChart { width: 100% !important; }
+
+        /* 排行榜 */
+        .rank-list { list-style: none; padding: 0; margin: 0; }
+        .rank-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .rank-item:last-child { border-bottom: none; }
+        .rank-no {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: #e9ecef;
+            color: #666;
+            font-size: 13px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+        .rank-no.top1 { background: #f39c12; color: white; }
+        .rank-no.top2 { background: #95a5a6; color: white; }
+        .rank-no.top3 { background: #e67e22; color: white; }
+        .rank-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .rank-avatar-placeholder {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #667eea;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        .rank-info { flex: 1; min-width: 0; }
+        .rank-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .rank-meta { font-size: 12px; color: #999; margin-top: 2px; }
+        .rank-badge {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: #e9ecef;
+            color: #495057;
+            flex-shrink: 0;
+        }
+        .chart-loading {
+            text-align: center;
+            color: #999;
+            padding: 40px 0;
+            font-size: 14px;
+        }
+    </style>
+
+    <div class="container chart-section">
+        <div class="section-title" style="margin-top: 0;">
+            <i class="fa fa-line-chart"></i> 数据趋势
+        </div>
+
+        <!-- 注册趋势图 -->
+        <div class="chart-card">
+            <div class="chart-title">
+                <i class="fa fa-line-chart"></i> 近 30 天用户注册趋势
+            </div>
+            <div id="regTrendLoading" class="chart-loading">
+                <i class="fa fa-spinner fa-spin"></i> 加载中...
+            </div>
+            <canvas id="regTrendChart" height="90" style="display:none;"></canvas>
+        </div>
+
+        <!-- 活跃用户排行 -->
+        <div class="chart-card">
+            <div class="chart-title">
+                <i class="fa fa-trophy"></i> 活跃用户 Top 10
+                <small style="font-size:12px; color:#999; font-weight:normal; margin-left:8px;">按最近登录时间</small>
+            </div>
+            <div id="activeUsersLoading" class="chart-loading">
+                <i class="fa fa-spinner fa-spin"></i> 加载中...
+            </div>
+            <ul class="rank-list" id="activeUsersList" style="display:none;"></ul>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script>
+    var regChart = null;
+
+    function loadCharts() {
+        $.ajax({
+            url: '/admin/chartData',
+            type: 'GET',
+            dataType: 'json',
+            success: function(result) {
+                if (result.code === 0) {
+                    renderRegTrend(result.regTrend || []);
+                    renderActiveUsers(result.activeUsers || []);
+                } else {
+                    showChartError('regTrendLoading', result.msg);
+                    showChartError('activeUsersLoading', result.msg);
+                }
+            },
+            error: function() {
+                showChartError('regTrendLoading', '加载失败，请稍后重试');
+                showChartError('activeUsersLoading', '加载失败，请稍后重试');
+            }
+        });
+    }
+
+    function renderRegTrend(data) {
+        $('#regTrendLoading').hide();
+
+        // 补全近30天日期（无数据的天填0）
+        var dateMap = {};
+        data.forEach(function(d) { dateMap[d.reg_date] = parseInt(d.reg_count, 10); });
+
+        var labels = [], values = [];
+        for (var i = 29; i >= 0; i--) {
+            var d = new Date();
+            d.setDate(d.getDate() - i);
+            var key = d.toISOString().substring(0, 10);
+            labels.push(key.substring(5)); // MM-DD
+            values.push(dateMap[key] || 0);
+        }
+
+        var canvas = document.getElementById('regTrendChart');
+        $(canvas).show();
+
+        if (regChart) { regChart.destroy(); }
+
+        regChart = new Chart(canvas.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '注册人数',
+                    data: values,
+                    borderColor: '#667eea',
+                    backgroundColor: 'rgba(102,126,234,0.10)',
+                    borderWidth: 2,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#667eea',
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                legend: { display: false },
+                scales: {
+                    xAxes: [{ gridLines: { display: false }, ticks: { fontSize: 11, maxRotation: 45 } }],
+                    yAxes: [{ ticks: { beginAtZero: true, precision: 0, fontSize: 11 }, gridLines: { color: 'rgba(0,0,0,0.05)' } }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(item) { return '注册 ' + item.yLabel + ' 人'; }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderActiveUsers(users) {
+        $('#activeUsersLoading').hide();
+        var $list = $('#activeUsersList');
+        if (!users.length) {
+            $list.html('<li style="text-align:center; color:#999; padding:30px 0;">暂无数据</li>').show();
+            return;
+        }
+
+        var typeColors = { github: '#24292e', google: '#4285f4', qq: '#12b7f5', email: '#45d0c6' };
+        var rankClasses = ['top1', 'top2', 'top3'];
+        var html = '';
+
+        users.forEach(function(u, idx) {
+            var rankClass = rankClasses[idx] || '';
+            var avatarHtml = u.avatar_url
+                ? '<img src="' + u.avatar_url + '" class="rank-avatar" onerror="this.parentNode.innerHTML=\'<span class=\\\"rank-avatar-placeholder\\\">' + (u.username || '?').charAt(0).toUpperCase() + '</span>\'">'
+                : '<span class="rank-avatar-placeholder">' + (u.username || '?').charAt(0).toUpperCase() + '</span>';
+
+            var loginType = u.login_type || 'email';
+            var typeColor = typeColors[loginType] || '#6c757d';
+            var lastLogin = (u.last_login || '').substring(0, 10);
+
+            html += '<li class="rank-item">';
+            html += '<span class="rank-no ' + rankClass + '">' + (idx + 1) + '</span>';
+            html += avatarHtml;
+            html += '<div class="rank-info">';
+            html += '<div class="rank-name">' + (u.username || '') + '</div>';
+            html += '<div class="rank-meta">' + (u.email || '') + ' · 最近登录 ' + lastLogin + '</div>';
+            html += '</div>';
+            html += '<span class="rank-badge" style="background:' + typeColor + '; color:white;">' + loginType + '</span>';
+            html += '</li>';
+        });
+
+        $list.html(html).show();
+    }
+
+    function showChartError(loadingId, msg) {
+        $('#' + loadingId).html('<i class="fa fa-exclamation-circle"></i> ' + (msg || '加载失败'));
+    }
     </script>
 </body>
 </html>

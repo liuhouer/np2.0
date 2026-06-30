@@ -134,6 +134,23 @@
     </div>
 
     <div class="container">
+
+        <!-- 导航栏 -->
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;">
+            <a href="/" class="btn btn-default btn-sm">
+                <i class="fa fa-home"></i> 返回首页
+            </a>
+            <a href="/admin/stat" class="btn btn-default btn-sm">
+                <i class="fa fa-bar-chart"></i> 系统概览
+            </a>
+            <a href="/admin/users" class="btn btn-default btn-sm">
+                <i class="fa fa-users"></i> 用户管理
+            </a>
+            <a href="/admin/envcfg" class="btn btn-default btn-sm">
+                <i class="fa fa-sliders"></i> 环境配置
+            </a>
+        </div>
+
         <div class="page-header">
             <h1>
                 <i class="fa fa-clock-o"></i> 定时任务管理

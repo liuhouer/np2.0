@@ -507,4 +507,38 @@ public class DashController {
 		}
 	}
 
+	/**
+	 * 用户注册趋势 + 活跃用户排行（管理员图表数据）
+	 */
+	@RequestMapping("/admin/chartData")
+	@ResponseBody
+	public JsonResult getChartData() {
+		try {
+			// 近 30 天每日注册人数
+			List<Map<String, Object>> regTrend = NPQueryRunner.query(
+				"SELECT DATE(date_joined) AS reg_date, COUNT(*) AS reg_count " +
+				"FROM bc_user " +
+				"WHERE date_joined >= DATE_SUB(CURDATE(), INTERVAL 29 DAY) " +
+				"GROUP BY DATE(date_joined) " +
+				"ORDER BY reg_date ASC",
+				new MapListHandler());
+
+			// 活跃用户 Top 10（按最后登录时间倒序，取有头像/有 lastLogin 的）
+			List<Map<String, Object>> activeUsers = NPQueryRunner.query(
+				"SELECT id, username, email, login_type, avatar_url, last_login, date_joined " +
+				"FROM bc_user " +
+				"WHERE is_del = 0 AND last_login IS NOT NULL AND last_login != '' " +
+				"ORDER BY last_login DESC " +
+				"LIMIT 10",
+				new MapListHandler());
+
+			return JsonResult.ok()
+					.put("regTrend", regTrend)
+					.put("activeUsers", activeUsers);
+		} catch (Exception e) {
+			log.error("获取图表数据失败", e);
+			return JsonResult.error("获取图表数据失败: " + e.getMessage());
+		}
+	}
+
 }

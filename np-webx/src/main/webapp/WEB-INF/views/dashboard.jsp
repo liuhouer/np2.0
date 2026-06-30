@@ -371,6 +371,14 @@
                 <i class="fa fa-bar-chart"></i>
                 <span>系统概览</span>
             </a>
+            <a href="/admin/users" class="toolbox-menu-item" title="用户管理">
+                <i class="fa fa-users"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="/admin/envcfg" class="toolbox-menu-item" title="环境配置管理">
+                <i class="fa fa-sliders"></i>
+                <span>环境配置</span>
+            </a>
         </div>
         <button class="toolbox-toggle" id="J_toolbox_toggle" title="管理工具">
             <i class="fa fa-cog"></i>
