@@ -174,7 +174,8 @@
             html += '<td>' + (u.email || '') + '</td>';
             html += '<td><span class="login-type" style="background:' + typeColor + '; color:white;">' + loginType + '</span></td>';
             html += '<td style="font-size:12px; color:#666;">' + (u.date_joined || '').substring(0, 10) + '</td>';
-            html += '<td style="font-size:12px; color:#666;">' + (u.last_login || '').substring(0, 10) + '</td>';
+            //html += '<td style="font-size:12px; color:#666;">' + (u.last_login || '').substring(0, 10) + '</td>';
+            html += '<td style="font-size:12px; color:#666;">' + (u.last_login || '') + '</td>';
             html += '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>';
             html += '<td>';
             html += '<button class="btn btn-xs btn-info" onclick="showDetail(' + u.id + ')"><i class="fa fa-eye"></i></button> ';

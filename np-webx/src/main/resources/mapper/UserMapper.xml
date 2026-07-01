@@ -99,6 +99,7 @@
   </select>
     <select id="login" resultMap="BaseResultMap">
       select *
+
       from bc_user
 
       <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -111,7 +112,7 @@
           and email =  #{email}
         </if>
 
-        and (is_del = 0 or is_del is null)
+        and is_del = 0
 
       </trim>
 

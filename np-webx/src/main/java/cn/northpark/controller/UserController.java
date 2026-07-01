@@ -804,6 +804,7 @@ public class UserController {
         user.setTailSlug(oAuthService.generateTailSlug(username));
         user.setPassword(NorthParkCryptUtils.northparkEncrypt(password));
         user.setEmailFlag("1");
+        user.setIsDel(0);
 
         userService.addUser(user);
 
