@@ -527,8 +527,8 @@ public class DashController {
 			List<Map<String, Object>> activeUsers = NPQueryRunner.query(
 				"SELECT id, username, email, login_type, avatar_url, last_login, date_joined " +
 				"FROM bc_user " +
-				"WHERE is_del = 0 AND last_login IS NOT NULL AND last_login != '' " +
-				"ORDER BY last_login DESC " +
+				"WHERE is_del = 0  " +
+				"ORDER BY id desc, last_login DESC " +
 				"LIMIT 10",
 				new MapListHandler());
 

@@ -800,7 +800,8 @@ public class UserController {
         }
         //默认字符头像===================================================
         //设置注册者的详细信息
-        user.setLastLogin(JsonUtil.object2json(user.getDateJoined() + ipAndDetail));
+        user.setLastLogin(new java.util.Date());
+        user.setLastLoginInfo(ipAndDetail);
         user.setTailSlug(oAuthService.generateTailSlug(username));
         user.setPassword(NorthParkCryptUtils.northparkEncrypt(password));
         user.setEmailFlag("1");
@@ -973,8 +974,9 @@ public class UserController {
                                 } else {
                                     ipAndDetail = AddressUtils.getInstance().getIpAndDetail(request);
 
-                                    //更新登录时间 +地址信息
-                                    user.setLastLogin(JsonUtil.object2json(TimeUtils.nowTime() + ipAndDetail));
+                                    //更新登录时间 + 地址信息（字段分离）
+                                    user.setLastLogin(new java.util.Date());
+                                    user.setLastLoginInfo(ipAndDetail);
                                     userService.updateUser(user);
                                 }
 

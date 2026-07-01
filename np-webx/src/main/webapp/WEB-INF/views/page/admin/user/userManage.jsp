@@ -163,6 +163,20 @@
             var typeColors = { github: '#24292e', google: '#4285f4', qq: '#12b7f5', email: '#45d0c6' };
             var typeColor  = typeColors[loginType] || '#6c757d';
 
+            // 格式化日期：如果是时间戳（数字），转为 yyyy-MM-dd
+            var lastLoginStr = '';
+            if (u.last_login) {
+                if (typeof u.last_login === 'number') {
+                    var d = new Date(u.last_login);
+                    var y = d.getFullYear();
+                    var m = ('0' + (d.getMonth() + 1)).slice(-2);
+                    var day = ('0' + d.getDate()).slice(-2);
+                    lastLoginStr = y + '-' + m + '-' + day;
+                } else if (typeof u.last_login === 'string') {
+                    lastLoginStr = u.last_login.substring(0, 10);
+                }
+            }
+
             var banBtn = (u.is_del === 1)
                 ? '<button class="btn btn-xs btn-success" onclick="toggleBan(' + u.id + ', 0)"><i class="fa fa-unlock"></i> 解封</button>'
                 : '<button class="btn btn-xs btn-warning" onclick="toggleBan(' + u.id + ', 1)"><i class="fa fa-ban"></i> 封禁</button>';
@@ -174,8 +188,7 @@
             html += '<td>' + (u.email || '') + '</td>';
             html += '<td><span class="login-type" style="background:' + typeColor + '; color:white;">' + loginType + '</span></td>';
             html += '<td style="font-size:12px; color:#666;">' + (u.date_joined || '').substring(0, 10) + '</td>';
-            //html += '<td style="font-size:12px; color:#666;">' + (u.last_login || '').substring(0, 10) + '</td>';
-            html += '<td style="font-size:12px; color:#666;">' + (u.last_login || '') + '</td>';
+            html += '<td style="font-size:12px; color:#666;">' + lastLoginStr + '</td>';
             html += '<td><span class="status-badge ' + statusClass + '">' + statusText + '</span></td>';
             html += '<td>';
             html += '<button class="btn btn-xs btn-info" onclick="showDetail(' + u.id + ')"><i class="fa fa-eye"></i></button> ';

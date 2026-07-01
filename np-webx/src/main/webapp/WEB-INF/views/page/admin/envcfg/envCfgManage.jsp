@@ -131,6 +131,18 @@
                             <button class="btn btn-xs btn-warning" onclick="openEditModal(${cfg.lCfgId})">
                                 <i class="fa fa-pencil"></i> 编辑
                             </button>
+                            <c:choose>
+                                <c:when test="${cfg.cStatus == '1'}">
+                                    <button class="btn btn-xs btn-default" onclick="toggleStatus(${cfg.lCfgId}, '0')" title="点击禁用">
+                                        <i class="fa fa-toggle-on" style="color:#5cb85c;"></i> 禁用
+                                    </button>
+                                </c:when>
+                                <c:otherwise>
+                                    <button class="btn btn-xs btn-default" onclick="toggleStatus(${cfg.lCfgId}, '1')" title="点击启用">
+                                        <i class="fa fa-toggle-off" style="color:#d9534f;"></i> 启用
+                                    </button>
+                                </c:otherwise>
+                            </c:choose>
                             <button class="btn btn-xs btn-danger" onclick="deleteCfg(${cfg.lCfgId})">
                                 <i class="fa fa-trash"></i>
                             </button>
@@ -246,6 +258,29 @@
             } else {
                 alert(r.msg || '删除失败');
             }
+        });
+    }
+
+    function toggleStatus(id, newStatus) {
+        var action = newStatus === '1' ? '启用' : '禁用';
+        if (!confirm('确定' + action + '该配置项？')) return;
+        // 先获取当前配置，再用原值更新只改 status
+        $.get('/admin/envcfg/get', { lCfgId: id }, function(r) {
+            if (r.code !== 0) { alert(r.msg); return; }
+            var c = r.cfg;
+            $.post('/admin/envcfg/update', {
+                lCfgId:     c.lCfgId,
+                vcCfgName:  c.vcCfgName,
+                vcCfgValue: c.vcCfgValue,
+                vcDesc:     c.vcDesc || '',
+                cStatus:    newStatus
+            }, function(res) {
+                if (res.code === 0) {
+                    location.reload();
+                } else {
+                    alert(res.msg || action + '失败');
+                }
+            });
         });
     }
     </script>

@@ -374,7 +374,7 @@ public class OAuthServiceImpl implements OAuthService {
         user.setLoginType("google");
         user.setEmailFlag("1"); // Google邮箱默认已验证
         user.setDateJoined(TimeUtils.nowTime());
-        user.setLastLogin(TimeUtils.nowTime());
+        user.setLastLogin(new java.util.Date());
         user.setIsDel(0);
 
         //默认字符头像===================================================
@@ -409,7 +409,7 @@ public class OAuthServiceImpl implements OAuthService {
         user.setLoginType("github");
         user.setEmailFlag(StringUtils.isNotEmpty(userInfo.getString("email")) ? "1" : "0");
         user.setDateJoined(TimeUtils.nowTime());
-        user.setLastLogin(TimeUtils.nowTime());
+        user.setLastLogin(new java.util.Date());
         user.setIsDel(0);
         //默认字符头像===================================================
         String abc = PinyinUtil.paraseStringToPinyin(user.getUsername());
@@ -430,7 +430,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     private void updateUserFromGoogle(User user, JSONObject userInfo) {
         user.setGoogleInfo(userInfo.toJSONString());
-        user.setLastLogin(TimeUtils.nowTime());
+        user.setLastLogin(new java.util.Date());
 
         // 更新可能变化的信息
         if (StringUtils.isNotEmpty(userInfo.getString("name"))) {
@@ -445,7 +445,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     private void updateUserFromGithub(User user, JSONObject userInfo) {
         user.setGithubInfo(userInfo.toJSONString());
-        user.setLastLogin(TimeUtils.nowTime());
+        user.setLastLogin(new java.util.Date());
 
         // 更新可能变化的信息
         if (StringUtils.isNotEmpty(userInfo.getString("name"))) {
@@ -477,7 +477,7 @@ public class OAuthServiceImpl implements OAuthService {
         // 设置Google相关信息
         existingUser.setGoogleId(userInfo.getString("id"));
         existingUser.setGoogleInfo(userInfo.toJSONString());
-        existingUser.setLastLogin(TimeUtils.nowTime());
+        existingUser.setLastLogin(new java.util.Date());
 
         // 如果现有用户没有头像，使用Google头像
         if (StringUtils.isEmpty(existingUser.getAvatarUrl()) && StringUtils.isNotEmpty(userInfo.getString("picture"))) {
@@ -505,7 +505,7 @@ public class OAuthServiceImpl implements OAuthService {
         // 设置GitHub相关信息
         existingUser.setGithubId(userInfo.getString("id"));
         existingUser.setGithubInfo(userInfo.toJSONString());
-        existingUser.setLastLogin(TimeUtils.nowTime());
+        existingUser.setLastLogin(new java.util.Date());
 
         // 如果现有用户没有头像，使用GitHub头像
         if (StringUtils.isEmpty(existingUser.getAvatarUrl()) && StringUtils.isNotEmpty(userInfo.getString("avatar_url"))) {

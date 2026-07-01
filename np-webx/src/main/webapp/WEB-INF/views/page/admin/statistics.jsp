@@ -403,16 +403,34 @@
     function renderRegTrend(data) {
         $('#regTrendLoading').hide();
 
+        // reg_date 可能是毫秒时间戳(Number)或 yyyy-MM-dd 字符串，统一转成 yyyy-MM-dd key
+        function toDateKey(val) {
+            if (!val) return '';
+            if (typeof val === 'number' || /^\d{10,}$/.test(String(val))) {
+                // Unix 毫秒时间戳 → 本地 yyyy-MM-dd
+                var d = new Date(Number(val));
+                var y = d.getFullYear();
+                var m = ('0' + (d.getMonth() + 1)).slice(-2);
+                var day = ('0' + d.getDate()).slice(-2);
+                return y + '-' + m + '-' + day;
+            }
+            // 已经是字符串格式，截取前10位
+            return String(val).substring(0, 10);
+        }
+
         // 补全近30天日期（无数据的天填0）
         var dateMap = {};
-        data.forEach(function(d) { dateMap[d.reg_date] = parseInt(d.reg_count, 10); });
+        data.forEach(function(d) { dateMap[toDateKey(d.reg_date)] = parseInt(d.reg_count, 10); });
 
         var labels = [], values = [];
         for (var i = 29; i >= 0; i--) {
             var d = new Date();
             d.setDate(d.getDate() - i);
-            var key = d.toISOString().substring(0, 10);
-            labels.push(key.substring(5)); // MM-DD
+            var y = d.getFullYear();
+            var m = ('0' + (d.getMonth() + 1)).slice(-2);
+            var day = ('0' + d.getDate()).slice(-2);
+            var key = y + '-' + m + '-' + day;
+            labels.push(m + '-' + day); // MM-DD
             values.push(dateMap[key] || 0);
         }
 
@@ -473,7 +491,20 @@
 
             var loginType = u.login_type || 'email';
             var typeColor = typeColors[loginType] || '#6c757d';
-            var lastLogin = (u.last_login || '').substring(0, 10);
+            
+            // 格式化最后登录日期：如果是时间戳（数字），转为 yyyy-MM-dd
+            var lastLogin = '';
+            if (u.last_login) {
+                if (typeof u.last_login === 'number') {
+                    var d = new Date(u.last_login);
+                    var y = d.getFullYear();
+                    var m = ('0' + (d.getMonth() + 1)).slice(-2);
+                    var day = ('0' + d.getDate()).slice(-2);
+                    lastLogin = y + '-' + m + '-' + day;
+                } else if (typeof u.last_login === 'string') {
+                    lastLogin = u.last_login.substring(0, 10);
+                }
+            }
 
             html += '<li class="rank-item">';
             html += '<span class="rank-no ' + rankClass + '">' + (idx + 1) + '</span>';

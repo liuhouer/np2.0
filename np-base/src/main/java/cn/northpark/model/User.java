@@ -25,7 +25,9 @@ public class User {
 
     private String dateJoined;
 
-    private String lastLogin;
+    private java.util.Date lastLogin;
+
+    private String lastLoginInfo;
 
     private String qqOpenid;
 
@@ -149,12 +151,20 @@ public class User {
         this.dateJoined = dateJoined == null ? null : dateJoined.trim();
     }
 
-    public String getLastLogin() {
+    public java.util.Date getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(String lastLogin) {
-        this.lastLogin = lastLogin == null ? null : lastLogin.trim();
+    public void setLastLogin(java.util.Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public String getLastLoginInfo() {
+        return lastLoginInfo;
+    }
+
+    public void setLastLoginInfo(String lastLoginInfo) {
+        this.lastLoginInfo = lastLoginInfo == null ? null : lastLoginInfo.trim();
     }
 
     public String getQqOpenid() {
