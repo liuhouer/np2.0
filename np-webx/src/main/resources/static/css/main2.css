@@ -1262,6 +1262,7 @@ text-color-【 {
 }
 
 /* 文本字体颜色--结束 */
+
 .sidebar .avatar img {
     width: 32px;
     height: 32px;
@@ -1272,6 +1273,7 @@ text-color-【 {
     line-height: 32px;
     width: 32px;
     height: 32px;
+    color: #9C27B0; /* 兜底颜色，当首字符非 A-Z/0-9 时生效，具体 text-color-X 类会覆盖此值 */
 }
 
 .thumbnail .avatar img {

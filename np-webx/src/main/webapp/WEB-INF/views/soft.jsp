@@ -193,7 +193,7 @@
                             <div class="col-md-12 margin-t10">
                                 <div class="col-xs-2 avatar">
 
-                                    <span class="text-${ fn:toLowerCase(fn:substring( z.title ,0,1)) }">${ fn:toUpperCase(fn:substring(z.title ,0,1))   }</span>
+                                    <span class="text-color-${ fn:toUpperCase(fn:substring(z.color ,0,1)) }">${ fn:toUpperCase(fn:substring(z.title ,0,1))   }</span>
 
                                 </div>
                                 <div class="col-xs-10">
