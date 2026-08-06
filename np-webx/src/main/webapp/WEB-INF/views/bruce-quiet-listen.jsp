@@ -156,35 +156,53 @@
                             <div class="product-header">
                                 <h2>NorthPark Music Player</h2>
                                 <p class="lead">基于 Electron 的现代化本地音乐播放器</p>
+                                <p class="version-tag">最新版本 v1.1.0</p>
                             </div>
 
                             <div class="features-list">
-                                <h4>主要特性</h4>
+                                <h4>全新特性 (v1.1.0)</h4>
                                 <ul>
-                                    <li>基于 Electron 技术，跨平台支持</li>
+                                    <li>重构整体UI布局，采用现代化网格系统设计播放器界面</li>
+                                    <li>添加左侧边栏导航和歌单管理功能</li>
+                                    <li>实现拖拽排序和歌单操作菜单功能</li>
+                                    <li>添加歌单上下文接收功能，添加音乐时自动传递当前歌单ID</li>
+                                    <li>桌面歌词自定义颜色、锁定状态和字体大小调节</li>
+                                    <li>实现深色模式紫罗兰主题样式系统，CSS变量统一管理颜色</li>
+                                    <li>实现底部播放器栏和歌曲列表表格布局</li>
+                                    <li>集成搜索功能和播放控制组件</li>
+                                    <li>实时音乐频谱可视化效果</li>
                                     <li>歌词自动搜索与动态展示</li>
-                                    <li>实时频谱可视化效果</li>
-                                    <li>支持深色和浅色主题切换</li>
-                                    <li>现代化的用户界面设计</li>
-                                    <li>本地音乐文件管理</li>
+                                    <li>基于 Electron 技术，跨平台支持</li>
+                                    <li>本地音乐文件管理与导入</li>
+                                </ul>
+                                <br>
+                                <h4>即将支持</h4>
+                                <ul>
+                                    <li>支持更多音频格式（FLAC、WAV、AAC、OGG、M4A）</li>
+                                    <li>最小化到系统托盘，托盘图标显示播放状态</li>
+                                    <li>托盘右键菜单（播放/暂停、下一曲、显示主窗口、退出）</li>
+                                    <li>支持格式关联到系统，可以选择用 NorthPark 打开音乐</li>
+                                    <li>ID3 标签维护与编辑</li>
+                                    <li>导入文件夹：一次性导入整个文件夹的音乐</li>
                                 </ul>
                             </div>
 
                             <div class="screenshot-container">
-                                <img src="https://minioapi.northpark.cn/pic/northpark-music-player-dark.png"
-                                    alt="NorthPark Music Player - 深色主题" />
-                                <img src="https://minioapi.northpark.cn/pic/northpark-music-player-light.png"
-                                    alt="NorthPark Music Player - 浅色主题" />
+                                <img src="https://minioapi.northpark.cn/pic/1.1.0-P3.png"
+                                     alt="NorthPark Music Player - 深色主题" />
+                                <img src="https://minioapi.northpark.cn/pic/1.1.0-P2.png"
+                                     alt="NorthPark Music Player - 浅色主题" />
                             </div>
 
                             <div class="text-center">
                                 <a href="https://github.com/liuhouer/northpark-music-player/releases/"
-                                    class="github-link" target="_blank">
+                                   class="github-link" target="_blank">
                                     <i class="fa fa-github"></i>
                                     GitHub 下载
                                 </a>
                             </div>
                         </div>
+
 
                         <!-- 右侧列 - 小布静听 -->
                         <div class="col-md-6 product-column">
