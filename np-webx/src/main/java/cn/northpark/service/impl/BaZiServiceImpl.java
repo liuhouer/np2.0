@@ -12,6 +12,7 @@ import cn.northpark.utils.EnvCfgUtil;
 import cn.northpark.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,9 +35,15 @@ public class BaZiServiceImpl implements BaZiService {
     public Result<?> fullReading(int year, int month, int day, int hour, int minute,
                                  boolean isMale, String name, String openId, HttpServletRequest request) {
 
-        // 对 name 做长度截断，防止超长字符串写入数据库
-        if (name != null && name.length() > 20) {
-            name = name.substring(0, 20);
+        // Service 层二次清洗：去除 name 中的可疑字符（防御纵深）
+        if (StringUtils.isNotBlank(name)) {
+            name = sanitizeName(name);
+        }
+
+        // openId 二次校验
+        if (StringUtils.isBlank(openId) || !openId.matches("^[a-zA-Z0-9_\\-]{1,64}$")) {
+            log.warn("[BaziAttack] Service 层拦截非法 openId, openId={}", openId);
+            return ResultGenerator.genErrorResult(400, "参数不合法");
         }
 
         String redisKey = "bazi:free:" + openId + ":" + LocalDate.now();
@@ -120,5 +127,21 @@ public class BaZiServiceImpl implements BaZiService {
             ip = ip.split(",")[0].trim();
         }
         return ip;
+    }
+
+    /**
+     * 清洗姓名：去除 SQL 注入和 XSS 常见危险字符，只保留安全字符
+     */
+    private String sanitizeName(String name) {
+        if (name == null) return null;
+        // 第一步：去除所有非安全字符（只允许中文、英文、数字、空格）
+        String cleaned = name.replaceAll("[^\\u4e00-\\u9fa5a-zA-Z0-9\\s]", "");
+        // 第二步：去除多余空格
+        cleaned = cleaned.trim().replaceAll("\\s+", " ");
+        // 第三步：长度截断
+        if (cleaned.length() > 20) {
+            cleaned = cleaned.substring(0, 20);
+        }
+        return cleaned;
     }
 }

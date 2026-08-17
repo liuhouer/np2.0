@@ -66,6 +66,11 @@ public class NorthParkApplication extends SpringBootServletInitializer implement
         // 设置类型别名包
         factoryBean.setTypeAliasesPackage("cn.northpark.model");
 
+        // 开启驼峰命名自动映射（数据库下划线列名 -> Java 驼峰属性）
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        configuration.setMapUnderscoreToCamelCase(true);
+        factoryBean.setConfiguration(configuration);
+
         // 配置 PageHelper 插件
         PageInterceptor pageInterceptor = new PageInterceptor();
         Properties properties = new Properties();

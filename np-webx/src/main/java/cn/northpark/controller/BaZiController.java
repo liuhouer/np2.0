@@ -2,6 +2,7 @@ package cn.northpark.controller;
 
 import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
+import cn.northpark.service.BaZiAiService;
 import cn.northpark.service.BaZiService;
 import cn.northpark.utils.EnvCfgUtil;
 import cn.northpark.utils.RedisUtil;
@@ -41,6 +42,9 @@ public class BaZiController {
 
     @Autowired
     private BaZiService baZiService;
+
+    @Autowired
+    private BaZiAiService baZiAiService;
 
     // ─────────────────────────────────────────────────────────────────────────
     // 页面入口：公众号菜单配置跳转此 URL
@@ -159,28 +163,155 @@ public class BaZiController {
             @RequestParam(required = false) String name,
             HttpServletRequest request) {
 
+        String clientIp = getClientIp(request);
+
+        // 1. Token 校验
+        String token = request.getHeader("token");
+        if (StringUtils.isBlank(token) || !token.equals(BAZI_TOKEN)) {
+            log.warn("[BaziAttack] token 无效, ip={}", clientIp);
+            return ResultGenerator.genErrorResult(401, "token 无效或缺失");
+        }
+
+        // 2. IP 频率限制：1 分钟内最多 10 次请求
+        String rateKey = "bazi:rate:" + clientIp;
+        String rateStr = RedisUtil.getInstance().get(rateKey);
+        int rateCount = rateStr == null ? 0 : Integer.parseInt(rateStr);
+        if (rateCount >= 10) {
+            log.warn("[BaziAttack] IP 请求过于频繁, ip={}", clientIp);
+            return ResultGenerator.genErrorResult(429, "请求过于频繁，请稍后再试");
+        }
+        RedisUtil.getInstance().set(rateKey, String.valueOf(rateCount + 1), 60);
+
+        // 3. openId 校验：只允许字母、数字、下划线和连字符，长度限制 64
+        if (StringUtils.isBlank(openId)) {
+            return ResultGenerator.genErrorResult(400, "open_id 不能为空");
+        }
+        if (!openId.matches("^[a-zA-Z0-9_\\-]{1,64}$")) {
+            log.warn("[BaziAttack] 非法 open_id 被拦截, ip={}, open_id={}", clientIp, openId);
+            return ResultGenerator.genErrorResult(400, "open_id 格式不合法");
+        }
+
+        // 4. name 校验：只允许中文、英文、数字、空格，长度 0-20
+        // 拦截 SQL 注入常见字符：' " ; -- /* */ < > ( ) = | & $ % @ # ! * ? ` ~ \
+        if (StringUtils.isNotBlank(name)) {
+            if (name.length() > 20) {
+                return ResultGenerator.genErrorResult(400, "姓名长度不能超过20字");
+            }
+            // 检测危险字符（SQL 注入、XSS 常见 payload）
+            if (containsDangerousChars(name)) {
+                log.warn("[BaziAttack] 非法 name 被拦截, ip={}, name={}", clientIp, name);
+                return ResultGenerator.genErrorResult(400, "姓名包含非法字符");
+            }
+            // 只允许中文、英文、数字、空格
+            if (!name.matches("^[\\u4e00-\\u9fa5a-zA-Z0-9\\s]{1,20}$")) {
+                log.warn("[BaziAttack] 非法 name 被拦截, ip={}, name={}", clientIp, name);
+                return ResultGenerator.genErrorResult(400, "姓名格式不合法");
+            }
+        }
+
+        // 5. gender 严格校验
+        if (StringUtils.isBlank(gender)) {
+            return ResultGenerator.genErrorResult(400, "性别参数不能为空");
+        }
+        String g = gender.trim().toLowerCase();
+        if (!("male".equals(g) || "female".equals(g) || "1".equals(g) || "0".equals(g))) {
+            log.warn("[BaziAttack] 非法 gender 被拦截, ip={}, gender={}", clientIp, gender);
+            return ResultGenerator.genErrorResult(400, "性别参数不合法");
+        }
+        boolean isMale = "male".equals(g) || "1".equals(g);
+
+        // 6. 日期范围校验
+        if (month < 1 || month > 12 || day < 1 || day > 31
+                || hour < 0 || hour > 23 || minute < 0 || minute > 59
+                || year < 1900 || year > 2100) {
+            log.warn("[BaziAttack] 非法日期参数, ip={}, year={}, month={}, day={}, hour={}, minute={}",
+                    clientIp, year, month, day, hour, minute);
+            return ResultGenerator.genErrorResult(400, "日期或时间参数不合法");
+        }
+
+        return baZiService.fullReading(year, month, day, hour, minute, isMale, name, openId, request);
+    }
+
+    /**
+     * 检测字符串中是否包含危险字符（SQL 注入、XSS 常见 payload）
+     */
+    private boolean containsDangerousChars(String input) {
+        if (input == null) return false;
+        String lower = input.toLowerCase();
+        String[] dangerPatterns = {
+            "'", "\"", ";", "--", "/*", "*/", "<", ">", "(", ")", "=", "|",
+            "union", "select", "insert", "update", "delete", "drop", "exec",
+            "script", "javascript:", "onerror", "onload", "alert(", "eval("
+        };
+        for (String pattern : dangerPatterns) {
+            if (lower.contains(pattern)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取客户端真实 IP
+     */
+    private String getClientIp(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+        }
+        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        if (ip != null && ip.contains(",")) {
+            ip = ip.split(",")[0].trim();
+        }
+        return ip;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // AI 命理解读接口
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * AI 深度解读八字排盘结果
+     *
+     * @param recordId 排盘记录ID
+     */
+    @PostMapping("/ai-interpret")
+    @ResponseBody
+    public Result<?> aiInterpret(@RequestParam Long recordId,
+                                  HttpServletRequest request) {
         String token = request.getHeader("token");
         if (StringUtils.isBlank(token) || !token.equals(BAZI_TOKEN)) {
             return ResultGenerator.genErrorResult(401, "token 无效或缺失");
         }
-        if (StringUtils.isBlank(openId)) {
-            return ResultGenerator.genErrorResult(400, "open_id 不能为空");
+        if (recordId == null || recordId <= 0) {
+            return ResultGenerator.genErrorResult(400, "recordId 参数不合法");
         }
-        // 防止恶意输入：openId 只允许字母、数字、下划线和连字符，长度限制 64
-        if (!openId.matches("^[a-zA-Z0-9_\\-]{1,64}$")) {
-            log.warn("非法 open_id 被拦截, ip={}, open_id={}", request.getRemoteAddr(), openId);
-            return ResultGenerator.genErrorResult(400, "open_id 格式不合法");
-        }
-        if (month < 1 || month > 12 || day < 1 || day > 31
-                || hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-            return ResultGenerator.genErrorResult(400, "日期或时间参数不合法");
-        }
-        if (StringUtils.isBlank(gender)) {
-            return ResultGenerator.genErrorResult(400, "性别参数不能为空");
-        }
-        boolean isMale = "male".equalsIgnoreCase(gender.trim()) || "1".equals(gender.trim());
 
-        return baZiService.fullReading(year, month, day, hour, minute, isMale, name, openId, request);
+        return baZiAiService.aiInterpret(recordId);
+    }
+
+    /**
+     * AI 针对具体问题给出命理建议
+     *
+     * @param recordId 排盘记录ID
+     * @param question 用户问题，如"今年适合跳槽吗？"
+     */
+    @PostMapping("/ai-advice")
+    @ResponseBody
+    public Result<?> aiAdvice(@RequestParam Long recordId,
+                               @RequestParam String question,
+                               HttpServletRequest request) {
+        String token = request.getHeader("token");
+        if (StringUtils.isBlank(token) || !token.equals(BAZI_TOKEN)) {
+            return ResultGenerator.genErrorResult(401, "token 无效或缺失");
+        }
+        if (recordId == null || recordId <= 0) {
+            return ResultGenerator.genErrorResult(400, "recordId 参数不合法");
+        }
+
+        return baZiAiService.aiAdvice(recordId, question);
     }
 
     // ─────────────────────────────────────────────────────────────────────────

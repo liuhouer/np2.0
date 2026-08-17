@@ -5,11 +5,34 @@
 
     <insert id="insert" parameterType="cn.northpark.model.BaZiRecord" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO bc_bazi_record
-            (user_id, user_name,open_id, name, gender, birth_year, birth_month, birth_day,
-             birth_hour, birth_minute, pan_result, yun_result, ip, is_free, create_time, pan_vo, yun_vo)
+            (user_id, user_name, open_id, name, gender, birth_year, birth_month, birth_day,
+             birth_hour, birth_minute, pan_result, yun_result, ip, is_free, create_time, pan_vo, yun_vo,
+             ai_interpret, ai_advice)
         VALUES
-            (#{userId}, #{userName}, #{openId},#{name}, #{gender}, #{birthYear}, #{birthMonth}, #{birthDay},
-             #{birthHour}, #{birthMinute}, #{panResult}, #{yunResult}, #{ip}, #{isFree}, NOW(), #{panVo}, #{yunVo})
+            (#{userId}, #{userName}, #{openId}, #{name}, #{gender}, #{birthYear}, #{birthMonth}, #{birthDay},
+             #{birthHour}, #{birthMinute}, #{panResult}, #{yunResult}, #{ip}, #{isFree}, NOW(), #{panVo}, #{yunVo},
+             #{aiInterpret}, #{aiAdvice})
     </insert>
+
+    <select id="selectByPrimaryKey" resultType="cn.northpark.model.BaZiRecord">
+        SELECT
+            id, user_id, user_name, open_id, name, gender, birth_year, birth_month, birth_day,
+            birth_hour, birth_minute, pan_result, yun_result, ip, is_free, create_time, pan_vo, yun_vo,
+            ai_interpret, ai_advice
+        FROM bc_bazi_record
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateAiInterpret" parameterType="cn.northpark.model.BaZiRecord">
+        UPDATE bc_bazi_record
+        SET ai_interpret = #{aiInterpret}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateAiAdvice" parameterType="cn.northpark.model.BaZiRecord">
+        UPDATE bc_bazi_record
+        SET ai_advice = #{aiAdvice}
+        WHERE id = #{id}
+    </update>
 
 </mapper>

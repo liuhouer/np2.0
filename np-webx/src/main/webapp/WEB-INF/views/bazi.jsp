@@ -302,6 +302,95 @@
         .hidden {
             display: none;
         }
+
+        /* AI 解读专属样式 */
+        .ai-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        .ai-question-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .ai-content {
+            line-height: 1.8;
+            color: #444;
+            font-size: 15px;
+        }
+
+        .ai-content h3 {
+            color: #667eea;
+            margin: 20px 0 10px;
+            font-size: 18px;
+        }
+
+        .ai-content p {
+            margin-bottom: 12px;
+        }
+
+        .ai-generate-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .ai-generate-box p {
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .ai-question-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            border: 1px solid #e0e5ff;
+        }
+
+        .ai-question-box label {
+            display: block;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .ai-question-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 12px;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .ai-question-input:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        .ai-answer-card {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fff9f0;
+            border-radius: 12px;
+            border-left: 4px solid #ff9f43;
+        }
+
+        .ai-answer-card .answer-title {
+            font-weight: bold;
+            color: #ff9f43;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .ai-answer-card .answer-content {
+            line-height: 1.8;
+            color: #555;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 
@@ -385,6 +474,7 @@
         <div class="tab-bar">
             <div class="tab-item active" data-tab="pan">排盘分析</div>
             <div class="tab-item" data-tab="yun">运势分析</div>
+            <div class="tab-item" data-tab="ai">AI 解读</div>
         </div>
         
         <!-- 排盘分析内容 -->
@@ -407,7 +497,29 @@
                 <div id="yunText"></div>
             </div>
         </div>
-        
+
+        <!-- AI 解读内容 -->
+        <div class="tab-content hidden" id="aiContent">
+            <div class="bazi-card">
+                <div class="card-title">AI 命理大师解读</div>
+                <div id="aiInterpretBox" class="ai-generate-box">
+                    <p>基于您的八字排盘数据，AI 命理大师将为您生成深度解读报告</p>
+                    <button class="action-btn ai-btn" id="aiInterpretBtn" style="width:auto;padding:12px 30px;">✨ 生成 AI 深度解读</button>
+                </div>
+                <div id="aiInterpretResult" class="ai-content hidden"></div>
+            </div>
+
+            <div class="bazi-card">
+                <div class="card-title">AI 运势问答</div>
+                <div class="ai-question-box">
+                    <label>向 AI 命理大师提问（如：今年适合跳槽吗？）</label>
+                    <textarea class="ai-question-input" id="aiQuestionInput" placeholder="请输入您的问题，最多200字..."></textarea>
+                    <button class="action-btn ai-question-btn" id="aiAdviceBtn" style="width:auto;padding:10px 24px;">🎯 获取建议</button>
+                </div>
+                <div id="aiAdviceResult"></div>
+            </div>
+        </div>
+
         <!-- 操作按钮 -->
         <div class="action-buttons">
             <button class="action-btn save-btn" id="saveBtn">💾 保存结果</button>
@@ -456,12 +568,13 @@ $(function() {
         $('.tab-item').removeClass('active');
         $(this).addClass('active');
         currentTab = $(this).data('tab');
+        $('#panContent, #yunContent, #aiContent').addClass('hidden');
         if (currentTab === 'pan') {
             $('#panContent').removeClass('hidden');
-            $('#yunContent').addClass('hidden');
-        } else {
-            $('#panContent').addClass('hidden');
+        } else if (currentTab === 'yun') {
             $('#yunContent').removeClass('hidden');
+        } else if (currentTab === 'ai') {
+            $('#aiContent').removeClass('hidden');
         }
     });
 
@@ -478,6 +591,16 @@ $(function() {
     // 分享结果
     $('#shareBtn').on('click', function() {
         shareResult();
+    });
+
+    // AI 深度解读
+    $('#aiInterpretBtn').on('click', function() {
+        aiInterpret();
+    });
+
+    // AI 运势问答
+    $('#aiAdviceBtn').on('click', function() {
+        aiAdvice();
     });
 
     // 初始化年月日时分下拉框
@@ -636,6 +759,111 @@ $(function() {
         try { document.execCommand('copy'); art.dialog.tips('已复制到剪贴板'); }
         catch(e) { art.dialog.alert('复制失败，请手动复制'); }
         document.body.removeChild(ta);
+    }
+
+    // AI 深度解读
+    function aiInterpret() {
+        if (!baziResult || !baziResult.recordId) {
+            art.dialog.alert('请先完成排盘');
+            return;
+        }
+        var $btn = $('#aiInterpretBtn');
+        $btn.prop('disabled', true).text('解读中...');
+        $('#loadingOverlay').css('display', 'flex').find('div div').text('AI 命理大师解读中...');
+
+        $.ajax({
+            url: '/api/bazi/ai-interpret',
+            type: 'POST',
+            headers: { 'token': '@WOAICAOBI@' },
+            data: { recordId: baziResult.recordId },
+            success: function(response) {
+                $('#loadingOverlay').hide();
+                $btn.prop('disabled', false).text('✨ 重新生成解读');
+                if (response.code === 200 && response.data) {
+                    $('#aiInterpretBox').addClass('hidden');
+                    $('#aiInterpretResult').removeClass('hidden').html(formatAiText(response.data));
+                } else {
+                    art.dialog.alert(response.message || response.msg || 'AI 解读失败');
+                }
+            },
+            error: function(xhr) {
+                $('#loadingOverlay').hide();
+                $btn.prop('disabled', false).text('✨ 生成 AI 深度解读');
+                var r = xhr.responseJSON;
+                art.dialog.alert(r ? (r.message || r.msg || 'AI 解读失败') : '网络请求失败');
+            }
+        });
+    }
+
+    // AI 运势问答
+    function aiAdvice() {
+        if (!baziResult || !baziResult.recordId) {
+            art.dialog.alert('请先完成排盘');
+            return;
+        }
+        var question = $('#aiQuestionInput').val().trim();
+        if (!question) {
+            art.dialog.alert('请输入您的问题');
+            return;
+        }
+        var $btn = $('#aiAdviceBtn');
+        $btn.prop('disabled', true).text('思考中...');
+        $('#loadingOverlay').css('display', 'flex').find('div div').text('AI 命理大师分析中...');
+
+        $.ajax({
+            url: '/api/bazi/ai-advice',
+            type: 'POST',
+            headers: { 'token': '@WOAICAOBI@' },
+            data: { recordId: baziResult.recordId, question: question },
+            success: function(response) {
+                $('#loadingOverlay').hide();
+                $btn.prop('disabled', false).text('🎯 获取建议');
+                if (response.code === 200 && response.data) {
+                    $('#aiAdviceResult').html(
+                        '<div class="ai-answer-card">' +
+                        '<div class="answer-title">💡 针对「' + escapeHtml(question) + '」的建议</div>' +
+                        '<div class="answer-content">' + formatAiText(response.data) + '</div>' +
+                        '</div>'
+                    );
+                } else {
+                    art.dialog.alert(response.message || response.msg || '获取建议失败');
+                }
+            },
+            error: function(xhr) {
+                $('#loadingOverlay').hide();
+                $btn.prop('disabled', false).text('🎯 获取建议');
+                var r = xhr.responseJSON;
+                art.dialog.alert(r ? (r.message || r.msg || '获取建议失败') : '网络请求失败');
+            }
+        });
+    }
+
+    // 格式化 AI 返回的文本（简单分段）
+    function formatAiText(text) {
+        if (!text) return '';
+        var lines = text.split('\n');
+        var html = '';
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].trim();
+            if (!line) continue;
+            if (/^\x23{1,3}\s/.test(line)) {
+                html += '<h3>' + escapeHtml(line.replace(/^\x23{1,3}\s/, '')) + '</h3>';
+            } else if (/^\d+\.\s/.test(line)) {
+                html += '<p><strong>' + escapeHtml(line) + '</strong></p>';
+            } else {
+                html += '<p>' + escapeHtml(line) + '</p>';
+            }
+        }
+        return html;
+    }
+
+    // HTML 转义
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/&/g, '&amp;')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')
+                  .replace(/"/g, '&quot;');
     }
 });
 </script>

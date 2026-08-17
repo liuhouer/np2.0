@@ -34,4 +34,8 @@ public class BaZiRecord {
     /** 是否免费：1=免费，0=付费 */
     private Integer isFree;
     private Date createTime;
+    /** AI 深度解读结果 */
+    private String aiInterpret;
+    /** AI 运势问答结果 */
+    private String aiAdvice;
 }
