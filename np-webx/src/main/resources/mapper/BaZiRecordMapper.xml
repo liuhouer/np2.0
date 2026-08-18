@@ -23,6 +23,17 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectLatestByOpenId" resultType="cn.northpark.model.BaZiRecord">
+        SELECT
+            id, user_id, user_name, open_id, name, gender, birth_year, birth_month, birth_day,
+            birth_hour, birth_minute, pan_result, yun_result, ip, is_free, create_time, pan_vo, yun_vo,
+            ai_interpret, ai_advice
+        FROM bc_bazi_record
+        WHERE open_id = #{openId}
+        ORDER BY create_time DESC
+        LIMIT 1
+    </select>
+
     <update id="updateAiInterpret" parameterType="cn.northpark.model.BaZiRecord">
         UPDATE bc_bazi_record
         SET ai_interpret = #{aiInterpret}

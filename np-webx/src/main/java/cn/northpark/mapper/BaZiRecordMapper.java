@@ -10,6 +10,8 @@ public interface BaZiRecordMapper {
 
     BaZiRecord selectByPrimaryKey(Long id);
 
+    BaZiRecord selectLatestByOpenId(String openId);
+
     void updateAiInterpret(BaZiRecord record);
 
     void updateAiAdvice(BaZiRecord record);

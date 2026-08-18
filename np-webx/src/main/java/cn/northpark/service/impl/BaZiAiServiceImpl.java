@@ -8,6 +8,7 @@ import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
 import cn.northpark.service.BaZiAiService;
 import cn.northpark.utils.EnvCfgUtil;
+import cn.northpark.utils.RedisUtil;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class BaZiAiServiceImpl implements BaZiAiService {
     /** GLM 开放 API 地址 */
     private static final String GLM_API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
 
+    /** 每用户每天 AI 调用总上限（ai-interpret + ai-advice 合计） */
+    private static final int AI_DAILY_LIMIT = 4;
+
     @Autowired
     private BaZiRecordMapper baZiRecordMapper;
 
@@ -48,6 +52,12 @@ public class BaZiAiServiceImpl implements BaZiAiService {
         if (record.getAiInterpret() != null && !record.getAiInterpret().isEmpty()) {
             log.info("AI 解读命中缓存, recordId={}", recordId);
             return ResultGenerator.genSuccessResult(record.getAiInterpret());
+        }
+
+        // 检查每日 AI 调用限制（缓存命中不计入限制）
+        if (!checkAndIncrementAiLimit(record.getOpenId())) {
+            return ResultGenerator.genErrorResult(429,
+                    "今日 AI 解读次数已用完（每日限" + AI_DAILY_LIMIT + "次），请明日再试");
         }
 
         String prompt = buildInterpretPrompt(record);
@@ -86,6 +96,12 @@ public class BaZiAiServiceImpl implements BaZiAiService {
         if (record.getAiAdvice() != null && !record.getAiAdvice().isEmpty()) {
             log.info("AI 建议命中缓存, recordId={}", recordId);
             return ResultGenerator.genSuccessResult(record.getAiAdvice());
+        }
+
+        // 检查每日 AI 调用限制（缓存命中不计入限制）
+        if (!checkAndIncrementAiLimit(record.getOpenId())) {
+            return ResultGenerator.genErrorResult(429,
+                    "今日 AI 问答次数已用完（每日限" + AI_DAILY_LIMIT + "次），请明日再试");
         }
 
         String prompt = buildAdvicePrompt(record, question.trim());
@@ -289,6 +305,22 @@ public class BaZiAiServiceImpl implements BaZiAiService {
             return "无";
         }
         return String.join("、", list);
+    }
+
+    /**
+     * 检查并递增用户当日 AI 调用次数
+     * @return true 表示未超限，可以继续调用；false 表示已用完
+     */
+    private boolean checkAndIncrementAiLimit(String openId) {
+        String today = LocalDate.now().toString();
+        String key = "bazi:ai:daily:" + openId + ":" + today;
+        String countStr = RedisUtil.getInstance().get(key);
+        int count = countStr == null ? 0 : Integer.parseInt(countStr);
+        if (count >= AI_DAILY_LIMIT) {
+            return false;
+        }
+        RedisUtil.getInstance().set(key, String.valueOf(count + 1), 86400);
+        return true;
     }
 
     // ======================== GLM API 调用 ========================

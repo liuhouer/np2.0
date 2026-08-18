@@ -550,6 +550,9 @@ $(function() {
     // 方案一：生成或读取 UUID 作为用户唯一标识
     initBaziUid();
 
+    // 自动加载历史记录
+    loadLatestRecord();
+
     // 性别切换：用原生 radio change 事件，彻底绕开 Bootstrap 事件干扰
     $('input[name="genderRadio"]').on('change', function() {
         var val = $(this).val();
@@ -636,13 +639,55 @@ $(function() {
         $('#minute').val(0);
     }
 
-    // 方案一：生成或读取 UUID
+    // Cookie 辅助函数（作为 localStorage 的备份，更不容易被误清除）
+    function setCookie(name, value, days) {
+        var expires = '';
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = '; expires=' + date.toUTCString();
+        }
+        document.cookie = name + '=' + encodeURIComponent(value) + expires + '; path=/; SameSite=Lax';
+    }
+
+    function getCookie(name) {
+        var nameEQ = name + '=';
+        var ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(nameEQ) === 0) return decodeURIComponent(c.substring(nameEQ.length));
+        }
+        return null;
+    }
+
+    // 方案一：生成或读取 UUID（localStorage + Cookie 双备份，保证同一设备尽量不变）
     function initBaziUid() {
+        // 优先级1：URL 参数传入的真实 openId（小程序跳转场景）
+        var urlParams = new URLSearchParams(window.location.search);
+        var urlOpenId = urlParams.get('openId');
+        if (urlOpenId && /^[a-zA-Z0-9_\-]{1,64}$/.test(urlOpenId)) {
+            openId = urlOpenId;
+            localStorage.setItem('bazi_uid', openId);
+            setCookie('bazi_uid', openId, 365);
+            return;
+        }
+
+        // 优先级2：localStorage
         var uid = localStorage.getItem('bazi_uid');
+
+        // 优先级3：Cookie（localStorage 被清除时兜底）
+        if (!uid) {
+            uid = getCookie('bazi_uid');
+        }
+
+        // 都没有则生成新的
         if (!uid) {
             uid = 'h5_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('bazi_uid', uid);
         }
+
+        // 双备份写入
+        localStorage.setItem('bazi_uid', uid);
+        setCookie('bazi_uid', uid, 365);
         openId = uid;
     }
 
@@ -653,6 +698,54 @@ $(function() {
         if (openId) {
             localStorage.setItem('wechat_openId', openId);
         }
+    }
+
+    // 自动加载最近一条历史排盘记录
+    function loadLatestRecord() {
+        if (!openId) return;
+        $.ajax({
+            url: '/api/bazi/latest',
+            type: 'GET',
+            headers: { 'token': '@WOAICAOBI@' },
+            data: { open_id: openId },
+            success: function(response) {
+                if (response.code === 200 && response.data) {
+                    var data = response.data;
+                    // 回填表单
+                    if (data.name) $('#name').val(data.name);
+                    if (data.birthYear) $('#year').val(data.birthYear);
+                    if (data.birthMonth) $('#month').val(data.birthMonth);
+                    if (data.birthDay) $('#day').val(data.birthDay);
+                    if (data.birthHour !== undefined) $('#hour').val(data.birthHour);
+                    if (data.birthMinute !== undefined) $('#minute').val(data.birthMinute);
+
+                    // 回填性别
+                    var genderVal = (data.gender === 1 || data.gender === '1') ? 'male' : 'female';
+                    $('input[name="genderRadio"][value="' + genderVal + '"]').prop('checked', true).trigger('change');
+
+                    // 渲染排盘结果
+                    baziResult = data;
+                    displayResult(data);
+                    $('#resultSection').removeClass('hidden');
+
+                    // 若已有 AI 解读缓存，直接展示
+                    if (data.aiInterpret) {
+                        $('#aiInterpretBox').addClass('hidden');
+                        $('#aiInterpretResult').removeClass('hidden').html(formatAiText(data.aiInterpret));
+                        $('#aiInterpretBtn').text('✨ 重新生成解读');
+                    }
+                    // 若已有 AI 建议缓存，直接展示
+                    if (data.aiAdvice) {
+                        $('#aiAdviceResult').html(
+                            '<div class="ai-answer-card">' +
+                            '<div class="answer-title">💡 AI 运势建议</div>' +
+                            '<div class="answer-content">' + formatAiText(data.aiAdvice) + '</div>' +
+                            '</div>'
+                        );
+                    }
+                }
+            }
+        });
     }
 
     // 提交排盘

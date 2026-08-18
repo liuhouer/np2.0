@@ -1,5 +1,7 @@
 package cn.northpark.controller;
 
+import cn.northpark.mapper.BaZiRecordMapper;
+import cn.northpark.model.BaZiRecord;
 import cn.northpark.result.Result;
 import cn.northpark.result.ResultGenerator;
 import cn.northpark.service.BaZiAiService;
@@ -45,6 +47,9 @@ public class BaZiController {
 
     @Autowired
     private BaZiAiService baZiAiService;
+
+    @Autowired
+    private BaZiRecordMapper baZiRecordMapper;
 
     // ─────────────────────────────────────────────────────────────────────────
     // 页面入口：公众号菜单配置跳转此 URL
@@ -312,6 +317,54 @@ public class BaZiController {
         }
 
         return baZiAiService.aiAdvice(recordId, question);
+    }
+
+    /**
+     * 查询用户最近一次排盘记录（用于页面刷新后自动恢复）
+     */
+    @GetMapping("/latest")
+    @ResponseBody
+    public Result<?> latest(@RequestParam("open_id") String openId,
+                            HttpServletRequest request) {
+        String token = request.getHeader("token");
+        if (StringUtils.isBlank(token) || !token.equals(BAZI_TOKEN)) {
+            return ResultGenerator.genErrorResult(401, "token 无效或缺失");
+        }
+        if (StringUtils.isBlank(openId) || !openId.matches("^[a-zA-Z0-9_\\-]{1,64}$")) {
+            return ResultGenerator.genErrorResult(400, "open_id 格式不合法");
+        }
+
+        BaZiRecord record = baZiRecordMapper.selectLatestByOpenId(openId);
+        if (record == null) {
+            return ResultGenerator.genSuccessResult(null);
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("recordId", record.getId());
+        data.put("name", record.getName());
+        data.put("gender", record.getGender());
+        data.put("birthYear", record.getBirthYear());
+        data.put("birthMonth", record.getBirthMonth());
+        data.put("birthDay", record.getBirthDay());
+        data.put("birthHour", record.getBirthHour());
+        data.put("birthMinute", record.getBirthMinute());
+        data.put("panResult", record.getPanResult());
+        data.put("yunResult", record.getYunResult());
+        data.put("aiInterpret", record.getAiInterpret());
+        data.put("aiAdvice", record.getAiAdvice());
+
+        try {
+            if (record.getPanVo() != null) {
+                data.put("panVO", JSON.parseObject(record.getPanVo()));
+            }
+            if (record.getYunVo() != null) {
+                data.put("yunVO", JSON.parseObject(record.getYunVo()));
+            }
+        } catch (Exception e) {
+            log.warn("解析历史记录 VO JSON 失败, recordId={}", record.getId());
+        }
+
+        return ResultGenerator.genSuccessResult(data);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
