@@ -348,8 +348,8 @@ public class BaZiController {
         data.put("birthDay", record.getBirthDay());
         data.put("birthHour", record.getBirthHour());
         data.put("birthMinute", record.getBirthMinute());
-        data.put("panResult", record.getPanResult());
-        data.put("yunResult", record.getYunResult());
+        data.put("panText", record.getPanResult());
+        data.put("yunText", record.getYunResult());
         data.put("aiInterpret", record.getAiInterpret());
         data.put("aiAdvice", record.getAiAdvice());
 

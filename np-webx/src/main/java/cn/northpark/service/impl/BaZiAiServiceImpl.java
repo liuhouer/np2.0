@@ -95,7 +95,7 @@ public class BaZiAiServiceImpl implements BaZiAiService {
         // 若已有缓存的 AI 建议，直接返回
         if (record.getAiAdvice() != null && !record.getAiAdvice().isEmpty()) {
             log.info("AI 建议命中缓存, recordId={}", recordId);
-            return ResultGenerator.genSuccessResult(record.getAiAdvice());
+            return ResultGenerator.genSuccessResult(extractAnswer(record.getAiAdvice()));
         }
 
         // 检查每日 AI 调用限制（缓存命中不计入限制）
@@ -112,7 +112,7 @@ public class BaZiAiServiceImpl implements BaZiAiService {
 
         // 保存到数据库（失败不影响返回）
         try {
-            record.setAiAdvice(aiText);
+            record.setAiAdvice("【问题】" + question.trim() + "\n\n【AI回答】\n" + aiText);
             baZiRecordMapper.updateAiAdvice(record);
             log.info("AI 建议已保存, recordId={}", recordId);
         } catch (Exception e) {
@@ -382,5 +382,18 @@ public class BaZiAiServiceImpl implements BaZiAiService {
             log.error("调用 GLM API 异常", e);
         }
         return null;
+    }
+
+    private String extractAnswer(String advice) {
+        if (advice == null || advice.isEmpty()) {
+            return "";
+        }
+        String marker = "【AI回答】\n";
+        int idx = advice.indexOf(marker);
+        if (idx >= 0) {
+            return advice.substring(idx + marker.length());
+        }
+        // 兼容旧数据（纯答案文本，没有问题前缀）
+        return advice;
     }
 }
