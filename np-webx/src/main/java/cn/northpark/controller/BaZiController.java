@@ -351,6 +351,7 @@ public class BaZiController {
         data.put("panText", record.getPanResult());
         data.put("yunText", record.getYunResult());
         data.put("aiInterpret", record.getAiInterpret());
+        data.put("aiQuestion", record.getAiQuestion());
         data.put("aiAdvice", record.getAiAdvice());
 
         try {

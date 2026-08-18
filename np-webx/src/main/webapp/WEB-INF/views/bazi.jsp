@@ -736,14 +736,13 @@ $(function() {
                     }
                     // 若已有 AI 建议缓存，直接展示
                     if (data.aiAdvice) {
-                        var qa = parseAiAdvice(data.aiAdvice);
-                        if (qa.question) {
-                            $('#aiQuestionInput').val(qa.question);
+                        if (data.aiQuestion) {
+                            $('#aiQuestionInput').val(data.aiQuestion);
                         }
                         $('#aiAdviceResult').html(
                             '<div class="ai-answer-card">' +
-                            '<div class="answer-title">💡 针对「' + escapeHtml(qa.question || 'AI运势建议') + '」的建议</div>' +
-                            '<div class="answer-content">' + formatAiText(qa.answer) + '</div>' +
+                            '<div class="answer-title">💡 针对「' + escapeHtml(data.aiQuestion || 'AI运势建议') + '」的建议</div>' +
+                            '<div class="answer-content">' + formatAiText(data.aiAdvice) + '</div>' +
                             '</div>'
                         );
                     }
@@ -936,16 +935,6 @@ $(function() {
     }
 
     // 格式化 AI 返回的文本（简单分段）
-    function parseAiAdvice(text) {
-        if (!text) return { question: '', answer: '' };
-        var match = text.match(/^【问题】(.+?)\n\n【AI回答】\n([\s\S]*)$/);
-        if (match) {
-            return { question: match[1], answer: match[2] };
-        }
-        // 兼容旧数据（纯答案文本）
-        return { question: '', answer: text };
-    }
-+
     function formatAiText(text) {
         if (!text) return '';
         var lines = text.split('\n');

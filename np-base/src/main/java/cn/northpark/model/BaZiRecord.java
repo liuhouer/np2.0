@@ -36,6 +36,8 @@ public class BaZiRecord {
     private Date createTime;
     /** AI 深度解读结果 */
     private String aiInterpret;
+    /** AI 运势问答问题 */
+    private String aiQuestion;
     /** AI 运势问答结果 */
     private String aiAdvice;
 }

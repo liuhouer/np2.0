@@ -14,5 +14,7 @@ public interface BaZiRecordMapper {
 
     void updateAiInterpret(BaZiRecord record);
 
+    void updateAiQuestion(BaZiRecord record);
+
     void updateAiAdvice(BaZiRecord record);
 }
