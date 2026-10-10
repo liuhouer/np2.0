@@ -6,6 +6,7 @@
 <link media="all" type="text/css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.4.1/dist/css/bootstrap.min.css">
 <link media="all" type="text/css" rel="stylesheet" href="/static/css/qinco.css">
 <link media="all" type="text/css" rel="stylesheet" href="/static/css/main2.css">
+<link media="all" type="text/css" rel="stylesheet" href="/static/css/theme-override.css">
 <input type="hidden" id="J_tab_name" value="${ tabs}"/>
 <%--<link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">--%>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
