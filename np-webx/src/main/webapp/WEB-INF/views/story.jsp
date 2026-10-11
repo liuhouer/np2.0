@@ -28,16 +28,16 @@
         <link rel="canonical" href="https://northpark.cn/note/story/page/${page}" />
     </c:if>
     <c:if test="${page==null || page==''}">
-        <title>树洞心灵驿站 - 情感倾诉与心情分享社区 | NorthPark</title>
+        <title>树洞 - 情感倾诉与心情分享社区 | NorthPark</title>
     </c:if>
     <c:if test="${page!=null && page!=''}">
-        <title>树洞心灵驿站第${page}页 - 情感倾诉与心情分享社区 | NorthPark</title>
+        <title>树洞第${page}页 - 情感倾诉与心情分享社区 | NorthPark</title>
     </c:if>
 
     <meta name="keywords" content="树洞,心灵驿站,情感倾诉,心情分享,情感交流,心理疏导,倾诉空间,匿名分享,心情日记,情感支持,NorthPark树洞">
-    <meta name="description" content="NorthPark树洞心灵驿站 - 温暖的情感倾诉社区，为您提供安全的心情分享空间。在这里可以匿名倾诉心声、记录生活感悟、获得情感支持，与理解你的朋友交流互动。一个充满人文关怀的心灵港湾。">
+    <meta name="description" content="NorthPark树洞 - 温暖的情感倾诉社区，为您提供安全的心情分享空间。在这里可以匿名倾诉心声、记录生活感悟、获得情感支持，与理解你的朋友交流互动。一个充满人文关怀的心灵港湾。">
 
-    <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>树洞心灵驿站 - 情感倾诉与心情分享社区</c:if><c:if test='${page!=null && page!=\'\'}'>树洞心灵驿站第${page}页 - 情感倾诉与心情分享社区</c:if>">
+    <meta property="og:title" content="<c:if test='${page==null || page==\'\'}'>树洞 - 情感倾诉与心情分享社区</c:if><c:if test='${page!=null && page!=\'\'}'>树洞第${page}页 - 情感倾诉与心情分享社区</c:if>">
     <meta property="og:description" content="温暖的情感倾诉社区，为您提供安全的心情分享空间。匿名倾诉心声、记录生活感悟、获得情感支持">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://northpark.cn/note/story">
@@ -45,7 +45,7 @@
 
     <!-- Twitter Card 标签 -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="NorthPark树洞心灵驿站">
+    <meta name="twitter:title" content="NorthPark树洞">
     <meta name="twitter:description" content="温暖的情感倾诉社区，安全的心情分享空间，匿名倾诉获得情感支持">
     <meta name="twitter:image" content="https://minioapi.northpark.cn/pic/treehole-banner.jpg">
     <link rel="stylesheet" href="/static/css/story.css">
@@ -55,7 +55,7 @@
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      "name": "NorthPark树洞心灵驿站",
+      "name": "NorthPark树洞",
       "description": "温暖的情感倾诉社区，为您提供安全的心情分享空间",
       "url": "https://northpark.cn/note/story",
       "mainEntity": {
@@ -88,7 +88,7 @@
             <nav aria-label="breadcrumb" class="container" style="margin-top: 50px;">
                 <ol class="breadcrumb" style="background-color: transparent;">
                     <li class="breadcrumb-item"><a href="/"><i class="fa fa-home"></i> 首页</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">🌳 树洞心灵驿站</li>
+                    <li class="breadcrumb-item active" aria-current="page">树洞</li>
                     <c:if test="${page!=null && page!=''}">
                         <li class="breadcrumb-item active" aria-current="page">第${page}页</li>
                     </c:if>

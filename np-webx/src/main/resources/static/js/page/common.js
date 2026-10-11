@@ -286,51 +286,47 @@ function loadDonates(type_id, page) {
 /**
  * 获取未读消息数量
  */
-function getNotifyCount(){
-
-
-    let num = 0;
+/**
+ * 获取未读消息数量 (异步非阻塞，不拖慢页面加载)
+ * @param {Function} [callback] 可选回调函数，接收 count
+ */
+function getNotifyCount(callback) {
     $.ajax({
         url: "/notify/count",
         type: "get",
         dataType: "json",
-        async: false,
+        async: true,
         success: function (msg) {
-            num = msg.data;
-            if(msg.result){
-                //拉取未读消息数量成功
-                console.log(msg.data);
-
-            }else{
-                console.log('拉取未读消息数量失败--->'+msg.message);
+            if (msg && msg.result) {
+                var num = msg.data || 0;
+                $("#J_notify_box").text(num);
+                if (num > 0) {
+                    $('title').text('NORTHPARK（' + num + '）');
+                }
+                if (typeof callback === 'function') {
+                    callback(num);
+                }
+            } else {
+                if (typeof callback === 'function') {
+                    callback(0);
+                }
+            }
+        },
+        error: function () {
+            if (typeof callback === 'function') {
+                callback(0);
             }
         }
     });
-    return num;
-
 }
 
 
 
 /**
- * 拉取未读消息数量
+ * 拉取未读消息数量 (兼容旧调用)
  */
-function fetchNotifyCount(){
-    $.ajax({
-        url: "/notify/count",
-        type: "get",
-        dataType: "json",
-        success: function (msg) {
-
-            if(msg.result){
-                //拉取未读消息数量成功
-                console.log(msg.data);
-                $("#J_notify_box").text(msg.data);
-            }else{
-                console.log('拉取未读消息数量失败--->'+msg.message);
-            }
-        }
-    });
+function fetchNotifyCount(callback) {
+    getNotifyCount(callback);
 }
 
 // setInterval(fetchNotifyCount,5*1000);

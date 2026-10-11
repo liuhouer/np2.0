@@ -22,6 +22,14 @@ $(function () {
     });
 
 
+    // 立即初始化首页顶部大轮播（不依赖 getNote 异步响应）
+    if (typeof $.fn.flexslider === 'function' && $('.flexslider').length > 0) {
+        $('.flexslider').flexslider({
+            prevText: '',
+            nextText: ''
+        });
+    }
+
     //加载suisui
     $.ajax({
         url: "/dash/getNote",
@@ -30,19 +38,15 @@ $(function () {
             if (data) {
                 $("#J_container_note").prepend(data);
 
-                //激活动作
-                $('.flexslider').flexslider({
-                    prevText: '',
-                    nextText: ''
-                });
-
-                $('.testimonails-slider').flexslider({
-                    animation: 'slide',
-                    slideshowSpeed: 5000,
-                    prevText: '',
-                    nextText: '',
-                    controlNav: false
-                });
+                if (typeof $.fn.flexslider === 'function') {
+                    $('.testimonails-slider').flexslider({
+                        animation: 'slide',
+                        slideshowSpeed: 5000,
+                        prevText: '',
+                        nextText: '',
+                        controlNav: false
+                    });
+                }
             }
         }
     });
@@ -54,77 +58,89 @@ $(function () {
         success: function (data) {
             if (data) {
                 $("#J_container_romeo").prepend(data);
-                
-                // 添加确保等高的处理
-                function adjustRomeoHeight() {
-                    var maxHeight = 0;
-                    $('.romeo-item').each(function() {
-                        var height = $(this).height();
-                        maxHeight = Math.max(maxHeight, height);
-                    });
-                    $('.romeo-item').height(maxHeight);
-                }
-                
-                // 页面加载完成后执行一次
-                adjustRomeoHeight();
-                
-                // 窗口大小改变时重新计算
-                $(window).resize(function() {
-                    adjustRomeoHeight();
-                });
             }
         }
     });
 
 
     function initMovieSlider() {
-        var itemWidth = 200; // 每个电影项的宽度
-        var visibleItems = 4; // 可见的电影数量
-        var linum = $('.piclist.mainlist li').length;
-        var totalWidth = linum * itemWidth;
-        
-        // 设置列表总宽度
-        $('.piclist').css('width', totalWidth + 'px');
-        
-        // 初始化位置
-        $('.mainlist').css({
+        var $mainlist = $('.piclist.mainlist');
+        var $items = $mainlist.find('li');
+        var count = $items.length;
+        if (count <= 4) {
+            $('.og_prev, .og_next').hide();
+            return;
+        }
+
+        var itemWidth = 220; // 每个项目的宽度
+        var totalWidth = (count + 1) * itemWidth;
+
+        $mainlist.css({
+            'width': totalWidth + 'px',
             'left': '0px'
         });
-        
-        // 复制内容到交换列表并设置位置
-        $('.swaplist').html($('.mainlist').html()).css({
-            'left': totalWidth + 'px'
+
+        var currentIndex = 0;
+        var maxIndex = Math.max(0, count - 4);
+
+        function updatePosition() {
+            var targetLeft = -(currentIndex * itemWidth);
+            if ($mainlist[0]) {
+                $mainlist[0].style.setProperty('left', targetLeft + 'px', 'important');
+            }
+        }
+
+        function slide(direction) {
+            if (direction === 'next') {
+                if (currentIndex >= maxIndex) {
+                    currentIndex = 0;
+                } else {
+                    currentIndex = Math.min(currentIndex + 4, maxIndex);
+                }
+            } else {
+                if (currentIndex <= 0) {
+                    currentIndex = maxIndex;
+                } else {
+                    currentIndex = Math.max(currentIndex - 4, 0);
+                }
+            }
+            updatePosition();
+        }
+
+        // 绑定左右点击切换
+        $('.og_next').off('click').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            slide('next');
         });
 
-        // 计算最大滚动距离
-        var maxScroll = -(totalWidth - visibleItems * itemWidth);
-        
-        // 绑定点击事件
-        $('.og_next').off('click').on('click', function() {
-            if ($('.mainlist').is(':animated')) return;
-            
-            var currentLeft = parseInt($('.mainlist').css('left'));
-            var newLeft = currentLeft - (itemWidth * visibleItems);
-            
-            if (newLeft < maxScroll) {
-                newLeft = 0;
-            }
-            
-            $('.mainlist').animate({left: newLeft + 'px'}, 300);
+        $('.og_prev').off('click').on('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            slide('prev');
         });
-        
-        $('.og_prev').off('click').on('click', function() {
-            if ($('.mainlist').is(':animated')) return;
-            
-            var currentLeft = parseInt($('.mainlist').css('left'));
-            var newLeft = currentLeft + (itemWidth * visibleItems);
-            
-            if (newLeft > 0) {
-                newLeft = maxScroll;
+
+        // 自动轮播（每4.5秒自动向右切换一组）
+        var autoTimer = null;
+        function startAutoSlide() {
+            if (!autoTimer) {
+                autoTimer = setInterval(function () {
+                    slide('next');
+                }, 4500);
             }
-            
-            $('.mainlist').animate({left: newLeft + 'px'}, 300);
-        });
+        }
+
+        function stopAutoSlide() {
+            if (autoTimer) {
+                clearInterval(autoTimer);
+                autoTimer = null;
+            }
+        }
+
+        startAutoSlide();
+
+        // 鼠标移入轮播卡片时暂停，移出时恢复自动轮播
+        $('.moviebox').off('mouseenter mouseleave').hover(stopAutoSlide, startAutoSlide);
     }
 
     //加载movies
@@ -134,89 +150,8 @@ $(function () {
         success: function (data) {
             if (data) {
                 $("#J_container_movies").prepend(data);
-                /*电影轮播*/
+                /* 电影轮播初始化与自动播放 */
                 initMovieSlider();
-
-                /***不需要自动滚动，去掉即可***/
-                // time = window.setInterval(function () {
-                //     //$('.og_next').click();
-                // }, 5000);
-
-                // 替换为初始化位置
-                $('.mainlist').css('left', '0px');
-                $('.swaplist').css('left', '1000px');
-
-                /***不需要自动滚动，去掉即可***/
-                linum = $('.piclist.mainlist li').length; //图片数量
-                w = linum * 250;//ul宽度
-                $('.piclist').css('width', w + 'px');//ul宽度
-                $('.swaplist').html($('.mainlist').html());//复制内容
-
-                $('.og_next').click(function () {
-                    if ($('.swaplist,.mainlist').is(':animated')) {
-                        return;
-                    }
-
-                    if ($('.mainlist li').length > 4) { // 修改判断条件
-                        var ml = parseInt($('.mainlist').css('left'));
-                        var sl = parseInt($('.swaplist').css('left'));
-                        var itemWidth = 220;
-                        var w = $('.mainlist li').length * itemWidth;
-                        var scrollWidth = 880; // 一次滚动4个项目的宽度
-
-                        if (ml <= 0 && ml > w * -1) {
-                            $('.swaplist').css({left: '1000px'});
-                            $('.mainlist').animate({left: ml - scrollWidth + 'px'}, 300);
-                            
-                            if (ml == (w - scrollWidth) * -1) {
-                                $('.swaplist').animate({left: '0px'}, 300);
-                            }
-                        } else {
-                            $('.mainlist').css({left: '1000px'});
-                            $('.swaplist').animate({left: sl - scrollWidth + 'px'}, 300);
-                            
-                            if (sl == (w - scrollWidth) * -1) {
-                                $('.mainlist').animate({left: '0px'}, 300);
-                            }
-                        }
-                    }
-                })
-                $('.og_prev').click(function () {
-
-                    if ($('.swaplist,.mainlist').is(':animated')) {
-                        $('.swaplist,.mainlist').stop(true, true);
-                    }
-
-                    if ($('.mainlist li').length > 4) {
-                        ml = parseInt($('.mainlist').css('left'));
-                        sl = parseInt($('.swaplist').css('left'));
-                        if (ml <= 0 && ml > w * -1) {
-                            $('.swaplist').css({left: w * -1 + 'px'});
-                            $('.mainlist').animate({left: ml + 1000 + 'px'}, 'slow');
-                            if (ml == 0) {
-                                $('.swaplist').animate({left: (w - 1000) * -1 + 'px'}, 'slow');
-                            }
-                        } else {
-                            $('.mainlist').css({left: (w - 1000) * -1 + 'px'});
-                            $('.swaplist').animate({left: sl + 1000 + 'px'}, 'slow');
-                            if (sl == 0) {
-                                $('.mainlist').animate({left: '0px'}, 'slow');
-                            }
-                        }
-                    }
-                })
-
-
-                $('.og_prev,.og_next').hover(function () {
-                    $(this).fadeTo('fast', 1);
-                }, function () {
-                    $(this).fadeTo('fast', 0.7);
-                })
-
-
-                $(".og_next").click();
-
-                /*电影轮播end*/
             }
         }
     });

@@ -15,8 +15,12 @@
                             <span class="icon-bar"></span>
                         </button>
 
-                        <a class="navbar-brand" href="/"><img src="/static/img/logo.png" width="96"
-                                height="16"/></a>
+                        <a class="navbar-brand np-brand" href="/" title="NorthPark 首页">
+                            <span class="np-brand-badge">
+                                <img src="/static/img/favicon.svg" alt="NorthPark Logo" class="np-brand-logo" width="30" height="30"/>
+                            </span>
+                            <span class="np-brand-title">NorthPark</span>
+                        </a>
                         <%-- <div class="navbar-brand">--%>
 
                             <%-- <c:if test="${user==null }">--%>

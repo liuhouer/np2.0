@@ -17,7 +17,9 @@ import com.github.pagehelper.PageInfo;
 import com.google.common.base.Preconditions;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.dbutils.handlers.MapListHandler;
+import org.apache.commons.dbutils.handlers.ScalarHandler;
 import org.apache.commons.lang3.StringUtils;
+import cn.northpark.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -46,29 +48,48 @@ public class NotifyRemindController {
  private NotifyRemindService notifyRemindService;
 
 	/**
-	 * 拉取未读消息数量
+	 * 拉取未读消息数量 (快速统计 + 缓存加速)
 	 */
 	@RequestMapping("/notify/count")
 	@ResponseBody
 	@RateLimit
 	public Result<Integer> notifyNum(HttpServletRequest request) {
-
-
 		try {
 			UserVO userInfo = RequestHolder.getUserInfo(request);
+			if (userInfo == null || userInfo.getId() == null) {
+				return ResultGenerator.genSuccessResult(0);
+			}
 
-			String notifyNumSql = " select * from bc_notify_remind_b   where recipient_id = ? and status = '0' ";
+			// 优先读取 Redis 缓存 (30秒短期缓存，极大减轻高频或通知过多时的数据库压力)
+			String redisKey = "notify_count:" + userInfo.getId();
+			try {
+				String cached = RedisUtil.getInstance().get(redisKey);
+				if (StringUtils.isNotBlank(cached)) {
+					return ResultGenerator.genSuccessResult(Integer.parseInt(cached));
+				}
+			} catch (Exception e) {
+				// Redis异常容灾降级
+			}
 
-			int i = NPQueryRunner.query(notifyNumSql,new MapListHandler(),userInfo.getId()).size();
+			// 使用 select count(1) 替代原本的 select * 全字段扫描和 MapList 内存实例化
+			String notifyNumSql = " select count(1) from bc_notify_remind_b where recipient_id = ? and status = '0' ";
+
+			Object countObj = NPQueryRunner.query(notifyNumSql, new ScalarHandler(), userInfo.getId());
+			int i = (countObj instanceof Number) ? ((Number) countObj).intValue() : 0;
+
+			// 异步写入缓存
+			try {
+				RedisUtil.getInstance().set(redisKey, String.valueOf(i), 30);
+			} catch (Exception e) {
+				// ignore
+			}
 
 			return ResultGenerator.genSuccessResult(i);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-
 			log.error("notify/count--->" + e);
 		}
-
 
 		return ResultGenerator.genSuccessResult(0);
 	}
@@ -81,33 +102,32 @@ public class NotifyRemindController {
 	@ResponseBody
 	@RateLimit
 	public Result<Boolean> readNotify(HttpServletRequest request) {
-
-
 		try {
 			String ids = request.getParameter("id");
 
 			if(StringUtils.isNotEmpty(ids)){
-
 				UserVO userInfo = RequestHolder.getUserInfo(request);
 
 				String readNotifySql = "update bc_notify_remind_b   set status = ? where  recipient_id = ? and id in ("+ids+")";
 
 				NPQueryRunner.update(readNotifySql,"1",userInfo.getId());
+
+				// 清除未读数量缓存，保证下次拉取即时更新
+				try {
+					RedisUtil.getInstance().del("notify_count:" + userInfo.getId());
+				} catch (Exception e) {
+					// ignore
+				}
 			}
-
-
 
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			log.error("notify/count--->" + e);
+			log.error("notify/readNotify--->" + e);
 
 			return ResultGenerator.genSuccessResult(false);
-
 		}
 
 		return ResultGenerator.genSuccessResult(true);
-
 	}
 
 

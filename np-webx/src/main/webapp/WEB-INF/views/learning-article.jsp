@@ -100,7 +100,7 @@
 
 									<c:if test="${user!=null }">
 										<c:if
-											test="${user.admin}">
+											test="${user.email == '654714226@qq.com' || user.email == 'qhdsoft@126.com' || user.email == 'woaideni@qq.com'}">
 											<span class=" glyphicon glyphicon-arrow-up margin10"></span>
 											<a class="common-a-right" title="置顶" href=""
 												onclick="handup('${model.id}')">置顶</a>
@@ -140,15 +140,10 @@
 												<p id="J_show_path">${model.path }</p>
 											</c:if>
 
-											<!-- 反馈区 -->
-											<div class="feedback-section text-center">
-												<small class="text-muted">
-													<i class="fa fa-info-circle"></i> 资源失效、缺失、错误不要慌
-												</small>
-												<button id="J_feedback_btn" class="btn feedback-btn">
-													<i class="fa fa-exclamation-circle"></i> 反馈资源失效
-												</button>
-											</div>
+									        <small class="text-muted padding-l10">资源失效、缺失、错误 不要慌 </small>
+											<span class="fa fa-hand-o-right padding-l10"></span>
+											<input id="J_feedback_btn" class="btn tag-node" style="width:150px;" type="button" value="戳我,失效反馈">
+
 
 										</div>
 										</p>

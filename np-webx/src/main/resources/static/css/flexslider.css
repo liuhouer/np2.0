@@ -290,100 +290,150 @@ html[xmlns] .slides {
     }
 }
 
-.mainlist, .swaplist {
-    transition: left 0.3s ease-in-out;
-}
-
-/* 电影轮播样式 */
+/* 电影轮播样式 — Anthropic 风格 */
 .moviebox {
     position: relative;
     width: 100%;
-    padding: 0 40px;
-    height: 50px;
+    max-width: 1040px;
+    margin: 0 auto 36px auto;
+    padding: 18px 56px;
+    background: #FFFFFF;
+    border: 1px solid #E8E6DF;
+    border-radius: 14px;
+    box-shadow: 0 1px 3px rgba(25, 25, 24, 0.04), 0 4px 16px rgba(25, 25, 24, 0.03);
+    box-sizing: border-box;
 }
 
 .picbox {
     position: relative;
     width: 100%;
-    max-width: 1000px;
+    max-width: 880px;
     margin: 0 auto;
     overflow: hidden;
-    height: 50px;
+    height: 64px;
 }
 
 .piclist {
     position: absolute;
     left: 0;
     top: 0;
-    width: 10000px;
+    width: 9999px;
+    height: 64px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    transition: left 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .piclist li {
     float: left;
-    width: 200px;
-    padding: 0 10px;
-    height: 50px;
-    line-height: 50px;
+    width: 220px;
+    height: 64px;
+    line-height: 64px;
+    padding: 0 6px;
+    box-sizing: border-box;
+    list-style: none;
 }
 
 .piclist li a {
     display: flex;
     align-items: center;
-    text-decoration: none;
     height: 100%;
+    padding: 8px 12px;
+    background: #FAF9F5;
+    border: 1px solid #EAE7E0;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+}
+
+.piclist li a:hover {
+    background: #FFFFFF;
+    border-color: #CC785C;
+    box-shadow: 0 3px 10px rgba(204, 120, 92, 0.12);
+    transform: translateY(-2px);
+    text-decoration: none;
 }
 
 .piclist li img {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 8px;
+    object-fit: cover;
     margin-right: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .piclist li .movie-title {
     flex: 1;
-    color: #333;
+    color: #191918;
+    font-size: 13px;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 14px;
+    line-height: 1.4;
+    transition: color 0.2s ease;
 }
 
-/* 前后按钮样式 */
+.piclist li a:hover .movie-title {
+    color: #CC785C;
+}
+
+/* 前后翻页控制按钮：Anthropic 风格悬浮圆形按钮 */
 .og_prev,
 .og_next {
     position: absolute;
-    top: 0;
-    width: 30px;
-    height: 50px;
-    background: rgba(0,0,0,0.5);
-    cursor: pointer;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 38px;
+    height: 38px;
+    line-height: 36px;
     text-align: center;
-    line-height: 50px;
-    color: #fff;
-    font-size: 24px;
-    border-radius: 3px;
+    background: #FFFFFF;
+    border: 1px solid #E8E6DF;
+    border-radius: 50%;
+    color: #191918;
+    cursor: pointer;
     z-index: 100;
-    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(25, 25, 24, 0.08);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    opacity: 1 !important;
 }
 
 .og_prev {
-    left: 0;
+    left: 10px;
 }
 
 .og_next {
-    right: 0;
+    right: 10px;
 }
 
 .og_prev:hover,
 .og_next:hover {
-    background: rgba(0,0,0,0.8);
+    background: #191918;
+    border-color: #191918;
+    color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(25, 25, 24, 0.22);
+    transform: translateY(-50%) scale(1.06);
 }
 
-/* 添加箭头图标 */
 .og_prev:before {
-    content: "‹";
+    content: "\f104";
+    font-family: FontAwesome;
+    font-size: 17px;
+    line-height: 1;
 }
 
 .og_next:before {
-    content: "›";
+    content: "\f105";
+    font-family: FontAwesome;
+    font-size: 17px;
+    line-height: 1;
 }

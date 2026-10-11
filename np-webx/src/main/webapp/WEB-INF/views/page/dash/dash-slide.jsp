@@ -83,6 +83,7 @@
 
 									    </span>
                         </div>
+                    </li>
                     <li>
                         <div class="slider-caption">
                             <img src="/static/img/index/slide3.jpg" alt="情圣时刻"/>
@@ -98,7 +99,7 @@
 
 										 </span>
                         </div>
-
+                    </li>
                 </ul>
             </div>
         </section>

@@ -96,21 +96,14 @@
 <script>
 
     /**
-     * 刷新未读
+     * 刷新未读 (异步非阻塞，不拖慢页面加载)
      */
     $(function (){
         var u = '${user.id}';
         if (u) {
-            var notifyCount = getNotifyCount();
-            $("#J_notify_box").text(notifyCount);
-
-            if(notifyCount>0){
-                $('title').text('NORTHPARK（'+notifyCount+'）');
-            }
-
-
+            getNotifyCount();
         }
-    })
+    });
 </script>
 
 <!-- Cloudflare Web Analytics -->

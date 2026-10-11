@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NorthPark × 始祖鸟 (Arc'teryx) Logo & Favicon 设计中心</title>
+  <link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg">
+  <link rel="alternate icon" type="image/x-icon" href="/static/img/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/img/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --np-bg-dark: #0D0F12;
+      --np-card-dark: #15181E;
+      --np-card-dark-glass: rgba(21, 24, 30, 0.88);
+      --np-border-dark: rgba(255, 255, 255, 0.08);
+      --np-border-dark-hover: rgba(224, 122, 58, 0.4);
+      --np-text-primary: #F3F4F6;
+      --np-text-secondary: #9CA3AF;
+      --np-text-muted: #6B7280;
+      
+      /* Arc'teryx Outdoor / NorthPark Brand Colors */
+      --np-arc-orange: #E07A3A;         /* 标志性陶土日光橙 */
+      --np-arc-orange-glow: rgba(224, 122, 58, 0.4);
+      --np-arc-bone: #E2E8F0;           /* 化石岩白 / 骨骼白 */
+      --np-arc-obsidian: #181B20;       /* 黑曜石岩石黑 */
+
+      --np-font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --np-font-serif: 'Noto Serif SC', Georgia, serif;
+      --np-font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--np-bg-dark);
+      color: var(--np-text-primary);
+      font-family: var(--np-font-sans);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(224, 122, 58, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(79, 100, 128, 0.06) 0%, transparent 40%),
+        linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(224, 122, 58, 0.1);
+      border: 1px solid rgba(224, 122, 58, 0.25);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--np-arc-orange);
+      margin-bottom: 16px;
+    }
+
+    .badge-pill::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      background-color: var(--np-arc-orange);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--np-arc-orange);
+    }
+
+    h1.hero-title {
+      font-size: 44px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #FFFFFF 30%, #CBD5E1 70%, var(--np-arc-orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      color: var(--np-text-secondary);
+      font-size: 16px;
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Status Alert */
+    .status-banner {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 12px;
+      padding: 14px 20px;
+      margin-top: 24px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: #34D399;
+    }
+
+    /* Grid Layout */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 48px;
+    }
+
+    @media (max-width: 960px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Card */
+    .card {
+      background: var(--np-card-dark);
+      border: 1px solid var(--np-border-dark);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--np-border-dark-hover);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5), 0 0 30px rgba(224, 122, 58, 0.15);
+    }
+
+    .card-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--np-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-label span {
+      color: var(--np-arc-orange);
+    }
+
+    /* Tab Mockup Simulator */
+    .browser-mockup {
+      background: #1E222B;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .browser-tab-bar {
+      background: #14171E;
+      padding: 8px 12px 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .browser-controls {
+      display: flex;
+      gap: 6px;
+      padding-bottom: 10px;
+      margin-right: 8px;
+    }
+
+    .browser-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .dot-close { background: #EF4444; }
+    .dot-min { background: #F59E0B; }
+    .dot-max { background: #10B981; }
+
+    .browser-tab {
+      background: #1E222B;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      padding: 7px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #E2E8F0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: none;
+      position: relative;
+    }
+
+    .tab-favicon {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      object-fit: cover;
+    }
+
+    .browser-viewport {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(180deg, #1A1D24 0%, #15181E 100%);
+    }
+
+    /* Favicon Multi-Size Grid */
+    .size-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .size-item {
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .size-item:hover {
+      border-color: var(--np-arc-orange);
+      transform: translateY(-2px);
+      background: rgba(224, 122, 58, 0.05);
+    }
+
+    .size-item img {
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+
+    .size-item span {
+      font-size: 11px;
+      font-family: var(--np-font-mono);
+      color: var(--np-text-muted);
+    }
+
+    /* Master Emblem */
+    .master-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .master-icon {
+      width: 180px;
+      height: 180px;
+      border-radius: 38px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px var(--np-arc-orange-glow);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+      cursor: pointer;
+    }
+
+    .master-icon:hover {
+      transform: scale(1.08) rotate(-1deg);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.8), 0 0 40px var(--np-arc-orange-glow);
+    }
+
+    /* Code Block */
+    .code-card {
+      margin-top: 32px;
+      background: #101216;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: var(--np-text-secondary);
+      font-weight: 600;
+    }
+
+    pre code {
+      font-family: var(--np-font-mono);
+      font-size: 13px;
+      color: #E2E8F0;
+      line-height: 1.7;
+      display: block;
+      overflow-x: auto;
+    }
+
+    .hl-tag { color: #E07A3A; }
+    .hl-attr { color: #93C5FD; }
+    .hl-val { color: #34D399; }
+
+    /* Actions */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--np-arc-orange);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px var(--np-arc-orange-glow);
+    }
+    .btn-primary:hover {
+      background: #F08A4A;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--np-text-primary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFFFFF;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="badge-pill">Arc'teryx Inspired · Brand & Favicon System</div>
+      <h1 class="hero-title">NorthPark × 始祖鸟 网站 Logo & Favicon</h1>
+      <p class="hero-subtitle">
+        传承始祖鸟（Archaeopteryx）经典远古化石骨架之纯粹机能，融入 NorthPark 北极星罗盘、精神角落与生命轨迹灵韵。
+        现已全面替换并升级全站 <code>/static/img/favicon.ico</code> 与矢量 <code>favicon.svg</code>！
+      </p>
+
+      <div class="status-banner">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span>已成功替换全站 <strong>favicon.ico</strong> 并同步注入矢量 <strong>favicon.svg</strong> 与 <strong>apple-touch-icon</strong></span>
+      </div>
+    </header>
+
+    <!-- Main Grid -->
+    <div class="grid">
+
+      <!-- 左侧：真实浏览器标签页模拟器与多尺寸矩阵 -->
+      <div class="card">
+        <div class="card-label">
+          <span>01</span> 真实浏览器标签栏预览 (Live Tab Simulation)
+        </div>
+
+        <div class="browser-mockup">
+          <div class="browser-tab-bar">
+            <div class="browser-controls">
+              <span class="browser-dot dot-close"></span>
+              <span class="browser-dot dot-min"></span>
+              <span class="browser-dot dot-max"></span>
+            </div>
+            <div class="browser-tab">
+              <!-- 这里直接引用生成的 favicon.ico / favicon.svg -->
+              <img src="/static/img/favicon.svg" alt="Favicon" class="tab-favicon">
+              <span>NorthPark - 勾勒出生命轨迹</span>
+            </div>
+          </div>
+          <div class="browser-viewport">
+            <p style="font-size: 13px; color: var(--np-text-muted);">
+              👆 上方标签栏呈现了 16×16 下极度清晰的始祖鸟骨骼剪影与北极星暖橙芒星
+            </p>
+          </div>
+        </div>
+
+        <div class="card-label" style="margin-top: 12px; margin-bottom: 12px;">
+          <span>02</span> 多尺寸清晰度矩阵 (Multi-Resolution Grid)
+        </div>
+
+        <div class="size-grid">
+          <div class="size-item">
+            <img src="/static/img/favicon-16x16.png" width="16" height="16" alt="16x16">
+            <span>16×16 Tab</span>
+          </div>
+          <div class="size-item">
+            <img src="/static/img/favicon-32x32.png" width="32" height="32" alt="32x32">
+            <span>32×32 Retina</span>
+          </div>
+          <div class="size-item">
+            <img src="/static/img/favicon.png" width="48" height="48" alt="48x48">
+            <span>48×48 书签</span>
+          </div>
+          <div class="size-item">
+            <img src="/static/img/favicon.png" width="64" height="64" alt="64x64">
+            <span>64×64 桌面</span>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <a href="/static/img/favicon.ico" download class="btn btn-primary">
+            <i class="fa fa-download"></i> 下载 favicon.ico
+          </a>
+          <a href="/static/img/favicon.svg" target="_blank" class="btn btn-secondary">
+            查看矢量 favicon.svg
+          </a>
+        </div>
+      </div>
+
+      <!-- 右侧：高清母版图腾与代码引用规范 -->
+      <div class="card">
+        <div class="card-label">
+          <span>03</span> 始祖鸟 × NorthPark 徽章母版 (Master Icon)
+        </div>
+
+        <div class="master-preview">
+          <!-- 母版高清图标 -->
+          <img src="/static/img/apple-touch-icon.png" alt="NorthPark Logo" class="master-icon" id="J_master_icon">
+          
+          <div style="text-align: center; margin-top: 20px;">
+            <h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF; letter-spacing: 0.05em;">
+              NORTHPARK × ARCHAEOPTERYX
+            </h3>
+            <p style="font-size: 13px; color: var(--np-text-secondary); margin-top: 6px;">
+              黑曜石机能基底 · 化石白精雕骨干 · 陶土日落暖橙北极星
+            </p>
+          </div>
+        </div>
+
+        <!-- 引用规范 -->
+        <div class="code-card">
+          <div class="code-header">
+            <span>全站 JSP 引用标准</span>
+            <span style="color: var(--np-arc-orange); font-family: var(--np-font-mono);">common.jsp</span>
+          </div>
+          <pre><code><span class="hl-tag">&lt;link</span> <span class="hl-attr">rel=</span><span class="hl-val">"icon"</span> <span class="hl-attr">type=</span><span class="hl-val">"image/svg+xml"</span> <span class="hl-attr">href=</span><span class="hl-val">"/static/img/favicon.svg"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;link</span> <span class="hl-attr">rel=</span><span class="hl-val">"alternate icon"</span> <span class="hl-attr">type=</span><span class="hl-val">"image/x-icon"</span> <span class="hl-attr">href=</span><span class="hl-val">"/static/img/favicon.ico"</span><span class="hl-tag">&gt;</span>
+<span class="hl-tag">&lt;link</span> <span class="hl-attr">rel=</span><span class="hl-val">"apple-touch-icon"</span> <span class="hl-attr">sizes=</span><span class="hl-val">"180x180"</span> <span class="hl-attr">href=</span><span class="hl-val">"/static/img/apple-touch-icon.png"</span><span class="hl-tag">&gt;</span></code></pre>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- 导航栏实装效果预览 -->
+    <div class="card" style="margin-top: 32px;">
+      <div class="card-label">
+        <span>04</span> 导航栏实装与 Hover 交互预览 (Navbar Brand Live Preview)
+        <span style="font-size: 11px; color: var(--np-arc-orange); font-weight: normal;">(鼠标悬停体验始祖鸟徽章与文字微动效)</span>
+      </div>
+
+      <!-- 模拟真实网站白底导航栏 -->
+      <div style="background: rgba(255,255,255,0.98); border-radius: 14px; padding: 0 24px; border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 4px 20px rgba(0,0,0,0.15); display: flex; align-items: center; justify-content: space-between; min-height: 64px;">
+        
+        <!-- 核心实装品牌结构 -->
+        <a class="navbar-brand np-brand" href="/" style="height: 64px; display: inline-flex; align-items: center; gap: 10px; text-decoration: none;" title="NorthPark 首页">
+          <span class="np-brand-badge">
+            <img src="/static/img/favicon.svg" alt="NorthPark Logo" class="np-brand-logo" width="32" height="32">
+          </span>
+          <span class="np-brand-title" style="color: #1A1A2E;">northpark</span>
+        </a>
+
+        <!-- 模拟右侧导航项 -->
+        <div style="display: flex; gap: 20px; align-items: center; font-size: 14px; color: #6B7280; font-weight: 500;">
+          <span style="color: #1A1A2E; font-weight: 600; border-bottom: 2px solid #E07A3A; padding-bottom: 4px;">影视</span>
+          <span>软件</span>
+          <span>学习</span>
+          <span>最爱</span>
+          <span>树洞</span>
+        </div>
+      </div>
+
+      <p style="margin-top: 16px; font-size: 13px; color: var(--np-text-muted); text-align: center;">
+        👉 该导航结构已同步部署至 <code>WEB-INF/views/page/common/navigation.jsp:18</code>，全站任意页面均已生效！
+      </p>
+    </div>
+  </div>
+
+</body>
+</html>

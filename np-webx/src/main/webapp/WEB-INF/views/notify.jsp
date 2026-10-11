@@ -426,14 +426,13 @@
         // 更新未读消息数量显示的函数
         function updateUnreadCount() {
             if (typeof getNotifyCount === 'function') {
-                var totalUnreadCount = getNotifyCount();
-                $("#unreadCount").text(totalUnreadCount);
-                return totalUnreadCount;
+                getNotifyCount(function (totalUnreadCount) {
+                    $("#unreadCount").text(totalUnreadCount);
+                });
             } else {
                 // 降级方案：使用当前页的未读数量
                 var currentPageUnreadCount = $("input[name='unReadId']").length;
                 $("#unreadCount").text(currentPageUnreadCount);
-                return currentPageUnreadCount;
             }
         }
         
