@@ -1073,8 +1073,7 @@ textarea:focus {
 
 /* 页脚 (Footer) - 雾蓝灰雅致高质感风格 */
 .mainfoot {
-  background: #4F6480 !important;
-  background: linear-gradient(180deg, #536884 0%, #465972 100%) !important;
+  background: #141413 !important;
   border-top: 1px solid rgba(255, 255, 255, 0.14) !important;
   padding: 48px 0 40px 0 !important;
   color: #E2E8F0 !important;
