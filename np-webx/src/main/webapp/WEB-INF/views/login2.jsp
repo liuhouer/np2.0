@@ -155,7 +155,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/"><img src="/static/img/logo.png" width="96" height="16"></img></a>
+            <%--<a class="navbar-brand" href="/"><img src="/static/img/logo.png" width="96" height="16"></img></a>--%>
+
+            <a class="navbar-brand np-brand" href="/" title="NorthPark 首页">
+                            <span class="np-brand-badge">
+                                <img src="/static/img/favicon.svg" alt="NorthPark Logo" class="np-brand-logo" width="30" height="30"/>
+                            </span>
+                <span class="np-brand-title">NorthPark</span>
+            </a>
         </div>
         <div class="navbar-collapse collapse mainhead-collapse">
             <ul class="nav mainhead-nav">
@@ -238,7 +245,7 @@
                         </div>
                         
                         <!-- 第三方登录 -->
-                        <div class="oauth-login" style="margin-top: 20px; text-align: center;">
+                        <div class="oauth-login" style="margin-top: 20px; margin-bottom: 10px; text-align: center;">
                             <div style="margin-bottom: 15px; color: #999; font-size: 14px;">
                                 <span style="background: #fff; padding: 0 10px;">或使用第三方账号登录</span>
                                 <hr style="margin: -10px 0 0 0; border-color: #eee;">
