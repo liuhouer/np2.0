@@ -8,7 +8,7 @@
 
             <p1>
 
-                2014 © <span class="glyphicon glyphicon-heart"></span> NorthPark. ALL Rights Reserved.
+                2014-2026 © <span class="glyphicon glyphicon-heart"></span> NorthPark. ALL Rights Reserved.
 
             </p1>
 
