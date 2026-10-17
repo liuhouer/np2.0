@@ -82,6 +82,10 @@
 
 </script>
 
+<%--ad sense--%>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6480430202155588"
+        crossorigin="anonymous"></script>
 
 <%--Bing Clarity--%>
 <script type="text/javascript">
